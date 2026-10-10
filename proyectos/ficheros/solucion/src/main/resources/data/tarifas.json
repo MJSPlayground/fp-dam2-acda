@@ -1,0 +1,5 @@
+[
+  {"codigo":"P01","nombre":"Taza, blanca","categoria":"hogar","precios":[{"tarifa":"general","importe":4.50},{"tarifa":"socio","importe":3.75}]},
+  {"codigo":"P02","nombre":"Cuaderno","categoria":"papeleria","precios":[{"tarifa":"general","importe":2.25}]},
+  {"codigo":"P03","nombre":"Vaso","categoria":"hogar","precios":[{"tarifa":"general","importe":-1},{"tarifa":"socio","importe":2.00}]}
+]

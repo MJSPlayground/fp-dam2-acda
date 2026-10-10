@@ -9,19 +9,38 @@ site_dir = "site"
 extra_css = ["stylesheets/colors.css", "stylesheets/extra.css"]
 extra_javascript = ["javascripts/extra.js"]
 nav = [
-  { "Manejo de ficheros y directorios" = ["ficheros/index.md"] },
-  { "Herramientas de mapeo objeto-relacional (ORM) y JPA con Hibernate" = ["hibernate/index.md"] },
-  { "Acceso a datos mediante componentes (Spring)" = ["spring/index.md"] },
-  { "Conexiones a bases de datos relacionales (JDBC)" = ["jdbc/index.md"] },
-  { "Bases de datos documentales con Cloud Firestore" = ["firestore/index.md"] },
-  { "Bases de datos NoSQL con MongoDB" = ["mongodb/index.md"] },
-  { "Ayuda y herramientas" = ["ayuda/index.md"] },
+  { "Ficheros" = [
+    "ficheros/index.md",
+    { "1. Ficheros y directorios" = ["ficheros/rutas.md", "ficheros/gestion-recorrido.md", "ficheros/guiada-directorios.md", "ficheros/practica-inventario.md"] },
+    { "2. Texto y CSV" = ["ficheros/texto.md", "ficheros/csv.md", "ficheros/guiada-csv.md", "ficheros/practica-fusion-csv.md"] },
+    { "3. XML" = ["ficheros/xml.md", "ficheros/guiada-xml-csv.md", "ficheros/practica-csv-xml.md"] },
+    { "4. JSON" = ["ficheros/json.md", "ficheros/guiada-json-csv.md", "ficheros/practica-formatos-anidados.md"] },
+    { "5. Binarios" = ["ficheros/binarios.md", "ficheros/guiada-binarios.md", "ficheros/practica-informe-binario.md"] },
+    { "6. Transformación" = ["ficheros/transformacion.md", "ficheros/practica-conversor.md"] },
+    { "Prácticas finales" = ["ficheros/final-clientes.md", "ficheros/final-inventario.md", "ficheros/final-gestor.md"] },
+    { "Ampliación" = ["ficheros/ampliacion-streaming.md", "ficheros/ampliacion-watchservice.md", "ficheros/ampliacion-filechannel.md", "ficheros/ampliacion-escrituras-fiables.md"] },
+  ] },
+  { "Hibernate" = ["hibernate/index.md"] },
+  { "Spring" = ["spring/index.md"] },
+  { "JDBC" = ["jdbc/index.md"] },
+  { "Firestore" = ["firestore/index.md"] },
+  { "MongoDB" = ["mongodb/index.md"] },
+  { "Ayuda" = ["ayuda/index.md", "ayuda/proyectos-maven.md"] },
 ]
 
 [project.extra]
 generator = false
 author_email_work = "mjorgesote@educacion.navarra.es"
 author_email_personal = "mjsplayground90@gmail.com"
+
+[project.extra.pdf_titles]
+ficheros = "Manejo de ficheros y directorios"
+hibernate = "Herramientas de mapeo objeto-relacional (ORM) y JPA con Hibernate"
+spring = "Acceso a datos mediante componentes (Spring)"
+jdbc = "Conexiones a bases de datos relacionales (JDBC)"
+firestore = "Bases de datos documentales con Cloud Firestore"
+mongodb = "Bases de datos NoSQL con MongoDB"
+ayuda = "Ayuda y herramientas"
 
 [project.theme]
 name = "material"

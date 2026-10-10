@@ -1,0 +1,6 @@
+id,nombre,ciudad,correo
+C01,"Ana, María",Pamplona,ana@example.org
+C02,Luis,Tudela,luis@example.org
+C03,Elena,,elena@example.org
+,Sin id,Pamplona,sin@example.org
+C04,María,Pamplona,correo-invalido

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<clientes>
+  <cliente id="C01"><nombre>Ana &amp; Luis</nombre><ciudad>Pamplona</ciudad><correo>ana@example.org</correo></cliente>
+  <cliente id="C02"><nombre>María</nombre><ciudad>Tudela</ciudad><correo>maria@example.org</correo></cliente>
+</clientes>

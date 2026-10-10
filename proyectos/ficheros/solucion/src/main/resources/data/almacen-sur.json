@@ -1,0 +1,6 @@
+[
+  {"codigo":"P01","nombre":"Taza, blanca","almacen":"Sur","unidades":2,"precio":4.50},
+  {"codigo":"P02","nombre":"Cuaderno","almacen":"Sur","unidades":4,"precio":2.25},
+  {"codigo":"P03","nombre":"Lápiz","almacen":"Sur","unidades":1,"precio":0.80},
+  {"codigo":"P02","nombre":"Cuaderno","almacen":"Sur","unidades":2,"precio":2.50}
+]

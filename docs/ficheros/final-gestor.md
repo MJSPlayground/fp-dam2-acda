@@ -1,0 +1,13 @@
+# Final avanzada: gestor universal de información comercial
+
+> Llevamos clientes, productos y operaciones comerciales en archivos locales. Necesitamos una aplicación de escritorio que permita importar los datos que recibimos, consultarlos y corregirlos sin abrir los archivos a mano. También queremos exportar información útil para otros departamentos y poder continuar el trabajo al cerrar y volver a abrir la aplicación.
+
+La ventana inicial muestra los registros y permite buscar por texto, filtrar por tipo y abrir un formulario solo al crear o modificar. Un registro puede ser cliente, producto u operación; las operaciones relacionan un cliente con uno o varios productos y cantidades. No se puede confirmar una operación con un cliente inexistente, un producto inexistente, cantidad no positiva ni existencias insuficientes. Al confirmar, las existencias se actualizan y el importe se calcula con precios decimales exactos. Cancelar una edición no altera el catálogo; eliminar pide confirmación y respeta las relaciones existentes.
+
+Se reciben catálogos de clientes y productos en CSV, XML y JSON; las operaciones se registran dentro de la aplicación. Algunos archivos contienen valores incorrectos o registros repetidos. La importación presenta aceptados, rechazados y conflictos, con el archivo y registro de origen. Los datos válidos se conservan ante errores parciales. La exportación permite elegir un formato y generar un catálogo filtrado y un resumen de operaciones por cliente y producto. Un archivo generado se guarda fuera de los recursos de la aplicación; la persistencia local recupera registros y relaciones al reiniciar. Ante una escritura fallida, la interfaz muestra un error veraz y evita anunciar un guardado exitoso.
+
+**Casos que la aplicación debe resolver:** un cliente con dos operaciones, un producto compartido por varias operaciones, una cantidad que agota existencias, un intento que supera existencias, dos códigos duplicados y un archivo con registros válidos antes y después de uno inválido. Comprueba búsquedas sin resultados, edición cancelada, eliminación rechazada por referencias, exportación con filtro y reinicio de la aplicación.
+
+La interfaz entregada contiene la navegación, la tabla, los formularios contextuales y los estados visuales. La persistencia, las transformaciones, los cálculos y las reglas comerciales son el trabajo a completar. Importa el proyecto en IntelliJ y ejecuta el objetivo JavaFX explicado en su README.
+
+[Proyecto inicial con interfaz](https://github.com/MJSPlayground/fp-dam2-acda/tree/main/proyectos/ficheros/inicial) · [Solución pública](https://github.com/MJSPlayground/fp-dam2-acda/tree/main/proyectos/ficheros/solucion)

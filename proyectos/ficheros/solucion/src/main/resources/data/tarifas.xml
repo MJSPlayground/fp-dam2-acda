@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<productos>
+  <producto codigo="P01"><nombre>Taza, blanca</nombre><categoria>hogar</categoria><precio tarifa="general">4.50</precio><precio tarifa="socio">3.75</precio></producto>
+  <producto codigo="P02"><nombre>Cuaderno</nombre><categoria>papeleria</categoria><precio tarifa="general">2.25</precio></producto>
+  <producto codigo="P03"><nombre>Vaso</nombre><categoria>hogar</categoria><precio tarifa="general">-1</precio><precio tarifa="socio">2.00</precio></producto>
+</productos>

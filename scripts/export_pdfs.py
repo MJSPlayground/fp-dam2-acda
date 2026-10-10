@@ -57,7 +57,8 @@ def find_sections(project):
                 raise ValueError(f"Se requiere {slug}/index.md en nav.")
             if any(previous[0] == slug for previous in sections):
                 raise ValueError(f"Sección duplicada: {slug}")
-            sections.append((slug, title, pages))
+            editorial_title = project.get("extra", {}).get("pdf_titles", {}).get(slug, title)
+            sections.append((slug, editorial_title, pages))
     if not sections:
         raise ValueError("No se encontraron secciones en nav.")
     return sections

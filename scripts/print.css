@@ -127,8 +127,8 @@ th,td { border: 1px solid var(--mjs-line); padding: 2mm 3mm; text-align: left; v
 th { background: #e7f2f8; font-weight: 700; }
 tr { break-inside: avoid; }
 pre,.highlight {
-  font-family: "Cascadia Code", Consolas, monospace;
-  font-size: 8pt;
+  font-family: "Courier New", monospace;
+  font-size: 8.5pt;
   line-height: 1.45;
   white-space: pre-wrap !important;
   overflow-wrap: anywhere;
@@ -144,7 +144,7 @@ pre {
 pre code { font: inherit; white-space: inherit !important; }
 code:not(pre code) {
   background: #eef2f6;
-  font-family: Consolas, monospace;
+  font-family: "Courier New", monospace;
   font-size: .92em;
   padding: .1em .2em;
 }

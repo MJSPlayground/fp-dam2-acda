@@ -1,0 +1,7 @@
+{
+  "clientes": [
+    {"id":"C01","contacto":{"nombre":"Ana, María","ciudad":"Pamplona"},"telefono":"600123456"},
+    {"id":"C02","contacto":{"nombre":"Luis","ciudad":"Tudela"}},
+    {"id":"C03","contacto":{"nombre":42,"ciudad":"Pamplona"}}
+  ]
+}

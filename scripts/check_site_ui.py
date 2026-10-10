@@ -14,13 +14,13 @@ from pypdf import PdfReader
 SITE = Path(__file__).resolve().parent.parent / "site"
 PREFIX = "/fp-dam2-acda/"
 SECTIONS = (
-    ("ficheros", "Manejo de ficheros y directorios"),
-    ("hibernate", "Herramientas de mapeo objeto-relacional (ORM) y JPA con Hibernate"),
-    ("spring", "Acceso a datos mediante componentes (Spring)"),
-    ("jdbc", "Conexiones a bases de datos relacionales (JDBC)"),
-    ("firestore", "Bases de datos documentales con Cloud Firestore"),
-    ("mongodb", "Bases de datos NoSQL con MongoDB"),
-    ("ayuda", "Ayuda y herramientas"),
+    ("ficheros", "Ficheros", "Manejo de ficheros y directorios"),
+    ("hibernate", "Hibernate", "Herramientas de mapeo objeto-relacional (ORM) y JPA con Hibernate"),
+    ("spring", "Spring", "Acceso a datos mediante componentes (Spring)"),
+    ("jdbc", "JDBC", "Conexiones a bases de datos relacionales (JDBC)"),
+    ("firestore", "Firestore", "Bases de datos documentales con Cloud Firestore"),
+    ("mongodb", "MongoDB", "Bases de datos NoSQL con MongoDB"),
+    ("ayuda", "Ayuda", "Ayuda y herramientas"),
 )
 
 
@@ -46,7 +46,7 @@ def check():
                 page = browser.new_page(viewport={"width": 1366, "height": 768}, accept_downloads=True)
                 errors = []
                 page.on("pageerror", lambda error: errors.append(str(error)))
-                paths = [""] + [f"{slug}/" for slug, _ in SECTIONS]
+                paths = [""] + [f"{slug}/" for slug, _, _ in SECTIONS]
                 for path in paths:
                     response = page.goto(base + path, wait_until="load")
                     assert response and response.ok, f"Página ausente: {path}"
@@ -55,16 +55,14 @@ def check():
                         assert "Acceso a Datos" in page.locator("h1").first.inner_text()
                     else:
                         slug = path.strip("/")
-                        title = dict(SECTIONS)[slug]
+                        title = {section: heading for section, _, heading in SECTIONS}[slug]
                         assert title in page.locator("h1").first.inner_text(), path
                     assert page.locator(".md-tabs__link").count() == len(SECTIONS), "Navegación incompleta"
-                    assert [name.strip() for name in page.locator(".md-tabs__link").all_text_contents()] == [name for _, name in SECTIONS], "Orden temático incorrecto"
+                    assert [name.strip() for name in page.locator(".md-tabs__link").all_text_contents()] == [name for _, name, _ in SECTIONS], "Orden temático incorrecto"
                     assert page.locator(".md-header__button.md-logo").evaluate("el => el.href") == base
                     assert page.locator(".mjs-home-link").evaluate("el => el.href") == base
                     assert page.locator(".mjs-pdf-trigger").count() == 1
                     if path == "ficheros/":
-                        assert page.locator(".md-annotation").count() == 1
-                        assert page.locator(".md-tooltip__inner").filter(has_text="Path.of").count() >= 1
                         page.locator(".md-tabs__link", has_text="Hibernate").click()
                         assert page.url == base + "hibernate/", "No se puede navegar entre temas"
                         page.go_back(wait_until="load")
@@ -108,6 +106,19 @@ def check():
                     page.locator(".md-header__button.md-logo").click()
                     assert page.url == base, "El logo no vuelve a la portada"
                     print(f"OK {PREFIX}{path}: enlaces, recursos y {len(names)} descargas", flush=True)
+                for path in ("ficheros/rutas/", "ficheros/guiada-csv/", "ficheros/final-gestor/", "ficheros/ampliacion-watchservice/"):
+                    response = page.goto(base + path, wait_until="load")
+                    assert response and response.ok and page.locator("h1").is_visible(), path
+                    assert page.locator(".md-sidebar--primary").count() == 1, path
+                    assert page.locator(".md-tabs__link").count() == len(SECTIONS), path
+                page.goto(base + "ficheros/rutas/", wait_until="load")
+                assert page.locator(".md-annotation").count() >= 1
+                assert page.locator(".md-tooltip__inner").filter(has_text="Path.of").count() >= 1
+                tabs = page.locator(".md-tabs__link").all()
+                assert all(tab.bounding_box() and tab.bounding_box()["x"] + tab.bounding_box()["width"] <= 1366 for tab in tabs), "Pestañas desbordadas a 1366 px"
+                page.set_viewport_size({"width": 768, "height": 900})
+                page.reload(wait_until="load")
+                assert page.locator("h1").is_visible(), "Contenido no visible en pantalla menor"
                 assert not errors, "Errores JavaScript: " + "; ".join(errors)
                 print("OK: navegación, estilos, recursos y PDF verificados.", flush=True)
             finally:

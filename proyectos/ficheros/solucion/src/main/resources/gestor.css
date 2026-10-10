@@ -1,0 +1,9 @@
+.root { -fx-font-family: "Segoe UI", "Arial"; -fx-font-size: 13px; -fx-background-color: #f7fafc; }
+.cabecera { -fx-alignment: center-left; -fx-padding: 10px 16px; -fx-background-color: #123c56; }
+.marca { -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 15px; }
+.herramientas { -fx-alignment: center-left; -fx-padding: 12px 16px; -fx-background-color: white; }
+.button { -fx-background-radius: 6px; -fx-padding: 7px 11px; -fx-cursor: hand; }
+.button.principal { -fx-background-color: #1385bd; -fx-text-fill: white; -fx-font-weight: bold; }
+.table-view { -fx-background-color: white; -fx-border-color: #dae4ea; }
+.estado { -fx-padding: 8px 16px; -fx-text-fill: #35556b; -fx-background-color: white; }
+.dialog-pane { -fx-background-color: white; }

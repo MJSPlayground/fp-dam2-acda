@@ -1,0 +1,5 @@
+codigo,nombre,almacen,unidades,precio
+P01,"Taza, blanca",Norte,3,4.50
+P02,Cuaderno,Norte,8,2.25
+P03,Lápiz,Norte,0,0.80
+P04,Carpeta,Norte,-2,3.20

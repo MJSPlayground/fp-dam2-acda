@@ -4,11 +4,28 @@ from datetime import date
 from html import escape
 from pathlib import Path
 
+DOCS = Path(__file__).resolve().parent.parent / "docs"
+
+def page_title(source):
+    if Path(source).name == "index.md":
+        return "Introducción"
+    for line in (DOCS / source).read_text(encoding="utf-8").splitlines():
+        if line.startswith("# "):
+            return line[2:].strip()
+    return Path(source).stem.replace("-", " ").capitalize()
+
 def section_navigation(project, slug):
+    def contains_index(branch):
+        for entry in branch:
+            if entry == f"{slug}/index.md":
+                return True
+            if isinstance(entry, dict) and any(isinstance(value, list) and contains_index(value) for value in entry.values()):
+                return True
+        return False
     for item in project["nav"]:
         if isinstance(item, dict):
             for branch in item.values():
-                if isinstance(branch, list) and f"{slug}/index.md" in branch:
+                if isinstance(branch, list) and contains_index(branch):
                     return branch
     raise ValueError(f"No existe navegación para {slug}")
 
@@ -18,7 +35,7 @@ def navigation_index(items, anchors):
         if isinstance(item, str):
             link = anchors.get(item)
             if link:
-                name = "Introducción" if Path(item).name == "index.md" else Path(item).stem.replace("-", " ").capitalize()
+                name = page_title(item)
                 lines.append(f'<li class="print-index-page"><a href="#{escape(link)}">{escape(name)}</a></li>')
         elif isinstance(item, dict):
             for label, value in item.items():
