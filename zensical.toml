@@ -1,0 +1,77 @@
+[project]
+site_name = "MJS Playground · Documentación"
+site_description = "Plantilla de documentación reutilizable"
+site_author = "Mikel Aingeru Jorge Soteras"
+site_url = "https://mjsplayground.github.io/mjs-docs-template/"
+copyright = "© MJS Playground"
+docs_dir = "docs"
+site_dir = "site"
+extra_css = ["stylesheets/colors.css", "stylesheets/extra.css"]
+extra_javascript = ["javascripts/extra.js"]
+nav = [
+  { "Guía" = [
+    "guia/index.md",
+    { "Organización" = "guia/organizacion.md" },
+    { "Bloques desplegables" = [
+      { "Página interior" = "guia/bloques/pagina.md" },
+    ] },
+  ] },
+  { "Referencia" = [
+    "referencia/index.md",
+    { "Ejemplos de código" = "referencia/codigo.md" },
+  ] },
+]
+
+[project.extra]
+generator = false
+author_email_work = "mjorgesote@educacion.navarra.es"
+author_email_personal = "mjsplayground90@gmail.com"
+
+[project.theme]
+name = "material"
+variant = "modern"
+language = "es"
+logo = "assets/branding/mjs-playground.svg"
+favicon = "assets/branding/mjs-playground.svg"
+features = [
+  "navigation.tabs",
+  "navigation.indexes",
+  "navigation.top",
+  "navigation.path",
+  "toc.follow",
+  "content.code.copy",
+  "content.code.annotate",
+  "content.tabs.link",
+  "search.highlight",
+]
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/sun"
+toggle.name = "Cambiar a modo oscuro"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/moon"
+toggle.name = "Cambiar a modo claro"
+
+[project.markdown_extensions]
+admonition = {}
+attr_list = {}
+md_in_html = {}
+pymdownx.details = {}
+pymdownx.superfences = {}
+pymdownx.inlinehilite = {}
+pymdownx.snippets = {}
+pymdownx.emoji.emoji_generator = "zensical.extensions.emoji.to_svg"
+pymdownx.emoji.emoji_index = "zensical.extensions.emoji.twemoji"
+pymdownx.tabbed.alternate_style = true
+pymdownx.highlight.anchor_linenums = true
+pymdownx.highlight.line_spans = "__span"
+pymdownx.highlight.pygments_lang_class = true

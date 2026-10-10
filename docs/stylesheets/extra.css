@@ -1,0 +1,99 @@
+/* Componentes visuales compartidos entre todos los proyectos. */
+.mjs-hero {
+  display: grid;
+  grid-template-columns: minmax(110px, 170px) 1fr;
+  gap: clamp(1rem, 4vw, 2.5rem);
+  align-items: center;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  margin: 0 0 2rem;
+  background: linear-gradient(120deg, rgba(19,133,189,.11), rgba(103,190,69,.12));
+  border: 1px solid rgba(19,133,189,.25);
+  border-radius: 1.4rem;
+}
+.mjs-hero h1 {
+  margin: .3rem 0 .75rem;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  line-height: 1.16;
+}
+.mjs-hero__logo {
+  width: 100%;
+  max-height: 180px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 15px rgba(8,67,107,.12));
+}
+.mjs-eyebrow {
+  color: var(--mjs-primary);
+  font-weight: 750;
+  font-size: .72rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.mjs-hero .md-button { margin-top: .65rem; margin-right: .35rem; }
+.mjs-progress-panel {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  padding: 1rem 1.15rem;
+  border-radius: var(--mjs-radius);
+  background: var(--md-code-bg-color);
+  margin-bottom: 1.5rem;
+}
+.mjs-progress-label { font-size: .74rem; display: block; }
+.mjs-progress-count { display: block; margin: .25rem 0 .65rem; }
+.mjs-progress-track { height: .45rem; border-radius: 2rem; background: rgba(19,133,189,.18); overflow: hidden; }
+.mjs-progress-fill { height: 100%; width: 0; background: var(--mjs-secondary); transition: width .2s ease; }
+.mjs-task-list { display: grid; gap: .75rem; margin-bottom: 1.6rem; }
+.mjs-task {
+  display: flex; align-items: flex-start; gap: .8rem;
+  border-radius: .75rem; padding: .75rem 1rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  background: var(--md-code-bg-color);
+}
+.mjs-task:has(input:checked) { border-color: var(--mjs-secondary); }
+.mjs-task input { margin-top: .3rem; width: 1.15rem; height: 1.15rem; accent-color: var(--mjs-secondary); }
+.mjs-task label { flex: 1; cursor: pointer; }
+.mjs-task input:checked + label { text-decoration: line-through; opacity: .7; }
+.md-typeset .grid.cards > :is(ul, ol) > li { border-radius: var(--mjs-radius); }
+.md-typeset a { text-underline-offset: .15em; }
+@media (max-width: 700px) {
+  .mjs-hero { grid-template-columns: 1fr; }
+  .mjs-hero__logo { max-width: 110px; }
+}
+@media print {
+  .mjs-hero { break-inside: avoid; }
+  .mjs-task, .md-typeset table, .highlight { break-inside: avoid; }
+}
+
+
+/* Selector de PDF en la cabecera (todos los módulos, claro/oscuro). */
+.mjs-pdf-action { display: flex; align-items: center; flex: 0 0 auto; }
+.mjs-pdf-trigger { display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.mjs-pdf-trigger svg { width: 1.25rem; height: 1.25rem; }
+.mjs-pdf-trigger:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: .35rem; }
+.mjs-pdf-menu {
+  position: fixed;
+  width: min(310px, calc(100vw - 16px));
+  z-index: 100;
+  padding: .45rem;
+  border-radius: .65rem;
+  box-shadow: 0 .5rem 2rem rgba(0,0,0,.23);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+}
+.mjs-pdf-menu[hidden] { display: none !important; }
+.mjs-pdf-menu__item {
+  display: block;
+  color: inherit;
+  padding: .7rem .9rem;
+  border-radius: .4rem;
+  text-decoration: none;
+  line-height: 1.35;
+}
+.mjs-pdf-menu__item:hover, .mjs-pdf-menu__item:focus-visible {
+  background: var(--md-code-bg-color);
+  outline: none;
+}
+.mjs-pdf-menu__title { display: block; font-size: .84rem; font-weight: 700; }
+.mjs-pdf-menu__item small { display: block; margin-top: .15rem; opacity: .72; font-size: .7rem; }
+
+.mjs-home-link { color: inherit; text-decoration: none; }
+.mjs-home-link:hover, .mjs-home-link:focus-visible { color: inherit; text-decoration: underline; text-underline-offset: .2em; }

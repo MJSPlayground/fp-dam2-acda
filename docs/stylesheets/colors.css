@@ -1,0 +1,16 @@
+/* Paleta específica de cada proyecto (se reutiliza también en PDF). */
+:root {
+  --mjs-primary: #1385bd;
+  --mjs-secondary: #67be45;
+  --mjs-accent: #f4a43a;
+  --mjs-ink: #12314d;
+  --mjs-radius: 1rem;
+}
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: var(--mjs-primary);
+  --md-accent-fg-color: #087cae;
+}
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #46b2e9;
+  --md-accent-fg-color: #9adb6a;
+}

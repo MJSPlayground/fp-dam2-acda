@@ -1,0 +1,186 @@
+/* Estilos SOLO para los PDF: independiente del tema de pantalla.
+   Usamos el HTML de Zensical para conservar las extensiones de Markdown. */
+@page { size: A4; margin: 15mm 15mm 20mm; }
+
+:root {
+  --mjs-primary: #147eae;
+  --mjs-secondary: #568c36;
+  --mjs-dark: #19334b;
+  --mjs-line: #ccd9e4;
+}
+* { box-sizing: border-box; }
+html { font-size: 10pt; }
+body {
+  margin: 0;
+  padding: 0;
+  color: #263445;
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 10pt;
+  line-height: 1.48;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.print-document-cover {
+  display: flex;
+  min-height: 233mm;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20mm 12mm;
+  background: linear-gradient(165deg, #f0f8fd 0%, #ffffff 72%);
+  border-left: 6px solid var(--mjs-primary);
+  break-after: page;
+}
+.print-document-cover img {
+  width: 44mm;
+  height: 51mm;
+  object-fit: contain;
+  margin-bottom: 12mm;
+}
+.print-document-cover h1 {
+  font-size: 30pt;
+  color: var(--mjs-dark);
+  line-height: 1.18;
+  margin: 5mm 0 4mm;
+}
+.print-cover-kicker,.print-unit-kicker {
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-size: 8pt;
+  font-weight: 700;
+  color: var(--mjs-primary);
+}
+.print-cover-site {
+  font-size: 13pt;
+  color: #52728a;
+}
+.print-cover-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2mm;
+  margin-top: 19mm;
+  padding-top: 5mm;
+  border-top: 1px solid #cbd9e5;
+  font-size: 10pt;
+}
+.print-index {
+  break-after: page;
+  padding: 8mm 3mm;
+}
+.print-index h1 {
+  font-size: 22pt;
+  margin: 0 0 3mm;
+  color: var(--mjs-dark);
+}
+.print-index-intro { color: #62788b; font-size: 9pt; margin-bottom: 9mm; }
+.print-index ol { list-style: none; padding-left: 0; }
+.print-index li { margin: 1.5mm 0; }
+.print-index a { color: #0d628e; text-decoration: none; }
+.print-index-unit {
+  break-inside: avoid;
+  border-bottom: 1px solid #d5e2eb;
+  padding: 4mm 0;
+  margin-bottom: 3mm !important;
+}
+.print-index-unit > a { font-size: 12pt; }
+.print-index-group {
+  padding-top: 2mm;
+  break-inside: avoid;
+}
+.print-index-group > span {
+  font-size: 10pt;
+  color: var(--mjs-dark);
+  font-weight: 700;
+}
+.print-index-group > ol { border-left: 2px solid #deebf3; margin: 2mm 0 1mm 2mm; padding-left: 5mm; }
+.print-index-page a { font-size: 9.5pt; }
+.print-unit:not(:first-child) { break-before: page; }
+.print-unit-header {
+  margin-top: 5mm;
+  padding: 4mm 0 3mm;
+  border-bottom: 1px solid var(--mjs-line);
+  margin-bottom: 5mm;
+}
+.print-unit-header h1 { margin: 2mm 0 0; font-size: 19pt; color: var(--mjs-dark); line-height: 1.2; }
+.print-chapter { margin: 0 0 7mm; }
+.print-chapter + .print-chapter { padding-top: 5mm; border-top: 1px solid #e6edf2; }
+.print-chapter h2 { margin: 6mm 0 2.5mm; font-size: 16pt; color: var(--mjs-primary); line-height: 1.25; }
+.print-chapter h3 { margin: 4.5mm 0 2mm; font-size: 12.5pt; color: var(--mjs-dark); }
+.print-chapter h4 { margin: 3.5mm 0 1.5mm; font-size: 11pt; color: var(--mjs-dark); }
+p { margin: 2mm 0 3mm; orphans: 3; widows: 3; }
+h1,h2,h3,h4,h5,h6 { break-after: avoid; }
+ul,ol { padding-left: 7mm; margin: 2mm 0 4mm; }
+li { margin: 1mm 0; }
+a { color: #075b89; text-decoration: none; }
+a:not([href]) { color: inherit; }
+img,svg,figure { max-width: 100%; }
+img { height: auto; }
+figure,table,pre,.admonition,details,blockquote { break-inside: avoid; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: auto;
+  margin: 3mm 0 5mm;
+  font-size: 9pt;
+}
+th,td { border: 1px solid var(--mjs-line); padding: 2mm 3mm; text-align: left; vertical-align: top; }
+th { background: #e7f2f8; font-weight: 700; }
+tr { break-inside: avoid; }
+pre,.highlight {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 8pt;
+  line-height: 1.45;
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere;
+}
+pre {
+  display: block;
+  background: #eef4f8;
+  border: 1px solid #d4e2eb;
+  border-radius: 2mm;
+  padding: 3mm;
+  margin: 3mm 0 4mm;
+}
+pre code { font: inherit; white-space: inherit !important; }
+code:not(pre code) {
+  background: #eef2f6;
+  font-family: Consolas, monospace;
+  font-size: .92em;
+  padding: .1em .2em;
+}
+.highlight pre { background: #eef4f8; }
+.highlighttable { border: none; }
+.highlighttable td { border: none; }
+.linenodiv pre { background: #e1ecf3; border: none; }
+.admonition,details {
+  border-left: 3px solid var(--mjs-primary);
+  padding: 2.5mm 3.5mm;
+  margin: 4mm 0;
+  background: #eef6fb;
+  border-radius: 1mm;
+}
+.admonition-title,details summary { font-weight: 700; color: var(--mjs-dark); margin: 0 0 1mm; }
+.admonition.warning,.admonition.danger { border-color: #e79d31; background: #fff6e6; }
+.admonition.tip,.admonition.success { border-color: var(--mjs-secondary); background: #f1f8eb; }
+.admonition p:last-child,details p:last-child { margin-bottom: 0; }
+details > summary { list-style: none; }
+details > summary::-webkit-details-marker { display: none; }
+.tabbed-set > input, .tabbed-labels { display: none !important; }
+.tabbed-content, .tabbed-content > .tabbed-block {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+  height: auto !important;
+}
+.tabbed-block { border: 0 !important; margin: 2mm 0 4mm; }
+.print-tab-title { font-weight: 700; color: var(--mjs-primary); margin: 2mm 0; }
+.grid.cards,.grid.cards ul { display: block; list-style: none; padding: 0; }
+.grid.cards li { border: 1px solid var(--mjs-line); padding: 3mm; margin-bottom: 2.5mm; border-radius: 2mm; }
+.mjs-progress-panel,.mjs-progress-track,.mjs-progress-label,.mjs-progress-fill,.mjs-progress-count { display: none !important; }
+.mjs-task { margin-bottom: 1mm; }
+.mjs-task input { margin-right: 2mm; accent-color: var(--mjs-secondary); }
+.md-button, .headerlink, .md-typeset__scrollwrap > .md-typeset__table > .md-clipboard { display: none !important; }
+@media screen {
+  body { max-width: 850px; margin: 3rem auto; padding: 2rem; background: white; }
+}
