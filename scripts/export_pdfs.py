@@ -36,7 +36,7 @@ def config():
 
 
 def find_sections(project):
-    """Cada sección de nav ocupa una carpeta con index.md, como guia/ o ut01/."""
+    """Cada sección de nav ocupa una carpeta temática con index.md."""
     sections = []
     for item in project["nav"]:
         if not isinstance(item, dict):
@@ -191,7 +191,7 @@ def export():
     print("Secciones detectadas:", ", ".join(name for name, _, _ in sections), flush=True)
 
     DOWNLOADS.mkdir(parents=True, exist_ok=True)
-    # Evita PDFs obsoletos cuando se retire una UT.
+    # Evita PDFs obsoletos cuando se retire una sección.
     for pdf in DOWNLOADS.glob("*.pdf"):
         pdf.unlink()
     build_site()
@@ -249,7 +249,7 @@ def export():
                         footer_template=(
                             '<div style="font-size:8px;color:#64748b;width:100%;'
                             'padding:0 15mm;display:flex;justify-content:space-between;">'
-                            "<span>MJS Playground · Documentación</span>"
+                            "<span>MJS Playground · Acceso a Datos</span>"
                             '<span><span class="pageNumber"></span> / '
                             '<span class="totalPages"></span></span></div>'
                         ),

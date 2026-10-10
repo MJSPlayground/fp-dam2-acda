@@ -1,5 +1,12 @@
 .venv/
 site/
+target/
+.m2-cache/
+*.log
+*.tmp
+*.bak
+*.swp
+*~
 __pycache__/
 *.py[cod]
 .DS_Store

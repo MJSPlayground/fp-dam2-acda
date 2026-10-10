@@ -1,25 +1,21 @@
 [project]
-site_name = "MJS Playground · Documentación"
-site_description = "Plantilla de documentación reutilizable"
+site_name = "MJS Playground · Acceso a Datos"
+site_description = "Material de aprendizaje de Acceso a Datos para 2.º DAM"
 site_author = "Mikel Aingeru Jorge Soteras"
-site_url = "https://mjsplayground.github.io/mjs-docs-template/"
+site_url = "https://mjsplayground.github.io/fp-dam2-acda/"
 copyright = "© MJS Playground"
 docs_dir = "docs"
 site_dir = "site"
 extra_css = ["stylesheets/colors.css", "stylesheets/extra.css"]
 extra_javascript = ["javascripts/extra.js"]
 nav = [
-  { "Guía" = [
-    "guia/index.md",
-    { "Organización" = "guia/organizacion.md" },
-    { "Bloques desplegables" = [
-      { "Página interior" = "guia/bloques/pagina.md" },
-    ] },
-  ] },
-  { "Referencia" = [
-    "referencia/index.md",
-    { "Ejemplos de código" = "referencia/codigo.md" },
-  ] },
+  { "Manejo de ficheros y directorios" = ["ficheros/index.md"] },
+  { "Herramientas de mapeo objeto-relacional (ORM) y JPA con Hibernate" = ["hibernate/index.md"] },
+  { "Acceso a datos mediante componentes (Spring)" = ["spring/index.md"] },
+  { "Conexiones a bases de datos relacionales (JDBC)" = ["jdbc/index.md"] },
+  { "Bases de datos documentales con Cloud Firestore" = ["firestore/index.md"] },
+  { "Bases de datos NoSQL con MongoDB" = ["mongodb/index.md"] },
+  { "Ayuda y herramientas" = ["ayuda/index.md"] },
 ]
 
 [project.extra]
@@ -34,15 +30,9 @@ language = "es"
 logo = "assets/branding/mjs-playground.svg"
 favicon = "assets/branding/mjs-playground.svg"
 features = [
-  "navigation.tabs",
-  "navigation.indexes",
-  "navigation.top",
-  "navigation.path",
-  "toc.follow",
-  "content.code.copy",
-  "content.code.annotate",
-  "content.tabs.link",
-  "search.highlight",
+  "navigation.tabs", "navigation.indexes", "navigation.top", "navigation.path",
+  "toc.follow", "content.code.copy", "content.code.annotate",
+  "content.tabs.link", "search.highlight",
 ]
 
 [[project.theme.palette]]

@@ -9,35 +9,48 @@ hide:
 
 <div markdown>
 
-<span class="mjs-eyebrow">MJS Playground · Documentación</span>
+<span class="mjs-eyebrow">MJS Playground · Acceso a Datos</span>
 
-# Tu proyecto, bien explicado
+# Acceso a Datos
 
-Una plantilla común para explicar módulos docentes o aplicaciones. Sustituye esta presentación por la de tu propio proyecto.
+Aprende a guardar, consultar y transformar información desde aplicaciones Java: ficheros, bases relacionales y bases documentales.
 
-[Empezar](guia/index.md){ .md-button .md-button--primary }
-[Ejemplos](referencia/index.md){ .md-button }
+[Empezar por ficheros](ficheros/index.md){ .md-button .md-button--primary }
+[Preparar el entorno](ayuda/index.md){ .md-button }
 
 </div>
 </div>
 
-## Contenidos de ejemplo
+## Temas
+
+El recorrido sigue el [índice aprobado](https://github.com/MJSPlayground/fp-dam2-acda/blob/main/CONTENIDOS_ACDA.md). Cada tema comienza con una introducción; las páginas de aprendizaje se publicarán progresivamente.
 
 <div class="grid cards" markdown>
 
-- **Guía**
+- **[Manejo de ficheros y directorios](ficheros/index.md)**
 
-    Un apartado de documentación con páginas agrupadas.
+    Persistencia local y transformación de formatos.
 
-    [Abrir guía](guia/index.md)
+- **[Herramientas de mapeo objeto-relacional (ORM) y JPA con Hibernate](hibernate/index.md)**
 
-- **Referencia**
+    Entidades Java, relaciones y persistencia en MySQL.
 
-    Ejemplos de componentes y fragmentos de código.
+- **[Acceso a datos mediante componentes (Spring)](spring/index.md)**
 
-    [Abrir referencia](referencia/index.md)
+    Componentes, servicios, repositorios y aplicaciones MVC.
+
+- **[Conexiones a bases de datos relacionales (JDBC)](jdbc/index.md)**
+
+    Acceso SQL directo con repositorios propios.
+
+- **[Bases de datos documentales con Cloud Firestore](firestore/index.md)**
+
+    Documentos y servicios REST con Spring Boot.
+
+- **[Bases de datos NoSQL con MongoDB](mongodb/index.md)**
+
+    Persistencia documental y consultas con MongoDB.
 
 </div>
 
-!!! note "Plantilla"
-    Las secciones son de demostración. Personalízalas en la configuración antes de publicar.
+Consulta también [Ayuda y herramientas](ayuda/index.md) para preparar el entorno. El icono de la cabecera permite descargar el PDF del tema actual o el temario completo.

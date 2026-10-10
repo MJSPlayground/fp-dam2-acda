@@ -50,7 +50,7 @@ def make_print_html(sections, title, article_markup, project, print_css, *, all_
         toc.append(f'<li class="print-index-unit"><a href="#pdf-{slug}"><strong>{escape(name)}</strong></a>'
                    + navigation_index(section_navigation(project, slug), anchors) + "</li>")
         chapters.append(f'<section class="print-unit" id="pdf-{slug}"><header class="print-unit-header">'
-                        '<span class="print-unit-kicker">MJS Playground · Documentación</span>'
+                        '<span class="print-unit-kicker">MJS Playground · Acceso a Datos</span>'
                         f'<h1>{escape(name)}</h1></header>' + '\n'.join(blocks) + "</section>")
     heading = "Índice general" if all_units else "Índice de la sección"
     type_name = "Documentación completa" if all_units else "Sección"
