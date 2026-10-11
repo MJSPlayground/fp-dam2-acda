@@ -2,7 +2,7 @@
 
 ## Índice de contenidos
 
-Cada tema se organiza en bloques temáticos, páginas de contenido, prácticas de aprendizaje y una sección final de **Ampliación**. Las prácticas guiadas pueden integrarse en una explicación si son breves o disponer de página propia cuando tengan entidad suficiente. En las actividades de persistencia se suministran las interfaces preparadas cuando su desarrollo no es el objetivo del ejercicio. Las prácticas incorporan reglas de negocio de complejidad progresiva.
+Cada tema se organiza en bloques temáticos, páginas de contenido, **una práctica guiada de cierre por bloque**, prácticas finales y una sección de **Ampliación**. Antes de cada práctica de cierre, las páginas explican gradualmente los conceptos nuevos con ejemplos pequeños e interpretados. Cada práctica de cierre adopta un formato *codelab*: contexto, preparación, pasos razonados y comprobables, código incremental, pistas o soluciones parciales desplegables cuando sean útiles, pequeños retos de integración y acceso destacado a la solución pública completa. No se crean simultáneamente otra «práctica de bloque» autónoma con los mismos objetivos; sus retos se integran en el codelab. **Las prácticas finales siguen siendo autónomas**, con enunciado, proyecto inicial cuando proceda y solución pública al final, sin resolverlas paso a paso. En las actividades de persistencia se suministran interfaces preparadas cuando su desarrollo no es el objetivo. La complejidad de las reglas de negocio progresa con los contenidos. Los números de bloques orientan dentro del tema; no se usan números de UT en el material público.
 
 ---
 
@@ -15,43 +15,39 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, prácticas d
 - **Sistemas de ficheros y rutas.** Archivos, directorios, rutas absolutas y relativas, directorio de trabajo y permisos.
 - **Gestión de ficheros con `Path` y `Files`.** Crear, copiar, mover, eliminar, inspeccionar propiedades y gestionar fallos.
 - **Recorrido y búsqueda de archivos.** Listar, filtrar, recorrer árboles de directorios e inventariar archivos.
-- **Práctica guiada:** organizar y explorar directorios con `Path` y `Files`.
-- **Práctica de bloque:** inventario de archivos con filtros, estadísticas y reglas de selección.
+- **Práctica guiada de cierre del bloque:** Organizar e inventariar directorios con `Path` y `Files`, incorporando recorrido, filtros, tamaños, estadísticas, exportación y tratamiento de incidencias.
 
 ### Bloque 2. Ficheros de texto y CSV
 
 - **Lectura y escritura de texto.** UTF-8, `Files.readString`, `Files.writeString` y flujos de caracteres.
 - **Procesamiento eficiente de texto.** Lectura línea a línea, `BufferedReader`, `BufferedWriter` y `try-with-resources`.
 - **Ficheros CSV.** Delimitadores, encabezados, comillas, campos vacíos, bibliotecas CSV y validación.
-- **Práctica guiada:** importar un CSV, validar campos y generar un informe de texto.
-- **Práctica de bloque:** fusionar CSV, descartar entradas no válidas y exportar registros filtrados.
+- **Práctica guiada de cierre del bloque:** Importar, validar y combinar CSV, generar un informe de texto y exportar registros filtrados respetando el formato.
 
 ### Bloque 3. Ficheros XML
 
 - **Lectura, escritura y transformación XML con DOM.** Analizar documentos, recorrer elementos, modificar nodos, generar XML y configurar el analizador de forma segura frente a entidades externas (XXE).
-- **Práctica guiada:** leer XML y exportar los registros a CSV.
-- **Práctica de bloque:** transformar CSV en XML y aplicar validaciones a los datos.
+- **Práctica guiada de cierre del bloque:** Leer XML con DOM seguro, exportar registros a CSV y construir después XML a partir de CSV con validaciones.
 
 ### Bloque 4. Ficheros JSON
 
 - **Estructura y tipos de datos JSON.** Objetos, arrays, valores, estructuras anidadas y diferencias respecto a XML.
 - **Lectura y escritura JSON con Jackson.** `ObjectMapper`, árboles JSON, conversión de objetos Java y manejo de errores.
-- **Práctica guiada:** importar JSON y generar CSV.
-- **Práctica de bloque:** transformar información entre CSV, XML y JSON, incluyendo datos anidados y filtros.
+- **Práctica guiada de cierre del bloque:** Leer estructuras JSON con Jackson y transformar registros entre JSON, CSV y XML, incluyendo anidamiento y filtros.
 
 ### Bloque 5. Ficheros binarios
 
 - **Flujos de datos binarios.** `InputStream`, `OutputStream`, `DataInputStream` y `DataOutputStream`.
 - **Acceso aleatorio.** `RandomAccessFile`, desplazamientos, registros de longitud fija y actualización de datos.
 - **Serialización de objetos Java.** `Serializable`, streams de objetos, `serialVersionUID`, compatibilidad y riesgos de deserializar datos no confiables.
-- **Práctica guiada:** guardar, consultar y modificar registros binarios.
-- **Práctica de bloque:** leer registros binarios y generar un informe JSON o CSV con reglas de negocio.
+- **Práctica guiada de cierre del bloque:** Guardar, leer y modificar registros binarios de tamaño fijo; calcular informes de existencias y exportarlos a CSV o JSON.
 
 ### Bloque 6. Transformación de formatos y aplicación
 
+- **Organización básica del código de ejemplo.** Distinguir modelos de datos (`model.entity`), clases de lectura/escritura (`model.dao`), reglas de aplicación (`model.service`) y código de presentación o ejecución, con ejemplos sencillos y sin adelantar el estudio formal de ORM, JPA o inyección de dependencias.
 - **Importadores y exportadores reutilizables.** Separar lectura, transformación, validación y escritura en clases con responsabilidades claras.
 - **Validación y recuperación ante errores.** Registros incompletos, codificaciones, escrituras fallidas y conservación de información válida.
-- **Práctica de bloque:** conversor multiformato capaz de importar, validar y exportar una misma colección en diferentes formatos.
+- **Práctica guiada de cierre del bloque:** Construir progresivamente un conversor multiformato con importadores, validaciones, informes de incidencias y exportadores reutilizables.
 
 ### Prácticas finales
 
@@ -76,7 +72,7 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, prácticas d
 
 - **Desfase objeto-relacional y herramientas ORM.** Tablas frente a objetos, ventajas y limitaciones del mapeo.
 - **JPA, Jakarta Persistence e Hibernate.** Especificación, implementación, API de persistencia y papel del proveedor.
-- **Práctica de bloque:** identificar entidades, claves y relaciones de un caso de negocio.
+- **Práctica guiada de cierre del bloque:** Reconocer entidades, claves y relaciones de un caso de negocio antes de realizar el mapeo.
 
 ### Bloque 2. Instalación y configuración
 
@@ -84,8 +80,7 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, prácticas d
 - **Primer proyecto Hibernate con Maven.** Dependencias, configuración, conexión, registro de entidades y mención breve al mapeo XML (`orm.xml`) como alternativa, sin protagonismo en las prácticas.
 - **POJO, JavaBean y entidad persistente.** Constructores, propiedades, accesores y requisitos de persistencia.
 - **Mapeo de entidades mediante anotaciones.** `@Entity`, `@Table`, `@Id`, `@Column`, identificadores, tipos Java modernos y restricciones.
-- **Práctica guiada:** crear una entidad y comprobar su persistencia en MySQL.
-- **Práctica de bloque:** modelar otra entidad con tipos, restricciones y valores coherentes.
+- **Práctica guiada de cierre del bloque:** Configurar una aplicación Hibernate, persistir una entidad en MySQL y ampliar el modelo con otra entidad y sus restricciones.
 
 ### Bloque 3. Persistencia, servicios y logging
 
@@ -94,8 +89,7 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, prácticas d
 - **Transacciones con Hibernate.** Inicio, `commit`, `rollback` y manejo de recursos.
 - **Capa de servicio y reglas de negocio.** Validar invariantes y coordinar repositorios sin poner lógica comercial en la interfaz.
 - **Logging profesional con SLF4J y Log4j2.** Fachada e implementación, niveles, configuración, mensajes parametrizados y registro de excepciones.
-- **Práctica guiada:** repositorio y servicio para una entidad con validaciones y logs.
-- **Práctica de bloque:** CRUD con reglas de negocio y recuperación de errores.
+- **Práctica guiada de cierre del bloque:** Implementar un repositorio y un servicio con CRUD, reglas de negocio, transacciones, recuperación de errores y logging.
 
 ### Bloque 4. Relaciones entre entidades
 
@@ -103,16 +97,14 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, prácticas d
 - **Relaciones uno a muchos y muchos a uno (1:N / N:1).** `@OneToMany`, `@ManyToOne`, lado propietario y colecciones.
 - **Relaciones muchos a muchos (M:N).** `@ManyToMany`, tablas intermedias y entidades de asociación con datos propios.
 - **Carga y ciclo de vida de las relaciones.** `LAZY`, `EAGER`, cascadas, `orphanRemoval` y errores habituales.
-- **Práctica guiada:** relacionar entidades y verificar el resultado en MySQL.
-- **Práctica de bloque:** gestionar entidades relacionadas con restricciones de negocio.
+- **Práctica guiada de cierre del bloque:** Relacionar entidades y gestionar operaciones sobre relaciones con restricciones de negocio, comprobando los resultados en MySQL.
 
 ### Bloque 5. Consultas y recuperación
 
 - **Consultas HQL y JPQL.** Parámetros, filtros, ordenación y consultas tipadas.
 - **Consultas sobre relaciones.** Joins, proyecciones, agregaciones sencillas y paginación.
 - **Consultas SQL nativas con Hibernate.** Cuándo acceder a tablas directamente y cómo recuperar resultados.
-- **Práctica guiada:** consultas parametrizadas desde un repositorio y su servicio.
-- **Práctica de bloque:** búsquedas, informes y validaciones basadas en consultas.
+- **Práctica guiada de cierre del bloque:** Crear consultas parametrizadas y ampliar el repositorio con filtros, joins, informes y validaciones basadas en consultas.
 
 ### Prácticas finales
 
@@ -137,14 +129,14 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, prácticas d
 
 - **Componentes software y reutilización.** Interfaces, encapsulación, composición, ventajas e inconvenientes.
 - **Spring Framework y Spring Boot.** Ecosistema, starters, autoconfiguración y ejecución.
-- **Práctica guiada:** crear y ejecutar una aplicación Spring sencilla con componentes.
+- **Práctica guiada de cierre del bloque:** Crear y ejecutar una aplicación sencilla con componentes Spring, entendiendo su responsabilidad y reutilización.
 
 ### Bloque 2. Componentes y configuración Spring
 
 - **Contenedor IoC y ciclo de vida de beans.** Registro, creación, inicialización y gestión.
 - **Inyección de dependencias.** `@Component`, `@Service`, `@Repository`, `@Bean` e inyección por constructor.
 - **Propiedades, perfiles y eventos.** `application.properties`, configuración externa y comunicación entre componentes.
-- **Práctica de bloque:** sustituir implementaciones de un servicio mediante inyección de dependencias.
+- **Práctica guiada de cierre del bloque:** Configurar componentes y sustituir implementaciones de un servicio mediante inyección de dependencias.
 
 ### Bloque 3. Componentes de acceso a datos
 
@@ -152,21 +144,19 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, prácticas d
 - **Spring Data JPA.** `JpaRepository`, CRUD y consultas derivadas.
 - **Servicios, validación y transacciones.** Reglas de negocio, coordinación y `@Transactional`.
 - **Componentes de persistencia reutilizables.** Interfaces e implementaciones sobre ficheros y ORM.
-- **Práctica guiada:** conectar un servicio con un repositorio Spring Data JPA.
-- **Práctica de bloque:** implementar reglas de negocio sobre una aplicación preparada.
+- **Práctica guiada de cierre del bloque:** Conectar un servicio con Spring Data JPA e incorporar reglas de negocio sobre una aplicación parcialmente preparada.
 
 ### Bloque 4. Aplicaciones web con Thymeleaf
 
 - **Spring MVC y Thymeleaf.** Modelo, vista y controlador; lectura y adaptación de plantillas existentes.
 - **Formularios y visualización de datos.** Listados, formularios, mensajes y validación de entrada.
-- **Práctica guiada:** integrar un servicio con una interfaz Thymeleaf suministrada.
-- **Práctica de bloque:** completar la persistencia y validaciones de una aplicación cuyo frontal y controladores están preparados.
+- **Práctica guiada de cierre del bloque:** Integrar servicios con una interfaz MVC/Thymeleaf preparada y completar persistencia, formularios y validaciones.
 
 ### Bloque 5. Composición y reutilización
 
 - **Integración de varios servicios.** Coordinación de operaciones y colaboración sin dependencias circulares.
 - **Diseño de componentes reutilizables.** Interfaces, sustitución de implementaciones, bajo acoplamiento y empaquetado conceptual.
-- **Práctica de bloque:** aplicar varias reglas de negocio coordinadas en un sistema MVC preparado.
+- **Práctica guiada de cierre del bloque:** Coordinar varios servicios y reglas de negocio en un sistema MVC preparado, evitando acoplamiento innecesario.
 
 ### Prácticas finales
 
@@ -194,7 +184,7 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, prácticas d
 
 - **JDBC frente a herramientas ORM.** Drivers, arquitectura, control directo, ventajas y límites.
 - **Bases embebidas y de servidor.** SQLite y MySQL; características, elección y configuración.
-- **Práctica guiada:** conexiones iniciales a SQLite y MySQL preparado con Docker.
+- **Práctica guiada de cierre del bloque:** Preparar las conexiones iniciales a SQLite y MySQL con Docker, comparar su configuración y probar operaciones sencillas.
 
 ### Bloque 2. Conexiones y operaciones SQL
 
@@ -202,30 +192,28 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, prácticas d
 - **Ejecución de instrucciones SQL.** `Statement`, scripts, DDL, inserciones, actualizaciones y eliminaciones.
 - **Recuperación de resultados con `ResultSet`.** Filas, columnas, tipos y conversión a objetos Java.
 - **Consultas seguras con `PreparedStatement`.** Parámetros, reutilización y prevención de inyección SQL.
-- **Práctica guiada:** consultas y CRUD de una tabla con parámetros.
-- **Práctica de bloque:** importación de registros y búsquedas seguras.
+- **Práctica guiada de cierre del bloque:** Desarrollar consultas parametrizadas y CRUD, importar registros y realizar búsquedas seguras mediante JDBC.
 
 ### Bloque 3. Repositorios y servicios JDBC
 
 - **Repositorios JDBC manuales.** Contratos, implementaciones y encapsulación de SQL.
 - **Servicios y reglas de negocio.** Verificaciones, coordinación, validación y errores.
 - **Integración con Spring MVC.** Usar repositorios JDBC creados desde cero mediante servicios Spring e interfaz web preparada.
-- **Práctica de bloque:** completar un sistema con vistas preparadas, repositorio JDBC y lógica comercial en el servicio.
+- **Práctica guiada de cierre del bloque:** Completar una aplicación con vistas preparadas, repositorios JDBC manuales y reglas comerciales en servicios.
 
 ### Bloque 4. Metadatos y consultas complejas
 
 - **Metadatos de JDBC.** `DatabaseMetaData` y `ResultSetMetaData`.
 - **Consultas de varias tablas.** Joins, claves generadas y transformación de relaciones a objetos.
 - **Procedimientos almacenados.** `CallableStatement`, parámetros de entrada/salida y resultados en MySQL.
-- **Práctica de bloque:** consultas relacionadas e informes con reglas sobre los datos.
+- **Práctica guiada de cierre del bloque:** Recuperar datos relacionados y metadatos para construir consultas e informes con reglas de negocio.
 
 ### Bloque 5. Transacciones y fiabilidad
 
 - **Transacciones JDBC.** ACID, `autoCommit`, `commit`, `rollback` y coordinación entre operaciones.
 - **Gestión de recursos y errores.** `try-with-resources`, `SQLException` y logging profesional.
 - **Pruebas de persistencia y consistencia.** CRUD, errores, fallos parciales e invariantes.
-- **Práctica guiada:** ejecutar una operación compuesta y provocar un rollback.
-- **Práctica de bloque:** gestión de inventario con varias operaciones atómicas.
+- **Práctica guiada de cierre del bloque:** Ejecutar operaciones compuestas y provocar `rollback`; ampliar el caso a una gestión de inventario con cambios atómicos.
 
 ### Prácticas finales
 
@@ -252,30 +240,28 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, prácticas d
 
 - **Bases relacionales y documentales.** Modelos, flexibilidad, ventajas, limitaciones y usos.
 - **Firebase y Cloud Firestore.** Servicios, arquitectura y componentes de una solución documental.
-- **Práctica de bloque:** identificar colecciones y documentos para un caso de negocio.
+- **Práctica guiada de cierre del bloque:** Diseñar un modelo documental de colecciones, documentos y relaciones para un caso empresarial, razonando decisiones básicas.
 
 ### Bloque 2. Configuración y acceso seguro
 
 - **Creación y configuración de Cloud Firestore.** Proyecto, base, región y consola.
 - **SDK de administración de Firebase con Spring Boot.** Dependencias, inicialización e integración.
 - **Credenciales y seguridad de acceso.** Cuentas de servicio, IAM, variables de entorno y protección de secretos.
-- **Práctica guiada:** conectar una aplicación de servicio a Firestore con configuración externa.
+- **Práctica guiada de cierre del bloque:** Configurar y conectar una aplicación de servicio a Firestore con credenciales y configuración externas seguras.
 
 ### Bloque 3. Modelado y persistencia
 
 - **Colecciones, documentos y tipos.** Identificadores, campos, mapas, listas y conversiones.
 - **Modelado de relaciones documentales.** Mapas, subcolecciones, referencias, duplicación y elección de estructura.
 - **Repositorios y servicios Firestore.** CRUD, reglas de negocio y gestión de fallos.
-- **Práctica guiada:** CRUD de documentos desde un servicio Spring.
-- **Práctica de bloque:** modelar documentos relacionados y validar operaciones comerciales.
+- **Práctica guiada de cierre del bloque:** Implementar CRUD documental y completar operaciones sobre documentos relacionados con validaciones comerciales.
 
 ### Bloque 4. HTTP y REST
 
 - **Fundamentos de HTTP.** Peticiones, respuestas, cabeceras, JSON y códigos de estado.
 - **Diseño de API REST.** Recursos, rutas, GET/POST/PUT/PATCH/DELETE, idempotencia y convenciones.
 - **Controladores REST con Spring Boot.** `@RestController`, mappings, parámetros, cuerpos y `ResponseEntity`.
-- **Práctica guiada:** publicar el CRUD de Firestore como API HTTP.
-- **Práctica de bloque:** diseñar endpoints para un segundo recurso con reglas de negocio.
+- **Práctica guiada de cierre del bloque:** Publicar el CRUD de Firestore como API REST y ampliar sus endpoints a un segundo recurso con reglas de negocio.
 
 ### Bloque 5. Buenas prácticas de API
 
@@ -283,15 +269,14 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, prácticas d
 - **Respuestas y tratamiento de errores.** Estados HTTP, `@RestControllerAdvice`, excepciones y formato coherente.
 - **OpenAPI y Swagger UI.** Esquemas, operaciones, respuestas y documentación interactiva.
 - **Pruebas manuales de API con Postman.** Colecciones, variables, escenarios normales y errores.
-- **Práctica guiada:** documentar y probar endpoints con OpenAPI y Postman.
-- **Práctica de bloque:** incorporar validaciones, errores consistentes y documentación a una API.
+- **Práctica guiada de cierre del bloque:** Documentar y probar una API con OpenAPI y Postman, incorporando validaciones y respuestas de error consistentes.
 
 ### Bloque 6. Consultas y consistencia
 
 - **Consultas y filtros Firestore.** Condiciones de igualdad, rangos y filtros combinados.
 - **Índices y paginación con cursores.** Ordenación, índices, límites, cursores y costes de lectura.
 - **Escrituras agrupadas y transacciones.** Operaciones coordinadas, consistencia y recuperación ante fallos.
-- **Práctica de bloque:** búsqueda paginada y operaciones coordinadas con reglas comerciales.
+- **Práctica guiada de cierre del bloque:** Construir consultas paginadas y operaciones coordinadas en Firestore, comprobando índices, costes y reglas comerciales.
 
 ### Prácticas finales
 
@@ -317,14 +302,13 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, prácticas d
 
 - **MongoDB y bases documentales.** Arquitectura, casos de uso y comparación con el modelo relacional y Firestore.
 - **BSON, documentos e identificadores.** `ObjectId`, tipos, listas y estructuras anidadas.
-- **Práctica de bloque:** diseñar documentos para una necesidad empresarial.
+- **Práctica guiada de cierre del bloque:** Diseñar documentos MongoDB para una necesidad empresarial y justificar el modelo elegido.
 
 ### Bloque 2. Instalación y modelado
 
 - **MongoDB standalone con Docker y Compass.** Contenedor, volúmenes, conexión y exploración visual.
 - **Diseño de documentos MongoDB.** Embebidos, referencias, esquemas flexibles y validación.
-- **Práctica guiada:** crear y consultar documentos desde Compass.
-- **Práctica de bloque:** elegir entre embebidos y referencias según consultas y reglas reales.
+- **Práctica guiada de cierre del bloque:** Crear y consultar documentos con Compass, analizando después embebidos frente a referencias según las consultas requeridas.
 
 ### Bloque 3. Persistencia con Spring Data MongoDB
 
@@ -332,22 +316,20 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, prácticas d
 - **Documentos Java y `MongoRepository`.** `@Document`, `@Id`, mapeo y CRUD.
 - **Servicios y reglas de negocio.** Validación, coordinación y errores de persistencia.
 - **Persistencia de estructuras relacionadas.** Listas, documentos embebidos, referencias y recuperación.
-- **Práctica guiada:** persistir entidades documentales mediante un repositorio.
-- **Práctica de bloque:** completar reglas de negocio sobre documentos relacionados.
+- **Práctica guiada de cierre del bloque:** Persistir documentos mediante Spring Data MongoDB y completar reglas de negocio sobre documentos relacionados.
 
 ### Bloque 4. Consultas y agregaciones
 
 - **Consultas personalizadas.** Consultas derivadas, `@Query`, filtros y operadores.
 - **Ordenación, paginación e índices.** Resultados paginados y búsquedas eficientes.
 - **Aggregation Pipeline.** `$match`, `$group`, `$project`, `$sort`, `$lookup` y cálculos.
-- **Práctica guiada:** filtros y agregaciones sobre una colección.
-- **Práctica de bloque:** construir informes y estadísticas a partir de agregaciones.
+- **Práctica guiada de cierre del bloque:** Construir consultas y agregaciones sobre colecciones y generar informes y estadísticas de sus resultados.
 
 ### Bloque 5. Integridad y pruebas
 
 - **Atomicidad y operaciones seguras sobre documentos.** Actualizaciones atómicas de un documento y límites de consistencia.
 - **Pruebas de persistencia MongoDB.** CRUD, consultas, validaciones, fallos y resultados.
-- **Práctica de bloque:** verificar invariantes y corregir errores en operaciones documentales.
+- **Práctica guiada de cierre del bloque:** Detectar y corregir problemas de integridad, validando invariantes y probando operaciones documentales.
 
 ### Prácticas finales
 
