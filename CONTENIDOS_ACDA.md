@@ -34,7 +34,7 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, **una práct
 
 - **Estructura y tipos de datos JSON.** Objetos, arrays, valores, estructuras anidadas y diferencias respecto a XML.
 - **Lectura y escritura JSON con Jackson.** `ObjectMapper`, árboles JSON, conversión de objetos Java y manejo de errores.
-- **Práctica guiada de cierre del bloque:** Leer estructuras JSON con Jackson y transformar registros entre JSON, CSV y XML, incluyendo anidamiento y filtros.
+- **Práctica guiada de cierre del bloque:** Leer estructuras JSON con Jackson y transformar registros entre JSONy y CSV, incluyendo anidamiento y filtros.
 
 ### Bloque 5. Ficheros binarios
 
