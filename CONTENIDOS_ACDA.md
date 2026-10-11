@@ -15,6 +15,7 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, **una práct
 - **Sistemas de ficheros y rutas.** Archivos, directorios, rutas absolutas y relativas, directorio de trabajo y permisos.
 - **Gestión de ficheros con `Path` y `Files`.** Crear, copiar, mover, eliminar, inspeccionar propiedades y gestionar fallos.
 - **Recorrido y búsqueda de archivos.** Listar, filtrar, recorrer árboles de directorios e inventariar archivos.
+- **Orientación para leer los proyectos de ejemplo.** Reconocer de manera introductoria las clases de datos, lectura/escritura, reglas y ejecución de un programa Java sin adelantar la enseñanza formal de patrones, ORM ni Spring.
 - **Práctica guiada de cierre del bloque:** Organizar e inventariar directorios con `Path` y `Files`, incorporando recorrido, filtros, tamaños, estadísticas, exportación y tratamiento de incidencias.
 
 ### Bloque 2. Ficheros de texto y CSV
