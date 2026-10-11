@@ -52,9 +52,9 @@ Cada tema se organiza en bloques temáticos, páginas de contenido, **una práct
 
 ### Prácticas finales
 
-- **Final fácil — Conversor de datos de clientes.** Leer un formato, comprobar reglas sencillas y generar otro formato.
-- **Final intermedia — Importador y exportador de inventario.** Leer y combinar archivos, validar existencias y precios, generar informes y convertir entre varios formatos.
-- **Final avanzada — Gestor universal de información comercial.** Aplicación con JavaFX preparado, conversión multiformato, filtros, cálculos, errores y persistencia.
+- **Final fácil — Conversor de datos de clientes.** Leer un formato, comprobar reglas sencillas y generar otro formato (No incluir XML).
+- **Final intermedia — Importador y exportador de inventario.** Leer y combinar archivos, validar existencias y precios, generar informes y convertir entre varios formatos (No incluir XML).
+- **Final avanzada — Gestor universal de información comercial.** Aplicación con JavaFX preparado, conversión multiformato, filtros, cálculos, errores y persistencia (No incluir XML).
 
 ### Ampliación
 
