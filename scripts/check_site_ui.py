@@ -119,6 +119,62 @@ def check():
                 page.set_viewport_size({"width": 768, "height": 900})
                 page.reload(wait_until="load")
                 assert page.locator("h1").is_visible(), "Contenido no visible en pantalla menor"
+                # Piloto Bloque 1: pie nativo, figuras y codelab en varios tamaños.
+                captures = SITE.parent / "qa-captures"
+                captures.mkdir(exist_ok=True)
+                sequence = [
+                    ("ficheros/rutas/", "ficheros/gestion-recorrido/"),
+                    ("ficheros/gestion-recorrido/", "ficheros/listar-recorrer/"),
+                    ("ficheros/listar-recorrer/", "ficheros/guiada-directorios/"),
+                    ("ficheros/guiada-directorios/", "ficheros/texto/"),
+                    ("ficheros/ampliacion-escrituras-fiables/", "hibernate/"),
+                ]
+                for source, destination in sequence:
+                    page.goto(base + source, wait_until="load")
+                    next_link = page.locator(".md-footer__link--next")
+                    assert next_link.count() == 1 and next_link.get_attribute("href")
+                    next_link.click()
+                    assert page.url == base + destination, f"Pie roto: {source} → {destination}"
+                page.set_viewport_size({"width": 1366, "height": 768})
+                page.goto(base + "ficheros/rutas/", wait_until="load")
+                assert page.locator("figure.mjs-figure img").count() == 1
+                assert page.locator("figure.mjs-figure figcaption").is_visible()
+                assert page.locator("figure.mjs-figure img").evaluate("img => img.complete && img.naturalWidth > 0")
+                page.locator(".md-footer__link--next").focus()
+                assert page.locator(".md-footer__link--next").evaluate("el => getComputedStyle(el).outlineStyle !== 'none'")
+                page.locator("figure.mjs-figure img").hover()
+                page.wait_for_timeout(300)
+                assert page.locator("figure.mjs-figure img").evaluate("el => getComputedStyle(el).transform !== 'none'")
+                page.emulate_media(reduced_motion="reduce")
+                assert page.locator("figure.mjs-figure img").evaluate("el => getComputedStyle(el).transform === 'none'")
+                page.emulate_media(reduced_motion="no-preference")
+                page.screenshot(path=str(captures / "rutas-desktop.png"), full_page=True)
+                page.goto(base + "ficheros/guiada-directorios/", wait_until="load")
+                assert page.locator(".mjs-task input[type=checkbox]").count() == 11
+                assert page.locator(".mjs-resources a.md-button").count() >= 5
+                details = page.locator("article details")
+                assert details.count() >= 2 and all(not details.nth(i).evaluate("el => el.open") for i in range(details.count()))
+                details.first.locator("summary").click()
+                assert details.first.evaluate("el => el.open")
+                box = page.locator("#b1-p1")
+                box.check()
+                assert "1 de 11" in page.locator(".mjs-progress-count").inner_text()
+                page.reload(wait_until="load")
+                assert page.locator("#b1-p1").is_checked(), "No persiste el avance"
+                page.locator("#b1-p1").uncheck()
+                page.screenshot(path=str(captures / "codelab-desktop.png"), full_page=True)
+                page.set_viewport_size({"width": 390, "height": 844})
+                page.reload(wait_until="load")
+                assert page.locator("h1").is_visible()
+                assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 2"), "Desbordamiento móvil"
+                page.screenshot(path=str(captures / "codelab-mobile.png"), full_page=True)
+                page.goto(base + "ficheros/rutas/", wait_until="load")
+                assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 2"), "Figura desborda en móvil"
+                page.screenshot(path=str(captures / "rutas-mobile.png"), full_page=True)
+                page.set_viewport_size({"width": 1366, "height": 768})
+                page.locator('.md-header__option label:visible').click()
+                assert page.locator('body').get_attribute('data-md-color-scheme') == 'slate'
+                page.screenshot(path=str(captures / "rutas-dark.png"), full_page=True)
                 assert not errors, "Errores JavaScript: " + "; ".join(errors)
                 print("OK: navegación, estilos, recursos y PDF verificados.", flush=True)
             finally:

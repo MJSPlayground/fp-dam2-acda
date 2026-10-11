@@ -15,8 +15,8 @@ Usa el mismo patrón con las clases siguientes y los argumentos indicados en cad
 
 | Actividad | Clase |
 | --- | --- |
-| Organización guiada | `OrganizarDirectorios` |
-| Inventario de rutas | `Inventariar` |
+| Codelab de organización (entrada, trabajo, `--reemplazar` opcional) | `OrganizarDirectorios` |
+| Codelab de inventario (entrada, extensión, CSV de salida fuera de entrada) | `Inventariar` |
 | Informe CSV guiado | `InformeCsvGuiado` |
 | Fusión CSV | `FusionarCsv` |
 | XML ⇄ CSV de tres columnas | `ClientesBasicos` |
@@ -31,3 +31,14 @@ Usa el mismo patrón con las clases siguientes y los argumentos indicados en cad
 | Gestor comercial | `GestorApp` con `javafx:run` |
 
 `ComercialService` guarda el estado en `~/MJSPlayground/comercial.json` por defecto. Se puede pasar otra ruta externa como argumento de JavaFX. Los tests usan directorios temporales y no tocan esa ruta.
+
+## Solución concreta del codelab de directorios
+
+Genera los datos con [`PrepararDatos`](../codelab-inicial/src/main/java/es/mjsplayground/acda/ficheros/codelab/PrepararDatos.java) desde el proyecto inicial. Desde **esta carpeta de solución**, ejecuta:
+
+```powershell
+.\mvnw.cmd -q exec:java '-Dexec.mainClass=es.mjsplayground.acda.ficheros.cli.OrganizarDirectorios' '-Dexec.args=../codelab-inicial/trabajo-codelab/entrada ../codelab-inicial/trabajo-codelab/referencia'
+.\mvnw.cmd -q exec:java '-Dexec.mainClass=es.mjsplayground.acda.ficheros.cli.Inventariar' '-Dexec.args=../codelab-inicial/trabajo-codelab/entrada csv ../codelab-inicial/trabajo-codelab/referencia/inventario.csv'
+```
+
+La primera clase prepara `copias/clientes.csv` y muestra CSV hasta profundidad tres; la segunda recorre hasta profundidad cuatro, registra incidencias, ordena filas y exporta el informe. En la muestra hay cuatro CSV, 22 bytes y el mayor es `historico/2025/marzo.CsV`. El informe está fuera de entrada. Si repites la copia, pasa `--reemplazar` como tercer argumento de la primera clase solo cuando desees sobrescribir.

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 230" role="img" aria-labelledby="title desc">
+  <title id="title">Directorio de trabajo y rutas de entrada y salida</title>
+  <desc id="desc">Desde trabajo-codelab salen dos ramas: entrada con los datos que se recorren y salida con copias e inventario.csv.</desc>
+  <rect width="720" height="230" rx="18" fill="#eef7fc"/>
+  <path d="M130 80v50m0 0h190m-190 0h-35m225 0v35" fill="none" stroke="#147eae" stroke-width="4" stroke-linecap="round"/>
+  <path d="M320 130h215v35" fill="none" stroke="#568c36" stroke-width="4" stroke-linecap="round"/>
+  <rect x="30" y="24" width="205" height="55" rx="10" fill="#19334b"/>
+  <text x="132" y="58" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="19">trabajo-codelab/</text>
+  <rect x="40" y="132" width="195" height="60" rx="10" fill="#147eae"/>
+  <text x="138" y="158" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="19">entrada/</text>
+  <text x="138" y="179" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="13">archivos examinados</text>
+  <rect x="240" y="132" width="190" height="60" rx="10" fill="#568c36"/>
+  <text x="335" y="158" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="19">salida/</text>
+  <text x="335" y="179" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="13">fuera del inventario</text>
+  <rect x="455" y="164" width="220" height="48" rx="10" fill="#fff" stroke="#568c36" stroke-width="3"/>
+  <text x="565" y="194" text-anchor="middle" fill="#19334b" font-family="Arial,sans-serif" font-size="16">copias/ · inventario.csv</text>
+</svg>

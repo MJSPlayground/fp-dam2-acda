@@ -144,8 +144,8 @@ def article_markup(source):
         elif tag.name == "h3":
             tag.name = "h4"
 
-    # Los botones de navegación no aportan nada en papel.
-    for button in article.select("a.md-button, a.headerlink"):
+    # Los enlaces de recursos sí son necesarios en papel; solo sobran las anclas de títulos.
+    for button in article.select("a.headerlink"):
         button.decompose()
 
     return str(article)
@@ -265,6 +265,10 @@ def export():
                             raise AssertionError(f"Falta la sección {section_title} en {pdf_path.name}")
                     if "Índice" not in extracted or "Fecha de generación" not in extracted or "Autor:" not in extracted:
                         raise AssertionError(f"Portada o índice no detectado en {pdf_path.name}")
+                    if filename == "ficheros" and not all(
+                        label in extracted for label in ("Proyecto inicial", "Generador de datos", "Ver solución completa")
+                    ):
+                        raise AssertionError("Faltan enlaces de recursos del codelab en ficheros.pdf")
                     cover_fields = [project.get("site_author", "")]
                     contacts = project.get("extra", {})
                     cover_fields.extend(contacts.get(key, "") for key in ("author_email_work", "author_email_personal"))

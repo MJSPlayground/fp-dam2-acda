@@ -32,8 +32,8 @@ def check():
                     local /= "index.html"
                 assert local.is_file(), f"Enlace roto: {rel} → {target}"
                 comprobados += 1
-            elif parsed.netloc == REPO and parsed.path.startswith("/MJSPlayground/fp-dam2-acda/tree/main/"):
-                local = ROOT / unquote(parsed.path.split("/tree/main/", 1)[1])
+            elif parsed.netloc == REPO and any(parsed.path.startswith(f"/MJSPlayground/fp-dam2-acda/{kind}/main/") for kind in ("tree", "blob")):
+                local = ROOT / unquote(parsed.path.split("/main/", 1)[1])
                 assert local.exists(), f"Proyecto enlazado inexistente: {rel} → {target}"
                 comprobados += 1
     print(f"OK: {len(pages)} páginas y {comprobados} enlaces internos/proyectos comprobados")

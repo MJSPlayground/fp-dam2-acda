@@ -11,7 +11,7 @@ extra_javascript = ["javascripts/extra.js"]
 nav = [
   { "Ficheros" = [
     "ficheros/index.md",
-    { "1. Ficheros y directorios" = ["ficheros/rutas.md", "ficheros/gestion-recorrido.md", "ficheros/guiada-directorios.md", "ficheros/practica-inventario.md"] },
+    { "1. Ficheros y directorios" = ["ficheros/rutas.md", "ficheros/gestion-recorrido.md", "ficheros/listar-recorrer.md", "ficheros/guiada-directorios.md"] },
     { "2. Texto y CSV" = ["ficheros/texto.md", "ficheros/csv.md", "ficheros/guiada-csv.md", "ficheros/practica-fusion-csv.md"] },
     { "3. XML" = ["ficheros/xml.md", "ficheros/guiada-xml-csv.md", "ficheros/practica-csv-xml.md"] },
     { "4. JSON" = ["ficheros/json.md", "ficheros/guiada-json-csv.md", "ficheros/practica-formatos-anidados.md"] },
@@ -49,7 +49,7 @@ language = "es"
 logo = "assets/branding/mjs-playground.svg"
 favicon = "assets/branding/mjs-playground.svg"
 features = [
-  "navigation.tabs", "navigation.indexes", "navigation.top", "navigation.path",
+  "navigation.tabs", "navigation.indexes", "navigation.top", "navigation.path", "navigation.footer",
   "toc.follow", "content.code.copy", "content.code.annotate",
   "content.tabs.link", "search.highlight",
 ]

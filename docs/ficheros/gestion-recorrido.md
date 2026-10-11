@@ -1,48 +1,76 @@
-# Gestión, recorrido y búsqueda
+﻿# Gestionar archivos y directorios
 
-[`Files`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html) concentra operaciones de creación, copia, movimiento, borrado e inspección. Sus métodos reciben un `Path` y consultan el sistema de ficheros. Suelen lanzar `IOException`: el mensaje y la excepción concreta aportan más información que una comprobación previa con `exists`.
+Ya sabemos construir un `Path`; ahora necesitamos realizar operaciones en disco. La clase [`Files`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html) reúne métodos estáticos que reciben rutas. La mayoría de operaciones modificadoras devuelven el `Path` creado o afectado y pueden lanzar `IOException`. En los ejemplos siguientes, los fragmentos se colocan dentro de un método que declara `throws IOException`; en una aplicación se captura el error cerca de la entrada para explicar al usuario qué ocurrió.
 
-## Crear y modificar sin perder datos por accidente
+## Preparar carpetas y archivos
 
-`createDirectories(carpeta)` crea también los padres que falten y acepta una carpeta ya existente. `createDirectory` exige que exista el padre. Una copia sin opciones falla si el destino ya existe; `REPLACE_EXISTING` permite sobrescribirlo solo cuando sea una decisión explícita. `move` puede cambiar de nombre o mover a otro directorio, pero sus garantías dependen del proveedor y del sistema de ficheros. `delete` falla si no existe la entrada; `deleteIfExists` devuelve `false` en ese caso. Un directorio no vacío no se elimina con una simple llamada a `delete`.
-
-Este fragmento ilustrativo prepara una carpeta de salida y copia un archivo. La copia sigue necesitando captura o propagación de `IOException` en el método que la contiene.
+[`createDirectory`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html#createDirectory(java.nio.file.Path,java.nio.file.attribute.FileAttribute...)) crea **una** carpeta: el padre debe existir y el destino no debe existir. [`createDirectories`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html#createDirectories(java.nio.file.Path,java.nio.file.attribute.FileAttribute...)) crea también los padres ausentes y acepta que la carpeta ya exista. Ambas reciben el `Path` deseado y devuelven esa ruta.
 
 ```java
-Path salida = Path.of("trabajo", "copias");
-Files.createDirectories(salida);
-Path copia = Files.copy(Path.of("entrada", "ventas.csv"), salida.resolve("ventas.csv"));
-System.out.println("Copia: " + copia);
+Path trabajo = Path.of("trabajo");
+Path copias = Files.createDirectories(trabajo.resolve("copias"));
+System.out.println(copias); // trabajo/copias
 ```
 
-Tras ejecutarlo, `trabajo/copias/ventas.csv` contiene los mismos bytes que la entrada. Si ya existía, `Files.copy` lanza `FileAlreadyExistsException`; así se evita un reemplazo silencioso. Para consultar tamaño y fecha usa `Files.size` y `Files.getLastModifiedTime`; para metadatos agrupados, [`BasicFileAttributes`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/attribute/BasicFileAttributes.html) evita varias consultas individuales.
+Después habrá una carpeta `trabajo/copias` relativa al directorio de trabajo. Si existe un *archivo* llamado `trabajo`, la operación fallará: una ruta válida en Java no implica que la estructura física permita usarla. [`createFile`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html#createFile(java.nio.file.Path,java.nio.file.attribute.FileAttribute...)) crea un archivo vacío y falla si el nombre está ocupado; todavía no escribe texto en él.
 
-## Listar un directorio
+## Consultar el tipo y las propiedades
 
-[`Files.list`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html#list(java.nio.file.Path)) devuelve un `Stream<Path>` con las entradas **directas**, sin entrar en subdirectorios. El stream mantiene recursos abiertos y debe cerrarse. El orden no está garantizado; ordénalo si la salida ha de ser reproducible.
+[`isDirectory`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html#isDirectory(java.nio.file.Path,java.nio.file.LinkOption...)) y [`isRegularFile`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html#isRegularFile(java.nio.file.Path,java.nio.file.LinkOption...)) devuelven un booleano. Son útiles para validar qué espera la aplicación, aunque `false` también puede significar que Java no pudo determinar el tipo. [`size`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html#size(java.nio.file.Path)) devuelve bytes, no caracteres. [`getLastModifiedTime`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html#getLastModifiedTime(java.nio.file.Path,java.nio.file.LinkOption...)) devuelve una fecha `FileTime`.
 
 ```java
-try (Stream<Path> entradas = Files.list(Path.of("entrada"))) {
-    entradas.filter(Files::isRegularFile)
-            .sorted()
-            .forEach(System.out::println);
+Path documento = Path.of("entregas", "clientes.csv");
+if (!Files.isRegularFile(documento)) {
+    throw new IOException("Se esperaba un archivo: " + documento.toAbsolutePath());
+}
+System.out.println(Files.size(documento) + " bytes");
+System.out.println(Files.getLastModifiedTime(documento));
+```
+
+Si el archivo contiene `a,b` en UTF-8 sin salto de línea, el tamaño será 3 bytes. La fecha real dependerá del equipo y del momento de creación. Para consultar juntas varias propiedades durante un recorrido, [`BasicFileAttributes`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/attribute/BasicFileAttributes.html) ofrece `size()`, `lastModifiedTime()` e `isRegularFile()`; lo retomaremos al inventariar.
+
+## Copiar, mover y cambiar el nombre
+
+[`Files.copy(origen, destino)`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html#copy(java.nio.file.Path,java.nio.file.Path,java.nio.file.CopyOption...)) conserva el origen y devuelve el `Path` del destino. El padre del destino debe existir. Sin opciones, un nombre ocupado produce `FileAlreadyExistsException`, protección útil frente a una repetición accidental.
+
+```java
+Path origen = Path.of("entregas", "clientes.csv");
+Path destino = Path.of("trabajo", "copias", "clientes.csv");
+Files.createDirectories(destino.getParent());
+Files.copy(origen, destino);
+```
+
+Tras ejecutar, existen las dos copias. Repetir la última línea falla. Solo si el requisito permite sustituir una copia, añade [`StandardCopyOption.REPLACE_EXISTING`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/StandardCopyOption.html). Esto puede perder los bytes antiguos del destino: ofrece esa decisión de forma explícita.
+
+[`Files.move`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html#move(java.nio.file.Path,java.nio.file.Path,java.nio.file.CopyOption...)) traslada la entrada; con otro nombre en el mismo directorio sirve para **renombrar**:
+
+```java
+Files.move(Path.of("trabajo", "borrador.csv"), Path.of("trabajo", "revisado.csv"));
+```
+
+Si el origen no existe falla; si el destino está ocupado, las opciones y el proveedor determinan el resultado. Un movimiento entre sistemas de ficheros distintos no tiene necesariamente las mismas garantías que un simple cambio de nombre.
+
+## Eliminar con intención
+
+[`delete`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html#delete(java.nio.file.Path)) no devuelve nada y falla si la entrada falta. [`deleteIfExists`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html#deleteIfExists(java.nio.file.Path)) devuelve `true` si eliminó algo y `false` si no había entrada. Ninguna de estas llamadas borra directamente un directorio no vacío.
+
+```java
+boolean eliminada = Files.deleteIfExists(Path.of("trabajo", "copia-antigua.csv"));
+System.out.println(eliminada ? "Copia eliminada" : "No había copia");
+```
+
+## Leer el error antes de corregirlo
+
+`NoSuchFileException` indica que falta una entrada usada en la operación; `FileAlreadyExistsException`, que el destino está ocupado; `AccessDeniedException`, que el proceso no obtuvo acceso. Todas son formas concretas de `IOException`. Una ruta puede ser correcta y aun así fallar por permisos, bloqueo, carpeta padre inexistente o cambios simultáneos. Muestra la ruta implicada y conserva la causa:
+
+```java
+try {
+    Files.copy(origen, destino);
+} catch (FileAlreadyExistsException ex) {
+    System.err.println("La copia ya existe: " + ex.getFile());
+} catch (IOException ex) {
+    System.err.println("No se pudo copiar " + origen + " a " + destino + ": " + ex.getMessage());
 }
 ```
 
-Este fragmento imprime solo archivos normales del primer nivel. `isRegularFile` puede devolver `false` cuando no puede determinar el tipo, de modo que un inventario riguroso también debe registrar incidencias de lectura.
-
-## Recorrer un árbol
-
-[`Files.walk`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html#walk(java.nio.file.Path,int,java.nio.file.FileVisitOption...)) recorre varios niveles y también devuelve un stream que se cierra. Es cómodo para árboles pequeños; los errores posteriores a abrirlo pueden surgir durante la iteración como `UncheckedIOException`. Si necesitas decidir qué hacer al entrar en cada directorio o continuar después de un fallo concreto, [`walkFileTree`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html#walkFileTree(java.nio.file.Path,java.nio.file.FileVisitor)) con `FileVisitor` ofrece control explícito de `visitFileFailed` y de la profundidad.
-
-```java
-try (Stream<Path> rutas = Files.walk(Path.of("entrada"), 3)) {
-    rutas.filter(p -> Files.isRegularFile(p))
-         .filter(p -> p.getFileName().toString().endsWith(".csv"))
-         .forEach(System.out::println);
-}
-```
-
-El límite `3` incluye la raíz como profundidad cero. La comparación de extensión es sensible a mayúsculas; si buscas `.CSV`, decide si tu regla debe normalizar el nombre. No sigas enlaces simbólicos salvo que el caso lo exija: pueden formar ciclos o salir de la carpeta esperada. Para conjuntos muy grandes consulta [streaming](ampliacion-streaming.md).
-
-Aplica estas operaciones en la [práctica guiada](guiada-directorios.md) y después en el [inventario autónomo](practica-inventario.md).
+Capturar `IOException` antes de `FileAlreadyExistsException` impediría distinguir este caso concreto. Tampoco conviene hacer `exists` y asumir que la copia siguiente será segura: otro proceso podría crear o borrar una entrada entre ambas llamadas.

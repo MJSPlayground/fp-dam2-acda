@@ -1,6 +1,9 @@
 .venv/
 site/
+qa-captures/
+qa-clean/
 target/
+**/trabajo-codelab/
 .m2-cache/
 *.log
 *.tmp

@@ -180,7 +180,14 @@ details > summary::-webkit-details-marker { display: none; }
 .mjs-progress-panel,.mjs-progress-track,.mjs-progress-label,.mjs-progress-fill,.mjs-progress-count { display: none !important; }
 .mjs-task { margin-bottom: 1mm; }
 .mjs-task input { margin-right: 2mm; accent-color: var(--mjs-secondary); }
-.md-button, .headerlink, .md-typeset__scrollwrap > .md-typeset__table > .md-clipboard { display: none !important; }
+.mjs-step { border-left: 2mm solid var(--mjs-primary); padding-left: 4mm; margin: 5mm 0; }
+.print-chapter h3.mjs-step-heading { border-left: 1.5mm solid var(--mjs-primary); padding: 2mm 3mm; background: #eef4f8; }
+.mjs-figure { text-align: center; margin: 4mm auto; }
+.mjs-figure img { max-width: 100%; height: auto; border-radius: 2mm; }
+.mjs-figure figcaption { font-size: 8pt; color: #52677a; }
+.mjs-resources a { display: inline !important; margin-right: 4mm; }
+.md-button { display: inline !important; padding: 0 !important; margin-right: 4mm; border: 0 !important; color: #075b89 !important; text-decoration: underline !important; background: none !important; }
+.headerlink, .md-typeset__scrollwrap > .md-typeset__table > .md-clipboard { display: none !important; }
 @media screen {
   body { max-width: 850px; margin: 3rem auto; padding: 2rem; background: white; }
 }

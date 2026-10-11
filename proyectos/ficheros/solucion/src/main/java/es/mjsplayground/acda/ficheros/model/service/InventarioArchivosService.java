@@ -9,27 +9,38 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Stream;
+import java.nio.file.FileVisitResult;
+import java.nio.file.SimpleFileVisitor;
+import java.util.EnumSet;
+import java.nio.file.FileVisitOption;
 
 public final class InventarioArchivosService {
     public record Inventario(List<ArchivoInventariado> archivos, List<String> incidencias, long bytes, Path mayor) {
         public Inventario { archivos = List.copyOf(archivos); incidencias = List.copyOf(incidencias); }
     }
     public Inventario crear(Path raiz, String extension) throws IOException {
-        if (!Files.isDirectory(raiz)) throw new IOException("No es un directorio: " + raiz);
-        if (extension.isBlank()) throw new IllegalArgumentException("Extensión vacía");
+        if (raiz == null || !Files.isDirectory(raiz)) throw new IOException("No es un directorio: " + raiz);
+        if (extension == null || !extension.matches("\\.?[A-Za-z0-9]+"))
+            throw new IllegalArgumentException("Indica una extensión simple, por ejemplo csv");
         String sufijo = (extension.startsWith(".") ? extension : "." + extension).toLowerCase(Locale.ROOT);
         List<ArchivoInventariado> archivos = new ArrayList<>(); List<String> incidencias = new ArrayList<>();
-        try (Stream<Path> rutas = Files.walk(raiz, 4)) {
-            for (Path p : rutas.filter(Files::isRegularFile).toList()) {
-                if (!p.getFileName().toString().toLowerCase(Locale.ROOT).endsWith(sufijo)) continue;
-                try {
-                    BasicFileAttributes a = Files.readAttributes(p, BasicFileAttributes.class);
+        Files.walkFileTree(raiz, EnumSet.noneOf(FileVisitOption.class), 4, new SimpleFileVisitor<>() {
+            @Override public FileVisitResult visitFile(Path p, BasicFileAttributes a) {
+                if (a.isRegularFile() && p.getFileName().toString().toLowerCase(Locale.ROOT).endsWith(sufijo))
                     archivos.add(new ArchivoInventariado(raiz.relativize(p), a.size(), a.lastModifiedTime().toInstant()));
-                } catch (IOException ex) { incidencias.add(p + ": " + ex.getMessage()); }
+                return FileVisitResult.CONTINUE;
             }
-        }
+            @Override public FileVisitResult visitFileFailed(Path p, IOException ex) {
+                incidencias.add(p + ": " + ex.getMessage());
+                return FileVisitResult.CONTINUE;
+            }
+            @Override public FileVisitResult postVisitDirectory(Path p, IOException ex) {
+                if (ex != null) incidencias.add(p + ": " + ex.getMessage());
+                return FileVisitResult.CONTINUE;
+            }
+        });
         archivos.sort(Comparator.comparing(a -> a.relativa().toString()));
+        incidencias.sort(String::compareTo);
         long bytes = archivos.stream().mapToLong(ArchivoInventariado::bytes).sum();
         Path mayor = archivos.stream().max(Comparator.comparingLong(ArchivoInventariado::bytes)
                 .thenComparing(a -> a.relativa().toString(), Comparator.reverseOrder()))
