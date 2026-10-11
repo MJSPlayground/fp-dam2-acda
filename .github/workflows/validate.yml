@@ -24,6 +24,7 @@ jobs:
       - name: Probar proyectos Java
         run: |
           (cd proyectos/ficheros/codelab-inicial && ./mvnw test --batch-mode)
+          (cd proyectos/ficheros/codelab-solucion && ./mvnw test --batch-mode)
           (cd proyectos/ficheros/inicial && ./mvnw test --batch-mode)
           (cd proyectos/ficheros/solucion && ./mvnw test --batch-mode)
       - uses: actions/setup-python@v5

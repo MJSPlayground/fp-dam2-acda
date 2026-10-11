@@ -4,7 +4,7 @@ Esta sección reúne las referencias transversales necesarias para trabajar con 
 
 ## Entorno Java y proyectos
 
-Los proyectos Java tendrán **Java 25** como objetivo inicial y utilizarán **Maven Wrapper**. Para preparar el equipo, instala un JDK 25, selecciona ese JDK en el IDE y comprueba `java -version`. Ejecuta el wrapper incluido en cada proyecto (`.\mvnw.cmd` en Windows o `./mvnw` en otros sistemas). La [guía de proyectos Maven](proyectos-maven.md) explica la importación y el diagnóstico inicial.
+Los proyectos Java tendrán **Java 25** como objetivo inicial. Instala el JDK, abre en IntelliJ IDEA la carpeta concreta que contiene `pom.xml`, espera la sincronización Maven y selecciona ese JDK. Ejecuta las clases `main` con el botón verde **Run**. La [guía de proyectos Maven e IntelliJ](proyectos-maven.md) explica la importación, la localización de resultados y el diagnóstico inicial. Maven Wrapper queda disponible para comprobaciones técnicas opcionales.
 
 ## Contenedores y bases de datos
 

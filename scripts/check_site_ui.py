@@ -122,6 +122,25 @@ def check():
                 # Piloto Bloque 1: pie nativo, figuras y codelab en varios tamaños.
                 captures = SITE.parent / "qa-captures"
                 captures.mkdir(exist_ok=True)
+                for width in (1366, 390):
+                    page.set_viewport_size({"width": width, "height": 844})
+                    for path, expected in (("ficheros/", 1), ("ficheros/rutas/", 2)):
+                        page.goto(base + path, wait_until="load")
+                        links = page.locator(".md-footer__link")
+                        assert links.count() == expected, path
+                        boxes = [link.bounding_box() for link in links.all()]
+                        assert all(box and box["width"] <= 280 and box["height"] < 100 for box in boxes), (path, width, boxes)
+                        assert all(link.locator(".md-footer__title").is_visible() for link in links.all()), (path, width, "Título del pie oculto")
+                        if expected == 1:
+                            assert boxes[0]["x"] + boxes[0]["width"] > width - 90, "El enlace único siguiente debe quedar a la derecha"
+                        elif width > 600:
+                            assert boxes[0]["x"] + boxes[0]["width"] < boxes[1]["x"], "Los enlaces deben ocupar extremos opuestos"
+                        assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 2"), (path, width)
+                    page.goto(base + "ficheros/rutas/", wait_until="load")
+                    figure = page.locator("figure.mjs-figure")
+                    assert figure.evaluate("el => Math.abs((el.getBoundingClientRect().left + el.getBoundingClientRect().right) / 2 - (el.parentElement.getBoundingClientRect().left + el.parentElement.getBoundingClientRect().right) / 2) < 3"), "La figura no está centrada"
+                    page.goto(base + "ficheros/", wait_until="load")
+                    page.screenshot(path=str(captures / f"footer-unico-{width}.png"), full_page=True)
                 sequence = [
                     ("ficheros/rutas/", "ficheros/gestion-recorrido/"),
                     ("ficheros/gestion-recorrido/", "ficheros/listar-recorrer/"),
@@ -151,7 +170,9 @@ def check():
                 page.screenshot(path=str(captures / "rutas-desktop.png"), full_page=True)
                 page.goto(base + "ficheros/guiada-directorios/", wait_until="load")
                 assert page.locator(".mjs-task input[type=checkbox]").count() == 11
-                assert page.locator(".mjs-resources a.md-button").count() >= 5
+                assert page.locator(".mjs-resources a.md-button").count() == 3
+                assert page.locator(".mjs-resources a.md-button--primary").count() == 2
+                assert page.locator(".mjs-resources a.md-button--primary").last.get_attribute("href").endswith("/codelab-solucion/README.md")
                 details = page.locator("article details")
                 assert details.count() >= 2 and all(not details.nth(i).evaluate("el => el.open") for i in range(details.count()))
                 details.first.locator("summary").click()

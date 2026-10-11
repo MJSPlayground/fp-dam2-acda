@@ -81,7 +81,7 @@ El visitante evita releer atributos que Java ya obtuvo para `visitFile`. No segu
 
 ## Cómo se organiza el código de referencia
 
-Antes de abrir el proyecto, imagina un programa que inventaría entregas. `cli.Inventariar` contiene `main`: recoge argumentos, muestra el resultado y coordina la exportación. `model.service.InventarioArchivosService` aplica la regla «solo esta extensión y hasta cuatro niveles» y calcula totales. `model.entity.ArchivoInventariado` representa los datos de una fila: ruta, bytes y fecha. Las clases `model.dao` de **otras** prácticas del laboratorio leen o escriben formatos; para este primer inventario se usan directamente operaciones de `Files` y un exportador CSV desde `main`. `gestor` contiene la interfaz gráfica de una práctica final posterior.
+Este ejemplo pertenece al laboratorio común, que reúne código de varias prácticas; la [solución específica del codelab](guiada-directorios.md) tiene una única clase principal `InventarioCodelab`. En el laboratorio común, `cli.Inventariar` contiene `main`: recoge argumentos, muestra el resultado y coordina la exportación. `model.service.InventarioArchivosService` aplica la regla «solo esta extensión y hasta cuatro niveles» y calcula totales. `model.entity.ArchivoInventariado` representa los datos de una fila: ruta, bytes y fecha. Las clases `model.dao` de **otras** prácticas del laboratorio leen o escriben formatos; para este primer inventario se usan directamente operaciones de `Files` y un exportador CSV desde `main`. `gestor` contiene la interfaz gráfica de una práctica final posterior.
 
 ```text
 Main (cli) → Servicio (reglas) → Acceso a ficheros (Files) → Archivo

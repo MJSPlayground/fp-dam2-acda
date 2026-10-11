@@ -1,21 +1,21 @@
-# Abrir y ejecutar proyectos Maven
+﻿# Abrir y ejecutar proyectos Maven en IntelliJ IDEA
 
-Los proyectos descargables tienen `pom.xml`, `mvnw`, `mvnw.cmd` y `.mvn/wrapper/`. Necesitas un **JDK 25**, no solo un entorno de ejecución. Comprueba en una terminal `java -version` y `javac -version`; ambos deben señalar la versión 25. Si la terminal aún usa otra versión, ajusta `JAVA_HOME` al JDK instalado y abre una terminal nueva. El wrapper descarga la versión de Maven fijada por el proyecto cuando hace falta.
+Los proyectos descargables contienen `pom.xml`, `mvnw`, `mvnw.cmd` y `.mvn/wrapper/`. Necesitas un **JDK 25** instalado. Para realizar las prácticas, trabaja desde IntelliJ IDEA.
 
-## Importación en IntelliJ IDEA
+## Importar el proyecto
 
-Abre la **carpeta que contiene `pom.xml`** mediante *File → Open*. Espera a que IntelliJ detecte el proyecto Maven y resuelva dependencias. En *File → Project Structure → Project* selecciona el JDK 25. En la configuración Maven comprueba que el importador y el ejecutor usan ese JDK; una terminal con Java 25 y un IDE con otro JDK producirán errores distintos. Si aparece un fallo de dependencia, abre la ventana Maven, recarga el proyecto y lee el primer error completo antes de cambiar versiones.
+1. Descarga o clona el repositorio y descomprime el ZIP si corresponde. Identifica **la carpeta concreta del proyecto** que contiene `pom.xml`, por ejemplo `proyectos/ficheros/codelab-inicial`.
+2. En IntelliJ, elige **File → Open** y selecciona esa carpeta. Confirma la apertura y espera a que Maven importe el `pom.xml` y sincronice las dependencias. La ventana Maven permite recargar el proyecto si la sincronización falla.
+3. En **File → Project Structure → Project**, selecciona el **JDK 25**. Si no aparece, añade el JDK instalado. Comprueba también que Maven en el IDE utilice ese JDK.
 
-Desde la terminal situada en la carpeta del `pom.xml`, ejecuta:
+## Ejecutar un programa
 
-```powershell
-.\mvnw.cmd test
-```
+Abre la clase indicada por la práctica dentro de `src/main/java`. Busca `public static void main(String[] args)`, pulsa el triángulo verde del margen y elige **Run**. Lee la salida y los errores en la ventana **Run** inferior. Cada vez que modifiques código, pulsa Run otra vez.
 
-En Linux o macOS utiliza `./mvnw test`. Un proyecto JavaFX ofrece además `.\mvnw.cmd javafx:run`. Los resultados de compilación aparecen en `target/`, que **no** se distribuye. El código fuente está en `src/main/java`, los tests en `src/test/java` y las muestras inmutables en `src/main/resources/data/`.
+Las rutas relativas parten del **Working directory** de la configuración de ejecución. Para los proyectos de este módulo debe ser la carpeta que contiene su `pom.xml`. Compruébalo en **Run → Edit Configurations** y, si no encuentras un archivo, compara con la ruta que imprime `Path.of("").toAbsolutePath()`. Los archivos generados suelen aparecer en el panel **Project**; actualiza la carpeta si no se muestran de inmediato. Los datos modificables van fuera de `src/main/resources`.
 
-## Localizar resultados y depurar
+Para seguir un fallo, haz clic en el margen de una línea para poner un punto de interrupción, pulsa **Debug** junto al mismo `main`, observa variables y rutas, avanza con *Step Over* y continúa con *Resume Program*. La primera línea de tu código en la traza de error suele indicar dónde investigar. `NoSuchFileException` señala una ruta ausente; `AccessDeniedException`, un problema de acceso.
 
-Los programas que reciben una ruta de salida crean archivos **externos** al JAR. Cuando la ruta es relativa, se interpreta desde el directorio de trabajo de esa ejecución; muéstrala con `Path.of("").toAbsolutePath()` si no encuentras el resultado. En IntelliJ revisa *Working directory* en la configuración de ejecución. No intentes modificar `src/main/resources` desde un programa empaquetado.
+## Comprobación técnica opcional
 
-Para investigar una excepción, localiza la primera línea de tu código en la traza, inspecciona los argumentos de ruta y usa un punto de interrupción antes de la lectura. Diferencia `NoSuchFileException` (ruta no localizada), `AccessDeniedException` (acceso denegado), `MalformedInputException` (decodificación) y errores de estructura CSV, XML o JSON. Cambiar el nombre del archivo o la codificación sin examinar el mensaje puede ocultar el fallo original.
+Maven Wrapper permite al docente ejecutar pruebas desde la carpeta del `pom.xml`: `.\mvnw.cmd test` en Windows o `./mvnw test` en Linux/macOS. No es un paso necesario para completar la práctica. `target/` contiene resultados de compilación y no se distribuye.
