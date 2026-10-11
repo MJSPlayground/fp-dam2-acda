@@ -132,9 +132,10 @@ def article_markup(source):
             tag["src"] = normalise_link(tag["src"], original_url)
         if tag.has_attr("href"):
             address = tag["href"]
-            # No incrustar enlaces a localhost (efímeros) en los PDF descargados.
+            # Las descargas impresas deben conservar la misma ruta pública estable.
             if address and not urlparse(address).scheme and not address.startswith(("#", "//", "mailto:", "tel:")):
-                del tag["href"]
+                public_page = config()["site_url"].rstrip("/") + "/" + path.relative_to(SITE).as_posix()
+                tag["href"] = urljoin(public_page, address)
             else:
                 tag["href"] = normalise_link(address, original_url)
         if tag.name == "h1":
@@ -266,9 +267,18 @@ def export():
                     if "Índice" not in extracted or "Fecha de generación" not in extracted or "Autor:" not in extracted:
                         raise AssertionError(f"Portada o índice no detectado en {pdf_path.name}")
                     if filename == "ficheros" and not all(
-                        label in extracted for label in ("Proyecto inicial", "Generador de datos", "Ver solución completa")
+                        label in extracted for label in ("Descargar proyecto inicial", "Descargar solución completa")
                     ):
                         raise AssertionError("Faltan enlaces de recursos del codelab en ficheros.pdf")
+                    if filename in ("ficheros", "documentacion-completa"):
+                        links = {
+                            annotation.get_object().get("/A", {}).get("/URI")
+                            for pdf_page in doc.pages for annotation in pdf_page.get("/Annots", [])
+                        }
+                        for kind in ("inicial", "solucion"):
+                            expected = project["site_url"].rstrip("/") + f"/descargas/codigo/inventario-directorios-{kind}.zip"
+                            if expected not in links:
+                                raise AssertionError(f"Enlace ZIP ausente o incorrecto en {pdf_path.name}: {expected}")
                     cover_fields = [project.get("site_author", "")]
                     contacts = project.get("extra", {})
                     cover_fields.extend(contacts.get(key, "") for key in ("author_email_work", "author_email_personal"))

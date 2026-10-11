@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import functools
 import io
+import zipfile
 import threading
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -170,9 +171,30 @@ def check():
                 page.screenshot(path=str(captures / "rutas-desktop.png"), full_page=True)
                 page.goto(base + "ficheros/guiada-directorios/", wait_until="load")
                 assert page.locator(".mjs-task input[type=checkbox]").count() == 11
-                assert page.locator(".mjs-resources a.md-button").count() == 3
-                assert page.locator(".mjs-resources a.md-button--primary").count() == 2
-                assert page.locator(".mjs-resources a.md-button--primary").last.get_attribute("href").endswith("/codelab-solucion/README.md")
+                cards = page.locator("a.mjs-code-resource")
+                assert cards.count() == 2
+                assert page.locator("a.mjs-resource-source").count() == 2
+                assert page.locator("article").get_by_text("Generador de datos", exact=True).count() == 0
+                for i, kind in enumerate(("inicial", "solucion")):
+                    filename = f"inventario-directorios-{kind}.zip"
+                    card = cards.nth(i)
+                    assert card.get_attribute("href") == f"{PREFIX}descargas/codigo/{filename}"
+                    assert card.locator(".mjs-code-resource__format").inner_text() == "ZIP"
+                    card.focus()
+                    page.keyboard.press("Tab")
+                    page.keyboard.press("Shift+Tab")
+                    assert card.evaluate("el => el.matches(':focus-visible') && getComputedStyle(el).outlineStyle !== 'none'"), kind
+                    with page.expect_download() as info:
+                        card.click()
+                    downloaded = info.value
+                    assert downloaded.suggested_filename == filename and downloaded.failure() is None
+                    with zipfile.ZipFile(downloaded.path()) as archive:
+                        names = set(archive.namelist())
+                        assert archive.testzip() is None and {"pom.xml", "README.md", "mvnw", "mvnw.cmd", ".mvn/wrapper/maven-wrapper.jar", ".mvn/wrapper/maven-wrapper.properties"} <= names
+                        source = archive.read("src/main/java/es/mjsplayground/acda/ficheros/codelab/InventarioCodelab.java").decode()
+                        assert ("TODO 5" in source) == (kind == "inicial")
+                        assert ("Files.walkFileTree(" in source) == (kind == "solucion")
+                assert page.locator("figure.mjs-figure img").evaluate("img => img.complete && img.naturalWidth > 0")
                 details = page.locator("article details")
                 assert details.count() >= 2 and all(not details.nth(i).evaluate("el => el.open") for i in range(details.count()))
                 details.first.locator("summary").click()
@@ -188,6 +210,8 @@ def check():
                 page.reload(wait_until="load")
                 assert page.locator("h1").is_visible()
                 assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 2"), "Desbordamiento móvil"
+                assert cards.first.is_visible() and cards.first.bounding_box()["width"] <= 390
+                assert all(card.locator(".mjs-code-resource__format").evaluate("el => getComputedStyle(el).whiteSpace === 'nowrap'") for card in cards.all())
                 page.screenshot(path=str(captures / "codelab-mobile.png"), full_page=True)
                 page.goto(base + "ficheros/rutas/", wait_until="load")
                 assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 2"), "Figura desborda en móvil"
@@ -196,6 +220,17 @@ def check():
                 page.locator('.md-header__option label:visible').click()
                 assert page.locator('body').get_attribute('data-md-color-scheme') == 'slate'
                 page.screenshot(path=str(captures / "rutas-dark.png"), full_page=True)
+                for width in (1366, 390):
+                    page.set_viewport_size({"width": width, "height": 844})
+                    page.goto(base + "ficheros/guiada-directorios/", wait_until="load")
+                    for scheme in ("slate", "default"):
+                        if page.locator("body").get_attribute("data-md-color-scheme") != scheme:
+                            page.locator('.md-header__option label:visible').click()
+                        assert page.locator("body").get_attribute("data-md-color-scheme") == scheme
+                        assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 2")
+                        assert all(card.is_visible() for card in cards.all())
+                        assert page.locator("figure.mjs-figure img").evaluate("img => img.complete && img.naturalWidth > 0")
+                        page.screenshot(path=str(captures / f"codelab-{width}-{scheme}.png"), full_page=True)
                 assert not errors, "Errores JavaScript: " + "; ".join(errors)
                 print("OK: navegación, estilos, recursos y PDF verificados.", flush=True)
             finally:

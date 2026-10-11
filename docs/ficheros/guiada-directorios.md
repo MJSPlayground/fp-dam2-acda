@@ -6,14 +6,21 @@ Al terminar, `trabajo-codelab/salida/copias/clientes.csv` será la copia y `trab
 
 <div class="mjs-progress-panel" role="status" aria-live="polite"><span class="mjs-progress-label">Tu avance en esta práctica</span><strong class="mjs-progress-count">0 de 11 pasos</strong><div class="mjs-progress-track"><div class="mjs-progress-fill"></div></div></div>
 
-<div class="mjs-resources" markdown="1">
-[Proyecto inicial](https://github.com/MJSPlayground/fp-dam2-acda/tree/main/proyectos/ficheros/codelab-inicial){ .md-button .md-button--primary }
-[Generador de datos](https://github.com/MJSPlayground/fp-dam2-acda/blob/main/proyectos/ficheros/codelab-inicial/src/main/java/es/mjsplayground/acda/ficheros/codelab/PrepararDatos.java){ .md-button }
+<div class="mjs-resources">
+<a class="mjs-code-resource" href="/fp-dam2-acda/descargas/codigo/inventario-directorios-inicial.zip" download="inventario-directorios-inicial.zip"><span class="mjs-code-resource__icon" aria-hidden="true">&lt;/&gt;</span><span class="mjs-code-resource__body"><strong>Descargar proyecto inicial</strong><small>Código preparado para completar en IntelliJ.</small></span><span class="mjs-code-resource__format">ZIP</span></a>
+<a class="mjs-resource-source" href="https://github.com/MJSPlayground/fp-dam2-acda/tree/main/proyectos/ficheros/codelab-inicial">Ver código en GitHub</a>
 </div>
+
+`PrepararDatos` crea la entrada; lo ejecutarás una vez antes del inventario. `InventarioCodelab` contiene el `main`, el recorrido y el modelo de cada fila. `ExportadorCsv` recibe esas filas y escribe el informe. Este primer proyecto no usa capas `dao` ni `service`: esas responsabilidades se muestran más adelante en el laboratorio compartido.
+
+<figure class="mjs-figure" markdown="span">
+  ![PrepararDatos crea la entrada; InventarioCodelab la recorre con Files y entrega filas a ExportadorCsv, que escribe la salida.](../assets/figures/organizacion-inventario.svg)
+  <figcaption>Las tres clases del primer codelab y el camino desde la entrada hasta el informe.</figcaption>
+</figure>
 
 ## 1. Preparar el proyecto y los datos { .mjs-step-heading }
 
-Descarga el repositorio desde **Code → Download ZIP** en GitHub (o ábrelo si ya lo tienes), extrae el ZIP y localiza el [proyecto inicial](https://github.com/MJSPlayground/fp-dam2-acda/tree/main/proyectos/ficheros/codelab-inicial). Abre **`proyectos/ficheros/codelab-inicial`**, la carpeta que contiene `pom.xml`, con *File → Open* de IntelliJ IDEA. Espera la sincronización Maven y selecciona el JDK 25 en *File → Project Structure → Project*. La [guía de IntelliJ](../ayuda/proyectos-maven.md) detalla estos pasos. El starter compila, pero aún no inventaría nada.
+Descarga el **proyecto inicial** de la tarjeta anterior, extrae el ZIP y abre **la carpeta extraída que contiene `pom.xml`** con *File → Open* de IntelliJ IDEA. Espera la sincronización Maven y selecciona el JDK 25 en *File → Project Structure → Project*. La [guía de IntelliJ](../ayuda/proyectos-maven.md) detalla estos pasos. El starter compila, pero aún no inventaría nada. `PrepararDatos.java` ya está dentro de ese proyecto; no requiere otra descarga.
 
 En *Project*, abre `src/main/java/es/mjsplayground/acda/ficheros/codelab/PrepararDatos.java` y pulsa el triángulo verde junto a `main` → **Run 'PrepararDatos.main()'**. Lee la ruta absoluta en *Run* y abre `trabajo-codelab/entrada` en el panel *Project*; actualiza la carpeta si hace falta. El *Working directory* debe ser la carpeta que contiene `pom.xml`.
 
@@ -23,7 +30,7 @@ En *Project*, abre `src/main/java/es/mjsplayground/acda/ficheros/codelab/Prepara
 
 ## 2. Construir rutas sin adivinar la carpeta de trabajo { .mjs-step-heading }
 
-Abre `InventarioCodelab.java` y pulsa el triángulo verde junto a `main` → **Run 'InventarioCodelab.main()'**, sin argumentos. El `main` inicial muestra el directorio de trabajo, la entrada y la salida predeterminadas, y el filtro `csv`. Si la ruta no termina en `codelab-inicial`, corrige *Working directory* en *Run → Edit Configurations*. Puedes cambiar las rutas y el filtro en el código al explorar alternativas. Los tres argumentos son opcionales. `Path.of(...)` construye una ruta; **todavía no abre** esa carpeta. Añade la validación física antes de modificar nada:
+Abre `InventarioCodelab.java` y pulsa el triángulo verde junto a `main` → **Run 'InventarioCodelab.main()'**, sin argumentos. El `main` inicial muestra el directorio de trabajo, la entrada y la salida predeterminadas, y el filtro `csv`. Si la ruta no es la carpeta extraída que contiene `pom.xml`, corrige *Working directory* en *Run → Edit Configurations*. Puedes cambiar las rutas y el filtro en el código al explorar alternativas. Los tres argumentos son opcionales. `Path.of(...)` construye una ruta; **todavía no abre** esa carpeta. En `InventarioCodelab.main`, sustituye **`TODO 2`** por la validación física antes de modificar nada:
 
 ```java
 if (!Files.isDirectory(origen)) {
@@ -37,7 +44,7 @@ Importa `java.nio.file.Files` y `java.io.IOException`. Comprueba el error cambia
 
 ## 3. Crear la salida y copiar sin sobrescribir { .mjs-step-heading }
 
-Antes de escribir, comprueba que la salida no está dentro de la entrada. Si lo estuviera, la copia podría aparecer en el inventario y alterar el resultado. Después construye `trabajo.resolve("copias")` y usa `Files.createDirectories`: crea tanto `salida` como `copias` si faltan. `Files.copy` recibe origen y destino; no sustituye un archivo ya existente sin una opción explícita.
+En **`TODO 3`**, antes de escribir, comprueba que la salida no está dentro de la entrada. Si lo estuviera, la copia podría aparecer en el inventario y alterar el resultado. Después construye `trabajo.resolve("copias")` y usa `Files.createDirectories`: crea tanto `salida` como `copias` si faltan. `Files.copy` recibe origen y destino; no sustituye un archivo ya existente sin una opción explícita.
 
 ```java
 if (trabajo.toAbsolutePath().normalize().startsWith(origen.toAbsolutePath().normalize())) {
@@ -62,7 +69,7 @@ Después de observar el fallo, rodea la copia con `try { ... } catch (FileAlread
 
 ## 4. Reconocer primero los archivos de un nivel { .mjs-step-heading }
 
-Antes de descender por el árbol, usa `Files.list(origen)` dentro de `try-with-resources`. Devuelve un `Stream<Path>` de entradas directas; ciérralo para liberar el directorio. Muestra nombres ordenados:
+En **`TODO 4`**, antes de descender por el árbol, usa `Files.list(origen)` dentro de `try-with-resources`. Devuelve un `Stream<Path>` de entradas directas; ciérralo para liberar el directorio. Muestra nombres ordenados:
 
 ```java
 try (Stream<Path> entradas = Files.list(origen)) {
@@ -76,28 +83,19 @@ Importa `java.util.stream.Stream`. Debes ver también `historico` y `vacio`, per
 
 ## 5. Recorrer y seleccionar CSV { .mjs-step-heading }
 
-`Files.walk(origen, 4)` sería suficiente para explorar un árbol pequeño. Prueba temporalmente ese stream y cuenta las rutas; recuerda que la raíz tiene profundidad cero. Para el inventario definitivo necesitamos continuar cuando falle una entrada. Cambia a `Files.walkFileTree`: `visitFile` recibe el archivo y sus atributos ya leídos; `visitFileFailed` recibe la ruta y el error. Prepara dos listas, una de filas y otra de incidencias, antes de iniciar el recorrido.
+`Files.walk(origen, 4)` sería suficiente para explorar un árbol pequeño. Prueba temporalmente ese stream y cuenta las rutas; recuerda que la raíz tiene profundidad cero. Para el inventario definitivo necesitamos continuar cuando falle una entrada. Cambia a `Files.walkFileTree`: `visitFile` recibe el archivo y sus atributos ya leídos; `visitFileFailed` recibe la ruta y el error. Las listas `filas` e `incidencias`, el sufijo y el esqueleto `visitante` ya están preparados en `main`. Completa **`TODO 5`** dentro de `visitFileFailed` y después sustituye el `TODO 5` situado tras el visitante por la llamada:
 
 ```java
-List<ArchivoInventariado> filas = new ArrayList<>();
-List<String> incidencias = new ArrayList<>();
-String sufijo = "." + extension.toLowerCase(Locale.ROOT);
-Files.walkFileTree(origen, EnumSet.noneOf(FileVisitOption.class), 4,
-    new SimpleFileVisitor<>() {
-        @Override public FileVisitResult visitFile(Path p, BasicFileAttributes a) {
-            // En el paso siguiente registrarás aquí los archivos seleccionados.
-            return FileVisitResult.CONTINUE;
-        }
-        @Override public FileVisitResult visitFileFailed(Path p, IOException e) {
-            incidencias.add(p + ": " + e.getMessage());
-            return FileVisitResult.CONTINUE;
-        }
-    });
+// Dentro de visitFileFailed, antes de CONTINUE:
+incidencias.add(p + ": " + e.getMessage());
+
+// Tras declarar visitante:
+Files.walkFileTree(origen, EnumSet.noneOf(FileVisitOption.class), 4, visitante);
 ```
 
-`ArchivoInventariado` será un `record` propio con `Path relativa`, `long bytes` e `Instant modificado`. Los imports se completan con la ayuda del IDE: `java.nio.file.*`, `java.nio.file.attribute.BasicFileAttributes`, `java.util.*` y `java.time.Instant`. Añade `postVisitDirectory` si quieres registrar un error al terminar de leer una carpeta. No seguimos enlaces simbólicos.
+`ArchivoInventariado` ya está preparado como `record` dentro de `InventarioCodelab`, con `Path relativa`, `long bytes` e `Instant modificado`. Importa `java.nio.file.Files`, `FileVisitOption` y `java.util.EnumSet` con ayuda del IDE. Añade `postVisitDirectory` si quieres registrar un error al terminar de leer una carpeta. No seguimos enlaces simbólicos.
 
-Créalo en otro archivo del mismo paquete. Su declaración, sin lógica de recorrido, es `public record ArchivoInventariado(Path relativa, long bytes, Instant modificado) {}`. El compilador genera automáticamente el constructor y los accesores `relativa()`, `bytes()` y `modificado()`. La solución coloca el mismo `record` dentro de la clase principal; ambas ubicaciones son válidas.
+No tienes que crear otra clase para este modelo de datos. El compilador genera automáticamente el constructor y los accesores `relativa()`, `bytes()` y `modificado()`.
 
 ??? tip "Pista: un fallo al cerrar una carpeta"
     Sobrescribe `postVisitDirectory(Path p, IOException e)`; si `e != null`, agrégalo a `incidencias`, y devuelve `CONTINUE`. La raíz inexistente se valida antes y sigue siendo un error que detiene la ejecución.
@@ -106,7 +104,7 @@ Créalo en otro archivo del mismo paquete. Su declaración, sin lógica de recor
 
 ## 6. Guardar tamaño, fecha y ruta relativa { .mjs-step-heading }
 
-Dentro de `visitFile`, comprueba `a.isRegularFile()` y compara **solo el nombre** con el sufijo en minúsculas. `a.size()` devuelve bytes; `a.lastModifiedTime().toInstant()` da la fecha. `origen.relativize(p)` evita que el informe dependa de una ruta absoluta del equipo.
+En el visitante de **`TODO 5`**, completa **`TODO 6`** dentro de `visitFile`: comprueba `a.isRegularFile()` y compara **solo el nombre** con el sufijo en minúsculas. `a.size()` devuelve bytes; `a.lastModifiedTime().toInstant()` da la fecha. `origen.relativize(p)` evita que el informe dependa de una ruta absoluta del equipo.
 
 ```java
 if (a.isRegularFile() && p.getFileName().toString()
@@ -116,17 +114,17 @@ if (a.isRegularFile() && p.getFileName().toString()
 }
 ```
 
-Comprueba que se registran cuatro rutas, entre ellas `ventas.CSV` y `historico/2025/marzo.CsV`; ni `notas.txt` ni el directorio `vacio` son filas. Si falta el CSV más profundo, revisa cómo cuentas la profundidad desde la raíz. Valida que la extensión no esté vacía ni contenga separadores de ruta antes de formar `sufijo`.
+Después del recorrido, añade temporalmente `filas.forEach(f -> System.out.println(f.relativa() + ": " + f.bytes()));` o inspecciona `filas` con Debug. Comprueba que se registran cuatro rutas, entre ellas `ventas.CSV` y `historico/2025/marzo.CsV`; ni `notas.txt` ni el directorio `vacio` son filas. Si falta el CSV más profundo, revisa cómo cuentas la profundidad desde la raíz. Valida que la extensión no esté vacía ni contenga separadores de ruta antes de formar `sufijo`.
 
 <div class="mjs-task"><input type="checkbox" id="b1-p6"><label for="b1-p6">Obtengo cuatro CSV, con tamaños 4, 4, 6 y 8 bytes.</label></div>
 
 ## 7. Ordenar y calcular el resumen { .mjs-step-heading }
 
-El sistema de ficheros no promete un orden de visita. Tras terminar el recorrido, ordena por el texto de la ruta relativa para que dos ejecuciones produzcan las mismas filas. Calcula la cantidad con `filas.size()` y suma los bytes con `mapToLong`. Para el mayor, define antes el desempate: entre tamaños iguales gana la ruta alfabéticamente menor.
+En **`TODO 7`**, recuerda que el sistema de ficheros no promete un orden de visita. Tras terminar el recorrido, ordena por el texto de la ruta relativa para que dos ejecuciones produzcan las mismas filas. Calcula la cantidad con `filas.size()` y suma los bytes con `mapToLong`. Para el mayor, define antes el desempate: entre tamaños iguales gana la ruta alfabéticamente menor.
 
 ```java
 filas.sort(Comparator.comparing(f -> f.relativa().toString()));
-long totalBytes = filas.stream().mapToLong(ArchivoInventariado::bytes).sum();
+totalBytes = filas.stream().mapToLong(ArchivoInventariado::bytes).sum();
 ```
 
 Imprime el total y el mayor. Para la muestra, son **4 archivos y 22 bytes**. Modifica temporalmente dos archivos para que empaten en tamaño y comprueba que la selección no cambie entre ejecuciones. Si no hay archivos coincidentes, el total es cero y el mayor debe mostrarse como «ninguno», nunca provocar un error por intentar acceder a una lista vacía.
@@ -138,24 +136,19 @@ Imprime el total y el mayor. Para la muestra, son **4 archivos y 22 bytes**. Mod
 
 ## 8. Exportar el informe fuera de la entrada { .mjs-step-heading }
 
-El destino será `trabajo.resolve("inventario.csv")`. La separación entre entrada y salida ya se validó **antes de la primera copia**; así el informe no puede incluirse a sí mismo. Para escribir CSV con comillas correctas si un nombre contiene coma, el starter ya incluye Apache Commons CSV como dependencia; no necesitas estudiar todavía todo el formato.
+El destino será `trabajo.resolve("inventario.csv")`. La separación entre entrada y salida ya se validó **antes de la primera copia**; así el informe no puede incluirse a sí mismo. Para escribir CSV con comillas correctas si un nombre contiene coma, ambos proyectos incluyen `ExportadorCsv`. Esta utilidad encapsula Apache Commons CSV; no necesitas estudiar todavía sus reglas internas. En **`TODO 8`**, úsala con las filas que has seleccionado.
 
 ```java
-Path informe = trabajo.resolve("inventario.csv");
-try (var writer = Files.newBufferedWriter(informe, StandardCharsets.UTF_8);
-     var csv = new CSVPrinter(writer, CSVFormat.RFC4180.builder()
-             .setHeader("ruta", "bytes", "modificado").get())) {
-    for (var fila : filas) csv.printRecord(fila.relativa(), fila.bytes(), fila.modificado());
-}
+ExportadorCsv.guardar(informe, filas);
 ```
 
-El `try` cierra escritor e impresora. `CSVPrinter` escribe las tres columnas y se ocupa de las comillas; el bloque de CSV profundizará en sus reglas. Importa `java.nio.charset.StandardCharsets`, `org.apache.commons.csv.CSVFormat` y `CSVPrinter`. Tras Run, busca `trabajo-codelab/salida/inventario.csv` en *Project*; actualiza la carpeta si no aparece. Debe tener cabecera y cuatro filas. El informe se regenera en cada ejecución y la copia existente se conserva. La solución comprueba también rutas reales para evitar que un enlace simbólico esconda una salida dentro de la entrada.
+La utilidad cierra el escritor y la impresora, escribe las tres columnas y se ocupa de las comillas; el bloque de CSV profundizará en sus reglas. No necesitas imports adicionales porque ambas clases comparten paquete. Tras Run, busca `trabajo-codelab/salida/inventario.csv` en *Project*; actualiza la carpeta si no aparece. Debe tener cabecera y cuatro filas. El informe se regenera en cada ejecución y la copia existente se conserva. La solución comprueba también rutas reales para evitar que un enlace simbólico esconda una salida dentro de la entrada.
 
 <div class="mjs-task"><input type="checkbox" id="b1-p8"><label for="b1-p8">El CSV contiene cuatro filas, está fuera de entrada y no se inventaría a sí mismo.</label></div>
 
 ## 9. Informar de incidencias con claridad { .mjs-step-heading }
 
-Muestra cada elemento de `incidencias` al terminar en *Run*, sin tirar las filas válidas. Si no hay incidencias, muestra un mensaje breve. Prueba primero errores reproducibles: entrada inexistente, destino que sea un archivo y copia ya ocupada. Para investigar la entrada inexistente, pon un punto de interrupción en la validación del paso 2; para un destino que sea archivo, en `Files.createDirectories`; para la copia ocupada, en `catch (FileAlreadyExistsException ex)`. Pulsa **Debug** junto a `main`, observa la ruta y la excepción, y continúa con *Resume Program*. Esos casos no llaman a `visitFileFailed`: ese método recibe fallos **durante el recorrido**. Los permisos dependen del sistema operativo. No llames «archivo inexistente» a cualquier `IOException`.
+Completa **`TODO 9`**: muestra cada elemento de `incidencias` al terminar en *Run*, sin tirar las filas válidas. Si no hay incidencias, muestra un mensaje breve. Prueba primero errores reproducibles: entrada inexistente, destino que sea un archivo y copia ya ocupada. Para investigar la entrada inexistente, pon un punto de interrupción en la validación del paso 2; para un destino que sea archivo, en `Files.createDirectories`; para la copia ocupada, en `catch (FileAlreadyExistsException ex)`. Pulsa **Debug** junto a `main`, observa la ruta y la excepción, y continúa con *Resume Program*. Esos casos no llaman a `visitFileFailed`: ese método recibe fallos **durante el recorrido**. Los permisos dependen del sistema operativo. No llames «archivo inexistente» a cualquier `IOException`.
 
 En una prueba más avanzada puedes borrar un archivo entre su descubrimiento y lectura: `walkFileTree` comunicará ese fallo mediante `visitFileFailed` cuando el proveedor no consiga obtener atributos. Un fallo de acceso a la raíz puede impedir comenzar y debe detenerse. Conserva el mensaje original junto a la ruta para poder diagnosticarlo.
 
@@ -173,10 +166,11 @@ Estos retos exigen combinar selección, rutas relativas y estadísticas. Prueba 
 
 ## 11. Contrastar con la solución ejecutable { .mjs-step-heading }
 
-Abre **`proyectos/ficheros/codelab-solucion`** como proyecto Maven independiente. Espera la sincronización y confirma el JDK 25. Abre `InventarioCodelab.java` del proyecto solución y pulsa el triángulo verde de `main` → **Run**. Ese único programa prepara la muestra si falta, organiza y copia `clientes.csv`, recorre y filtra, calcula el resumen y exporta el inventario. Compara en *Run* cantidad, suma y mayor; después abre `trabajo-codelab/salida/inventario.csv` y contrasta orden y filas con tu programa. El [README de esta solución](https://github.com/MJSPlayground/fp-dam2-acda/blob/main/proyectos/ficheros/codelab-solucion/README.md) explica el recorrido y sus clases. El proyecto inicial sigue incompleto en la lógica del ejercicio.
+Descarga la **solución completa** al final de esta página y abre la carpeta extraída como proyecto Maven independiente. Espera la sincronización y confirma el JDK 25. Abre `InventarioCodelab.java` del proyecto solución y pulsa el triángulo verde de `main` → **Run**. Ese único programa prepara la muestra si falta, organiza y copia `clientes.csv`, recorre y filtra, calcula el resumen y exporta el inventario. Compara en *Run* cantidad, suma y mayor; después abre `trabajo-codelab/salida/inventario.csv` y contrasta orden y filas con tu programa. El [README de esta solución](https://github.com/MJSPlayground/fp-dam2-acda/blob/main/proyectos/ficheros/codelab-solucion/README.md) explica el recorrido y sus clases. El proyecto inicial sigue incompleto en la lógica del ejercicio.
 
 <div class="mjs-task"><input type="checkbox" id="b1-p11"><label for="b1-p11">He ejecutado la clase principal de la solución y comparado sus resultados con mi programa.</label></div>
 
-<div class="mjs-resources" markdown="1">
-[Ver solución completa](https://github.com/MJSPlayground/fp-dam2-acda/blob/main/proyectos/ficheros/codelab-solucion/README.md){ .md-button .md-button--primary }
+<div class="mjs-resources">
+<a class="mjs-code-resource" href="/fp-dam2-acda/descargas/codigo/inventario-directorios-solucion.zip" download="inventario-directorios-solucion.zip"><span class="mjs-code-resource__icon" aria-hidden="true">&lt;/&gt;</span><span class="mjs-code-resource__body"><strong>Descargar solución completa</strong><small>Proyecto terminado para ejecutar y comparar.</small></span><span class="mjs-code-resource__format">ZIP</span></a>
+<a class="mjs-resource-source" href="https://github.com/MJSPlayground/fp-dam2-acda/tree/main/proyectos/ficheros/codelab-solucion">Ver código en GitHub</a>
 </div>

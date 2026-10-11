@@ -36,6 +36,11 @@ jobs:
         run: python -m playwright install --only-shell chromium
       - name: Construir web y PDF
         run: python scripts/export_pdfs.py
+      - name: Empaquetar y verificar proyectos descargables
+        run: |
+          python scripts/package_projects.py
+          python scripts/package_projects.py --check
+          python scripts/test_project_packages.py
       - name: Probar navegación y menú de descargas
         run: python scripts/check_site_ui.py
       - name: Comprobar enlaces internos y proyectos

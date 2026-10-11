@@ -1,14 +1,11 @@
 package es.mjsplayground.acda.ficheros.codelab;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Stream;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 
 /** Versión completa del mismo programa que construye el alumnado. */
 public final class InventarioCodelab {
@@ -86,12 +83,7 @@ public final class InventarioCodelab {
         for (ArchivoInventariado fila : filas)
             if (mayor == null || fila.bytes() > mayor.bytes()) mayor = fila;
         Path informe = trabajo.resolve("inventario.csv");
-        try (var writer = Files.newBufferedWriter(informe, StandardCharsets.UTF_8);
-             var csv = new CSVPrinter(writer, CSVFormat.RFC4180.builder()
-                     .setHeader("ruta", "bytes", "modificado").get())) {
-            for (ArchivoInventariado fila : filas)
-                csv.printRecord(fila.relativa(), fila.bytes(), fila.modificado());
-        }
+        ExportadorCsv.guardar(informe, filas);
         return new Resultado(List.copyOf(filas), total, mayor, List.copyOf(incidencias), informe);
     }
 }
