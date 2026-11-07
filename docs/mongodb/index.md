@@ -2,7 +2,7 @@
 
 !!! warning "En construcción"
 
-    Este tema est? pendiente de desarrollo y validación conforme al índice aprobado.
+    Este tema está pendiente de desarrollo y validación conforme al índice aprobado.
 
 MongoDB organiza la información en documentos y permite consultarlos sin fijar todas las columnas de una tabla. El tema se centrará en el modelado, la persistencia y las consultas desde aplicaciones Java.
 

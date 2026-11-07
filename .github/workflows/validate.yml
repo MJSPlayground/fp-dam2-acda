@@ -27,6 +27,10 @@ jobs:
           (cd proyectos/ficheros/codelab-solucion && ./mvnw test --batch-mode)
           (cd proyectos/ficheros/inicial && ./mvnw test --batch-mode)
           (cd proyectos/ficheros/solucion && ./mvnw test --batch-mode)
+          (cd proyectos/jdbc/guiado-inicial && sh mvnw test --batch-mode)
+          (cd proyectos/jdbc/guiado-solucion && sh mvnw test --batch-mode)
+          (cd proyectos/jdbc/final-inicial && sh mvnw test --batch-mode)
+          (cd proyectos/jdbc/final-solucion && sh mvnw test --batch-mode)
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -43,6 +47,8 @@ jobs:
           python scripts/test_project_packages.py
       - name: Probar navegación y menú de descargas
         run: python scripts/check_site_ui.py
+      - name: Probar páginas y cuatro descargas de JDBC
+        run: python scripts/check_jdbc_ui.py
       - name: Comprobar enlaces internos y proyectos
         run: python scripts/check_links.py
       - name: Configurar GitHub Pages

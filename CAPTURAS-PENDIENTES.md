@@ -6,6 +6,16 @@ Este archivo recoge **capturas auténticas, GIF y otros recursos visuales** que 
 
 ## Solicitudes concretas al docente
 
+### [Opcional · Pendiente] JDBC: importar y arrancar desde IntelliJ
+
+- **Página y posición:** `docs/jdbc/proyecto.md`, «Preparar el proyecto».
+- **Objetivo:** contrastar el recorrido de importación Maven y Run con la instalación real del aula. La compilación, los tests y el arranque JavaFX sí se han comprobado; no se ha ejecutado IntelliJ en esta sesión.
+- **Pasos:** descargar `almacen-guiado-inicial.zip`, extraer en carpeta nueva, abrir su `pom.xml` como proyecto, seleccionar JDK 25 y ejecutar `es.mjsplayground.acda.jdbc.almacen.app.Launcher.main` mediante Run. Mostrar el aviso de etapa pendiente del starter; contrastar después con la tabla de tres productos de la solución en otra carpeta.
+- **Herramienta:** IntelliJ IDEA, registrar versión exacta usada; Java 25.
+- **Destino:** `docs/assets/capturas/jdbc/intellij-almacen.webp`.
+- **Alt y pie:** «Proyecto Maven de almacén abierto en IntelliJ y aplicación JavaFX iniciada desde Launcher».
+- **Estado:** pendiente; instrucciones textuales disponibles sin enlaces a capturas inexistentes. Las capturas reales de las pruebas gráficas están en `target/qa` y no se distribuyen en los ZIP.
+
 ### [Importante · Pendiente] Captura: ejecutar el proyecto desde IntelliJ
 
 - **Página y posición:** `docs/ficheros/guiada-directorios.md`, paso 1, junto a las instrucciones de ejecución.

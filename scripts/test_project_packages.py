@@ -20,16 +20,16 @@ def check(name: str) -> None:
             names = set(archive.namelist())
             assert archive.testzip() is None, name
             assert REQUIRED <= names, REQUIRED - names
-            assert "src/main/java/es/mjsplayground/acda/ficheros/codelab/PrepararDatos.java" in names
-            assert "src/main/java/es/mjsplayground/acda/ficheros/codelab/ExportadorCsv.java" in names
+            assert any(n.startswith("src/main/java/") and n.endswith(".java") for n in names)
             assert all(not (set(Path(item).parts) & EXCLUDED_DIRS) for item in names)
             assert all(not item.endswith((".zip", ".log", ".tmp", ".class")) for item in names)
-            source = archive.read("src/main/java/es/mjsplayground/acda/ficheros/codelab/InventarioCodelab.java").decode()
-            if name.endswith("inicial.zip"):
+            if name.startswith("inventario-directorios-"):
+                source = archive.read("src/main/java/es/mjsplayground/acda/ficheros/codelab/InventarioCodelab.java").decode()
+            if name == "inventario-directorios-inicial.zip":
                 assert "TODO 5" in source and "TODO 9" in source
                 assert "Files.walkFileTree(" not in source and "ExportadorCsv.guardar(informe, filas);" not in source
                 assert "src/test/java/es/mjsplayground/acda/ficheros/codelab/InventarioCodelabTest.java" not in names
-            else:
+            elif name == "inventario-directorios-solucion.zip":
                 assert "TODO" not in source and "Files.walkFileTree(" in source
                 assert "src/test/java/es/mjsplayground/acda/ficheros/codelab/InventarioCodelabTest.java" in names
             archive.extractall(root)

@@ -1,0 +1,6 @@
+.root { -fx-font-family: "Segoe UI"; -fx-font-size: 14px; -fx-base: #f4f6fb; -fx-accent: #4c51bf; }
+.button { -fx-padding: 8 14; -fx-cursor: hand; }
+.button:focused,.text-field:focused { -fx-border-color: #4c51bf; -fx-border-radius: 4; }
+.table-view { -fx-background-color: white; }
+.error { -fx-text-fill: #a31930; }
+.dialog-pane { -fx-padding: 18; }

@@ -2,7 +2,7 @@
 
 !!! warning "En construcción"
 
-    Este tema est? pendiente de desarrollo y validación conforme al índice aprobado.
+    Este tema está pendiente de desarrollo y validación conforme al índice aprobado.
 
 Spring ayuda a construir componentes reutilizables y a separar controladores, servicios y repositorios. En este tema se aplicará esa estructura al acceso a datos y a interfaces MVC con Thymeleaf.
 
