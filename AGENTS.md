@@ -1,13 +1,41 @@
-# AGENTS.md — Material docente DAM2 · ACDA
+# AGENTS.md — DAM2 · Acceso a Datos
 
-Fuente de estructura y alcance del temario: `CONTENIDOS_ACDA.md`. Consultar la configuración vigente de `zensical.toml`, las pruebas del repositorio y, cuando se tenga acceso autorizado, `MJSPlayground/ai-workspace/WORKING-AGREEMENT.md` y `TEACHING-STANDARD.md`. No asumir acceso al repositorio privado si no está disponible.
+## Fuentes y prioridades
 
-## Crítica constructiva y calidad educativa
+1. `CONTENIDOS_ACDA.md` (raíz): **índice y metodología aprobados**. Su alcance, orden de bloques y reglas específicas de ACDA prevalecen sobre materiales antiguos.
+2. `PLAN-DESARROLLO.md`: prioridad actual, orden de ejecución, estrategia de commits, entrega y validación del rediseño integral.
+3. `MJSPlayground/ai-workspace/TEACHING-STANDARD.md` y skills docentes actualizadas: estándares generales y procedimientos de desarrollo. Si una norma general contradice el índice ACDA, aplicar la excepción explícita de ACDA sin modificar otros módulos.
+4. `zensical.toml`, proyectos, scripts, tests y contenidos del repositorio: configuración y componentes **existentes** que se deben preservar y mejorar de forma compatible.
+5. Hoja de presentación y programación: referencia de tiempos y trazabilidad RA/CE. Los PDF de teoría históricos solo son fuentes secundarias, nunca sustituyen al índice vigente.
 
-No confirmar automáticamente las propuestas del docente. Detectar y explicar a tiempo errores técnicos, insuficiente profundidad didáctica, saltos de conocimientos previos, prácticas incoherentes, diseños de navegación/UX deficientes, costes de mantenimiento o alternativas mejores. Mostrar evidencias y sugerencias concretas; no elogiar resultados defectuosos ni polemizar por detalles irrelevantes. Cuando el docente insiste informado en una alternativa viable, respetarla sin discusiones repetitivas.
+No ocultar desacuerdos técnicos o curriculares: registrarlos para revisión docente, sin reescribir el temario acordado.
 
-Revisar también el contenido generado desde la perspectiva de un alumno que empieza: explicaciones progresivas, ejemplos reales, funcionamiento de proyectos, enlaces, accesibilidad y exportación a PDF. Distinguir revisiones razonadas de pruebas realmente ejecutadas. No alterar índices y decisiones aprobadas de forma silenciosa.
+## Modelo de enseñanza obligatorio
 
-## Git, privacidad y publicación
+- La web y sus PDF muestran **títulos de temas**; no UT, números, bloques de intermodulares ni referencias a exámenes. Los identificadores internos de planificación sí pueden conservar la correspondencia docente.
+- Cada tema tiene **un proyecto guiado incremental** integrado en la progresión de la teoría, no un codelab aislado por bloque. Se parte de frontend preparado, starter ejecutable y pasos de backend `TODO` verificables.
+- Al terminar: **una práctica final autónoma del mismo proyecto**, con niveles `Base`, `Aplicación` y `Reto avanzado`. Su starter procede de la **solución completa del proyecto guiado**, sin resolver sus nuevos requisitos. Publicar la solución completa de los tres niveles.
+- Una sección `Prácticas de repaso` por tema, con **cinco fichas «En preparación»** hasta que se desarrollen realmente. No inventar descargas, enunciados ni soluciones.
+- Una sección `Ampliación` por tema, sin el adjetivo «profesional» ni afirmaciones públicas sobre los exámenes.
+- No crear tareas evaluables de Moodle, exámenes, rúbricas ni soluciones docentes privadas en este repositorio.
 
-Respetar el acuerdo vigente de `commit` + `push` por hitos autorizados y la separación entre contenido público y material evaluable reservado. **Este repositorio publica GitHub Pages desde `main`**: no subir a `main` contenido que no cumpla los controles de compilación, PDF y validaciones aprobadas. Usar una rama de trabajo cuando el hito todavía no sea publicable. No introducir datos personales ni exámenes reservados.
+## Arquitectura y calidad funcional
+
+- Reutilizar nomenclatura `repository` desde Ficheros; `DAO` no está obsoleto, pero reservar esa explicación para el contexto. Mantener responsabilidades claras: repositorio = persistencia; servicio = validaciones, casos de uso, reglas de negocio y coordinación; UI/controlador = presentación y entrada. No saltarse el servicio.
+- Introducir de forma progresiva errores de dominio bien expresados, excepciones propias cuando aporten valor, conservación de la causa de los fallos técnicos, SLF4J/Log4j2 desde Ficheros, pruebas de casos límite y ausencia de `sout` como logging habitual.
+- En REST: códigos HTTP coherentes, errores estructurados y `@RestControllerAdvice` cuando se justifique. Para Firestore, colección Postman **importable y preparada íntegramente** para probar éxitos y errores; nunca subir credenciales.
+- **El frontend se entrega terminado** (JavaFX o web). El alumnado no edita FXML, Thymeleaf, HTML, CSS o JavaScript; sí implementa backend, servicios, repositorios, entidades y endpoints REST que se enseñen.
+- Java 25 como versión objetivo **sujeta a prueba de compatibilidad**, Maven Wrapper, ejecución sencilla desde IntelliJ, datos reproducibles, ZIPs limpios y soluciones públicas separadas del starter.
+- No declarar completo un tema sin comprobar teoría, código inicial/solución, escenarios de éxito y error, UX gráfica, navegación, enlaces/descargas, compilación y exportación PDF.
+
+## Desarrollo incremental, Git y publicación
+
+- Seguir la secuencia y las puertas de calidad de `PLAN-DESARROLLO.md`. Se autoriza un **encargo integral** de los seis temas, pero cada tema se completa y verifica antes de avanzar al siguiente.
+- Hacer **commits y push frecuentes por páginas, funcionalidades o contenidos completos y coherentes**, siempre con código, enlaces y pruebas relacionados cuando proceda. No acumular cambios sin publicar en la rama, ni confirmar como terminada una página con recursos rotos o lógica engañosa.
+- `main` publica GitHub Pages: **no fusionar ni publicar ramas con material parcial**. Trabajar en rama de desarrollo, preservar la configuración actual y solicitar revisión docente antes de integrar material nuevo en `main`. La validación automática no sustituye la aprobación humana.
+- Revisar localmente la web, PDFs y aplicaciones con herramientas disponibles. La web de Pages en `main` muestra solamente lo ya integrado, no el estado de una rama; no usar esa URL como prueba de cambios aún no publicados.
+- Mantener un registro de incidencias y capturas reales pendientes en `CAPTURAS-PENDIENTES.md` o informe asociado. Nunca inventar capturas, resultados, enlaces de documentación o pruebas ejecutadas.
+
+## Revisión crítica
+
+Revisar la experiencia desde un alumno que empieza: explicar conceptos antes del código, guiar la importación/ejecución desde IntelliJ, enlazar conocimientos previos y hacer visible qué está resuelto, qué debe completar y cómo comprobarlo. Señalar errores o sobreingeniería con alternativas justificadas; respetar el alcance aprobado. Dejar cada entrega técnica lista para **revisión humana**, no declararla aprobada unilateralmente.
