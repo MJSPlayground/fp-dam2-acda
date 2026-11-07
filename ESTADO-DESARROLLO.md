@@ -4,7 +4,7 @@
 
 Encargo integral autorizado en main. Orden obligatorio: JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring.
 
-**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: publicado y preparado para revisión docente. Ficheros: publicado y preparado para revisión docente. Hibernate: verificado localmente, publicación pendiente. Spring pendiente.**
+**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: publicado y preparado para revisión docente. Ficheros: publicado y preparado para revisión docente. Hibernate: publicado y preparado para revisión docente. Spring: en desarrollo.**
 
 ## Avances confirmados
 
@@ -42,7 +42,7 @@ Entorno: Windows, Temurin 25.0.4.1, Python 3.13.7; herramientas web mediante `.v
 
 ## Siguiente paso concreto
 
-Cerrar Hibernate completo (biblioteca y sus tres cardinalidades) y comprobar Actions/Pages antes de comenzar Spring. Mantener commits y push directos en main según autorización vigente, sin pedir nueva aprobación entre temas.
+Desarrollar Spring completo: componentes, DI, Spring Data JPA y servicios del catálogo, con frontend MVC preparado; cerrar proyectos, pruebas, PDF y publicación. Mantener commits y push directos en main según autorización vigente, sin pedir nueva aprobación entre temas.
 
 ## Firestore: entrega técnica y comprobaciones
 
@@ -146,3 +146,9 @@ Hibernate comienza después de ese control. Se producirán cuatro proyectos Java
 - Cierre de descargas: `scripts/package_projects.py --check` comprueba 20 ZIP exactos y sus bytes contra fuentes; `scripts/test_project_packages.py` extrae y prueba 20/20 con Wrapper, salida 0. En este modo las pruebas UI/MySQL optativas se omiten; ya ejecutadas por separado como consta arriba.
 - Web local: `check_site_ui.py` y `check_hibernate_ui.py` correctos (10 páginas internas, cuatro descargas, escritorio/móvil, claro/oscuro); guía de cinco casillas conserva progreso y permite reinicio real. `check_links.py`: 56 páginas, 1045 enlaces, 783 fragmentos y 397 entradas de búsqueda correctos.
 - Compose y contenedor de QA propios detenidos, volumen de demostración propio conservado. Sin intervenciones en servicios ajenos.
+
+### Publicación Hibernate comprobada
+
+- `092bc87`, sincronizado con origin/main. Actions [42419950876](https://github.com/MJSPlayground/fp-dam2-acda/actions/runs/42419950876): build y deploy SUCCESS, incluyendo MySQL real.
+- Chromium sobre GitHub Pages: portada, guiado y final Hibernate HTTP 200, sin aviso En construcción; cuatro ZIP descargados e íntegros con POM/README/Wrapper. PDF Hibernate 26 páginas y global 128, HTTP 200. Capturas reales de las tres páginas.
+- Se inicia Spring después de superar esta puerta de calidad. No quedan comprobaciones técnicas bloqueantes conocidas de Hibernate; IntelliJ/Workbench y revisión pedagógica final mantienen las limitaciones indicadas.
