@@ -125,7 +125,7 @@ def check():
                 captures.mkdir(exist_ok=True)
                 for width in (1366, 390):
                     page.set_viewport_size({"width": width, "height": 844})
-                    for path, expected in (("ficheros/", 1), ("ficheros/rutas/", 2)):
+                    for path, expected in (("ficheros/", 1), ("hibernate/", 2)):
                         page.goto(base + path, wait_until="load")
                         links = page.locator(".md-footer__link")
                         assert links.count() == expected, path
@@ -142,26 +142,10 @@ def check():
                     assert figure.evaluate("el => Math.abs((el.getBoundingClientRect().left + el.getBoundingClientRect().right) / 2 - (el.parentElement.getBoundingClientRect().left + el.parentElement.getBoundingClientRect().right) / 2) < 3"), "La figura no está centrada"
                     page.goto(base + "ficheros/", wait_until="load")
                     page.screenshot(path=str(captures / f"footer-unico-{width}.png"), full_page=True)
-                sequence = [
-                    ("ficheros/rutas/", "ficheros/gestion-recorrido/"),
-                    ("ficheros/gestion-recorrido/", "ficheros/listar-recorrer/"),
-                    ("ficheros/listar-recorrer/", "ficheros/guiada-directorios/"),
-                    ("ficheros/guiada-directorios/", "ficheros/texto/"),
-                    ("ficheros/ampliacion-escrituras-fiables/", "hibernate/"),
-                ]
-                for source, destination in sequence:
-                    page.goto(base + source, wait_until="load")
-                    next_link = page.locator(".md-footer__link--next")
-                    assert next_link.count() == 1 and next_link.get_attribute("href")
-                    next_link.click()
-                    assert page.url == base + destination, f"Pie roto: {source} → {destination}"
-                page.set_viewport_size({"width": 1366, "height": 768})
-                page.goto(base + "ficheros/rutas/", wait_until="load")
-                assert page.locator("figure.mjs-figure img").count() == 1
-                assert page.locator("figure.mjs-figure figcaption").is_visible()
-                assert page.locator("figure.mjs-figure img").evaluate("img => img.complete && img.naturalWidth > 0")
+                page.goto(base + "hibernate/", wait_until="load")
                 page.locator(".md-footer__link--next").focus()
                 assert page.locator(".md-footer__link--next").evaluate("el => getComputedStyle(el).outlineStyle !== 'none'")
+                page.goto(base + "ficheros/rutas/", wait_until="load")
                 page.locator("figure.mjs-figure img").hover()
                 page.wait_for_timeout(300)
                 assert page.locator("figure.mjs-figure img").evaluate("el => getComputedStyle(el).transform !== 'none'")

@@ -1,5 +1,9 @@
 # Herramientas de mapeo objeto-relacional (ORM) y JPA con Hibernate
 
+!!! warning "En construcción"
+
+    Este tema est? pendiente de desarrollo y validación conforme al índice aprobado.
+
 Hibernate permite relacionar objetos Java con tablas de una base de datos. El objetivo es persistir entidades en MySQL y organizar las operaciones en repositorios y servicios con reglas de negocio.
 
 ## Recorrido

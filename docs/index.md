@@ -15,7 +15,7 @@ hide:
 
 Aprende a guardar, consultar y transformar información desde aplicaciones Java: ficheros, bases relacionales y bases documentales.
 
-[Empezar por ficheros](ficheros/index.md){ .md-button .md-button--primary }
+[Consultar JDBC](jdbc/index.md){ .md-button .md-button--primary }
 [Preparar el entorno](ayuda/index.md){ .md-button }
 
 </div>
@@ -23,7 +23,7 @@ Aprende a guardar, consultar y transformar información desde aplicaciones Java:
 
 ## Temas
 
-El recorrido sigue el [índice aprobado](https://github.com/MJSPlayground/fp-dam2-acda/blob/main/CONTENIDOS_ACDA.md). Cada tema comienza con una introducción; las páginas de aprendizaje se publicarán progresivamente.
+El recorrido sigue el [índice aprobado](https://github.com/MJSPlayground/fp-dam2-acda/blob/main/CONTENIDOS_ACDA.md). Los seis temas están en construcción conforme al nuevo índice. La publicación comienza por JDBC y continuará con los demás temas.
 
 <div class="grid cards" markdown>
 

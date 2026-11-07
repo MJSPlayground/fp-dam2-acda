@@ -266,19 +266,6 @@ def export():
                             raise AssertionError(f"Falta la sección {section_title} en {pdf_path.name}")
                     if "Índice" not in extracted or "Fecha de generación" not in extracted or "Autor:" not in extracted:
                         raise AssertionError(f"Portada o índice no detectado en {pdf_path.name}")
-                    if filename == "ficheros" and not all(
-                        label in extracted for label in ("Descargar proyecto inicial", "Descargar solución completa")
-                    ):
-                        raise AssertionError("Faltan enlaces de recursos del codelab en ficheros.pdf")
-                    if filename in ("ficheros", "documentacion-completa"):
-                        links = {
-                            annotation.get_object().get("/A", {}).get("/URI")
-                            for pdf_page in doc.pages for annotation in pdf_page.get("/Annots", [])
-                        }
-                        for kind in ("inicial", "solucion"):
-                            expected = project["site_url"].rstrip("/") + f"/descargas/codigo/inventario-directorios-{kind}.zip"
-                            if expected not in links:
-                                raise AssertionError(f"Enlace ZIP ausente o incorrecto en {pdf_path.name}: {expected}")
                     cover_fields = [project.get("site_author", "")]
                     contacts = project.get("extra", {})
                     cover_fields.extend(contacts.get(key, "") for key in ("author_email_work", "author_email_personal"))

@@ -1,5 +1,9 @@
 # Bases de datos documentales con Cloud Firestore
 
+!!! warning "En construcción"
+
+    Este tema est? pendiente de desarrollo y validación conforme al índice aprobado.
+
 Cloud Firestore almacena documentos agrupados en colecciones. Este tema conectará la persistencia documental con servicios Spring Boot y una API REST que intercambie JSON.
 
 ## Recorrido

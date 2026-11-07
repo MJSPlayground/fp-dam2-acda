@@ -19,7 +19,7 @@ def section_navigation(project, slug):
         for entry in branch:
             if entry == f"{slug}/index.md":
                 return True
-            if isinstance(entry, dict) and any(isinstance(value, list) and contains_index(value) for value in entry.values()):
+            if isinstance(entry, dict) and any(value == f"{slug}/index.md" or (isinstance(value, list) and contains_index(value)) for value in entry.values()):
                 return True
         return False
     for item in project["nav"]:

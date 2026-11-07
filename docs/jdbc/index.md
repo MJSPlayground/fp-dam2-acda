@@ -1,5 +1,9 @@
 # Conexiones a bases de datos relacionales (JDBC)
 
+!!! warning "En construcción"
+
+    Este tema est? pendiente de desarrollo y validación conforme al índice aprobado.
+
 JDBC permite controlar directamente las conexiones y las instrucciones SQL desde Java. Aprenderás a implementar repositorios propios, recuperar resultados y mantener operaciones consistentes.
 
 ## Recorrido
