@@ -4,7 +4,7 @@
 
 Encargo integral autorizado en main. Orden obligatorio: JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring.
 
-**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: publicado y preparado para revisión docente. Ficheros: validación local completa, publicación en comprobación. Hibernate y Spring pendientes.**
+**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: publicado y preparado para revisión docente. Ficheros: publicado y preparado para revisión docente. Hibernate: en desarrollo. Spring pendiente.**
 
 ## Avances confirmados
 
@@ -42,7 +42,7 @@ Entorno: Windows, Temurin 25.0.4.1, Python 3.13.7; herramientas web mediante `.v
 
 ## Siguiente paso concreto
 
-Cerrar Ficheros completo (inventario, CSV/JSON/serialización y final) y comprobar Actions/Pages antes de comenzar Hibernate. Mantener commits y push directos en main según autorización vigente, sin pedir nueva aprobación entre temas.
+Cerrar Hibernate completo (biblioteca y sus tres cardinalidades) y comprobar Actions/Pages antes de comenzar Spring. Mantener commits y push directos en main según autorización vigente, sin pedir nueva aprobación entre temas.
 
 ## Firestore: entrega técnica y comprobaciones
 
@@ -126,3 +126,9 @@ Al retomar, comprobar primero estado Git y el último workflow: el código Fiche
 - QA adicional JDBC de diálogos se consolida también en este hito; no cambia producción.
 
 **Pendiente:** Actions y Pages del hito Ficheros; después Hibernate. Revisión pedagógica humana final, ejecución manual en IntelliJ y capturas de aula siguen pendientes donde está indicado.
+
+## Ficheros publicado y comienzo de Hibernate
+
+`f46bc9d`: Actions [42417163135](https://github.com/MJSPlayground/fp-dam2-acda/actions/runs/42417163135) build y deploy correctos. Pages real comprobado en navegador: tres páginas actuales y cuatro ZIP íntegros. Búsqueda pública315 entradas, con rutas de Ficheros limitadas al itinerario vigente; PDF Ficheros26/global105 páginas, HTTP200. El primer script de consulta pública asumió erróneamente clave docs en search.json; corregido a items y verificación completada (no fue un fallo del sitio).
+
+Hibernate comienza después de ese control. Se producirán cuatro proyectos JavaFX/Hibernate puro y diez páginas conforme al índice; MySQL real aislado para probar relaciones1:1/1:N/M:N y rollback. Los agentes existentes mantienen sus permisos y modelo; no se ha cambiado configuración global por la preferencia de cuota. Nuevos subagentes rutinarios, si fueran necesarios, usarán la preferencia solicitada cuando la herramienta admita elegirla.
