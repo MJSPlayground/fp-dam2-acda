@@ -26,6 +26,12 @@ Las rutas relativas parten del **Working directory** de la configuración de eje
 
 Para seguir un fallo, haz clic en el margen de una línea para poner un punto de interrupción, pulsa **Debug** junto al mismo `main`, observa variables y rutas, avanza con *Step Over* y continúa con *Resume Program*. La primera línea de tu código en la traza de error suele indicar dónde investigar. `NoSuchFileException` señala una ruta ausente; `AccessDeniedException`, un problema de acceso.
 
+## Aplicaciones con interfaz preparada
+
+En los proyectos **JavaFX**, ejecuta el `Launcher` indicado por la guía. Esa clase abre la ventana de escritorio y Maven proporciona las bibliotecas necesarias; conserva las dependencias del proyecto. Si falta JavaFX, comprueba primero la sincronización y el JDK seleccionado. La [guía oficial de JavaFX con Maven](https://openjfx.io/openjfx-docs/) explica esta integración.
+
+En los proyectos **web**, la clase principal inicia un servidor: mantén su proceso activo y abre en el navegador la dirección del README. Cerrar una pestaña no detiene el servidor. Cuando el proyecto utiliza Thymeleaf, el servidor procesa las plantillas antes de enviarlas al navegador; la aplicación se usa desde su URL, con la interfaz ya entregada. Si otra configuración ocupa el puerto, identifica cuál está ejecutándose y detén la que corresponda antes de arrancar otra variante.
+
 ## Comprobación técnica opcional
 
 Maven Wrapper permite al docente ejecutar pruebas desde la carpeta del `pom.xml`: `.\mvnw.cmd test` en Windows o `./mvnw test` en Linux/macOS. No es un paso necesario para completar la práctica. `target/` contiene resultados de compilación y no se distribuye.

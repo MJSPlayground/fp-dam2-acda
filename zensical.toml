@@ -15,7 +15,12 @@ nav = [
     "ficheros/arquitectura.md", "ficheros/proyecto.md", "ficheros/practica-final.md",
     "ficheros/repaso.md", "ficheros/ampliacion.md",
   ] },
-  { "Hibernate" = [{ "Hibernate" = "hibernate/index.md" }] },
+  { "Hibernate" = [
+    { "Hibernate" = "hibernate/index.md" },
+    "hibernate/arquitectura.md", "hibernate/configuracion.md", "hibernate/entidades.md",
+    "hibernate/persistencia.md", "hibernate/relaciones.md", "hibernate/consultas.md",
+    "hibernate/proyecto.md", "hibernate/practica-final.md", "hibernate/repaso.md", "hibernate/ampliacion.md",
+  ] },
   { "Spring" = [{ "Spring" = "spring/index.md" }] },
   { "JDBC" = [
     { "JDBC" = "jdbc/index.md" },

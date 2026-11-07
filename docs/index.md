@@ -23,7 +23,7 @@ Aprende a guardar, consultar y transformar información desde aplicaciones Java:
 
 ## Temas
 
-El recorrido sigue el [índice aprobado](https://github.com/MJSPlayground/fp-dam2-acda/blob/main/CONTENIDOS_ACDA.md). Ficheros, JDBC, Cloud Firestore y MongoDB disponen de teoría y proyectos para revisión docente. Los demás temas están en construcción conforme al nuevo índice.
+El recorrido sigue el [índice aprobado](https://github.com/MJSPlayground/fp-dam2-acda/blob/main/CONTENIDOS_ACDA.md). Ficheros, Hibernate, JDBC, Cloud Firestore y MongoDB disponen de teoría y proyectos para revisión docente. Spring está en construcción conforme al nuevo índice.
 
 <div class="grid cards" markdown>
 

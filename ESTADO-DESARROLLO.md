@@ -4,7 +4,7 @@
 
 Encargo integral autorizado en main. Orden obligatorio: JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring.
 
-**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: publicado y preparado para revisión docente. Ficheros: publicado y preparado para revisión docente. Hibernate: en desarrollo. Spring pendiente.**
+**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: publicado y preparado para revisión docente. Ficheros: publicado y preparado para revisión docente. Hibernate: verificado localmente, publicación pendiente. Spring pendiente.**
 
 ## Avances confirmados
 
@@ -132,3 +132,17 @@ Al retomar, comprobar primero estado Git y el último workflow: el código Fiche
 `f46bc9d`: Actions [42417163135](https://github.com/MJSPlayground/fp-dam2-acda/actions/runs/42417163135) build y deploy correctos. Pages real comprobado en navegador: tres páginas actuales y cuatro ZIP íntegros. Búsqueda pública315 entradas, con rutas de Ficheros limitadas al itinerario vigente; PDF Ficheros26/global105 páginas, HTTP200. El primer script de consulta pública asumió erróneamente clave docs en search.json; corregido a items y verificación completada (no fue un fallo del sitio).
 
 Hibernate comienza después de ese control. Se producirán cuatro proyectos JavaFX/Hibernate puro y diez páginas conforme al índice; MySQL real aislado para probar relaciones1:1/1:N/M:N y rollback. Los agentes existentes mantienen sus permisos y modelo; no se ha cambiado configuración global por la preferencia de cuota. Nuevos subagentes rutinarios, si fueran necesarios, usarán la preferencia solicitada cuando la herramienta admita elegirla.
+
+## Hibernate — cierre local (2026-11-07)
+
+- Once páginas cubren ORM/JPA, configuración, entidades, sesiones, transacciones, tres cardinalidades, HQL, guiado, final, repaso y Ampliación. Cinco fichas de repaso En preparación. Auditoría didáctica posterior de solo lectura sin nuevos defectos materiales; no sustituye revisión docente.
+- Cuatro proyectos Java 25/JavaFX con Hibernate 7.4.15.Final y MySQL 8.4.13 real, Maven Wrapper y frontend preparado. Guiado: catálogo con editoriales, autores, libros y detalles. Final: nuevas ediciones, traslado/descuento y fusión atómica; starter conserva guiado resuelto sin resolver requisitos nuevos.
+- `mvnw.cmd -q -Dqa.ui=true -Dqa.mysql=true test`: inicial guiado 2, solución guiado 12, inicial final 2, solución final 11; sin fallos, errores u omisiones. Relaciones, versiones de formulario, conservación de autores, retirada del detalle, restricciones, causas y rollback múltiple comprobados.
+- `sh scripts/test_hibernate_real.sh`: ambas soluciones con MySQL; 12/11 pruebas totales, una UI omitida por proyecto en esta ejecución. Tres pruebas de Ampliación activas: XML, consultas y diagnóstico N+1 (6 sentencias frente a 1, mismos dos libros).
+- `config.MySqlLocal.main` y cuatro `app.Launcher.main` ejecutados realmente contra Compose de alumno. Esquemas separados, persistencia tras reinicio y arranque sin borrado automático. Sin ejecución manual de IntelliJ ni Workbench.
+- Corregido mensaje de error oculto en formulario desplazable; verificados flujos JavaFX y ventana compacta. Capturas reales no incluidas en ZIP.
+- `scripts/export_pdfs.py`: Hibernate 26 páginas y global 128; muestras de portada, código, relaciones, guiado y Ampliación renderizadas e inspeccionadas. Corregidas dimensiones intrínsecas del SVG para evitar página casi vacía. No revisión visual exhaustiva de cada página.
+- Pendiente inmediato: terminar comprobaciones de ZIP/web, commit/push y Actions/Pages antes de iniciar Spring.
+- Cierre de descargas: `scripts/package_projects.py --check` comprueba 20 ZIP exactos y sus bytes contra fuentes; `scripts/test_project_packages.py` extrae y prueba 20/20 con Wrapper, salida 0. En este modo las pruebas UI/MySQL optativas se omiten; ya ejecutadas por separado como consta arriba.
+- Web local: `check_site_ui.py` y `check_hibernate_ui.py` correctos (10 páginas internas, cuatro descargas, escritorio/móvil, claro/oscuro); guía de cinco casillas conserva progreso y permite reinicio real. `check_links.py`: 56 páginas, 1045 enlaces, 783 fragmentos y 397 entradas de búsqueda correctos.
+- Compose y contenedor de QA propios detenidos, volumen de demostración propio conservado. Sin intervenciones en servicios ajenos.

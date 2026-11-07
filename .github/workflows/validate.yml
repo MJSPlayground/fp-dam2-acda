@@ -16,6 +16,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     services:
+      mysql:
+        image: mysql@sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902
+        env:
+          MYSQL_ROOT_PASSWORD: qa_root_local
+          MYSQL_ROOT_HOST: '%'
+          MYSQL_DATABASE: biblioteca_guiado
+          MYSQL_USER: acda
+          MYSQL_PASSWORD: acda_local
+        ports:
+          - 3308:3306
+        options: >-
+          --tmpfs /var/lib/mysql:rw,mode=1777
+          --health-cmd "MYSQL_PWD=qa_root_local mysql --protocol=TCP -h 127.0.0.1 -u root -N -e 'SELECT 1'"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 24
       mongodb:
         image: mongo@sha256:b9924c330a8bbc5800fe9c69f04a84e221eca7b28fd049a0354147d9908fa142
         env:
@@ -58,6 +74,16 @@ jobs:
           (cd proyectos/mongodb/guiado-solucion && sh mvnw test --batch-mode)
           (cd proyectos/mongodb/final-inicial && sh mvnw test --batch-mode)
           (cd proyectos/mongodb/final-solucion && sh mvnw test --batch-mode)
+          (cd proyectos/hibernate/guiado-inicial && sh mvnw test --batch-mode)
+          (cd proyectos/hibernate/guiado-solucion && sh mvnw test --batch-mode)
+          (cd proyectos/hibernate/final-inicial && sh mvnw test --batch-mode)
+          (cd proyectos/hibernate/final-solucion && sh mvnw test --batch-mode)
+      - name: Probar relaciones y transacciones con MySQL real
+        env:
+          QA_MYSQL_ADMIN_URL: jdbc:mysql://127.0.0.1:3308/mysql?serverTimezone=UTC
+          QA_MYSQL_ADMIN_USER: root
+          QA_MYSQL_ADMIN_PASSWORD: qa_root_local
+        run: sh scripts/test_hibernate_real.sh
       - name: Probar persistencia y atomicidad con MongoDB real
         env:
           MONGODB_URI: mongodb://127.0.0.1:27018/acda_mongodb_qa_ci?serverSelectionTimeoutMS=3000&connectTimeoutMS=3000
@@ -93,6 +119,8 @@ jobs:
         run: python scripts/check_firestore_ui.py
       - name: Probar páginas y cuatro descargas de MongoDB
         run: python scripts/check_mongodb_ui.py
+      - name: Probar páginas y cuatro descargas de Hibernate
+        run: python scripts/check_hibernate_ui.py
       - name: Comprobar enlaces internos y proyectos
         run: python scripts/check_links.py
       - name: Configurar GitHub Pages

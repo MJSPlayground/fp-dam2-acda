@@ -1,0 +1,21 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="420" height="540" viewBox="0 0 420 540" role="img" aria-labelledby="titulo descripcion">
+<title id="titulo">Tres relaciones del catálogo de biblioteca</title><desc id="descripcion">Una editorial tiene varios libros; varios libros comparten autores; un libro puede tener un detalle propio. Libro es propietario de las tres asociaciones.</desc>
+<rect width="420" height="540" rx="16" fill="#f1f5fb"/>
+<g font-family="sans-serif" fill="#172b4d" text-anchor="middle">
+<text x="210" y="35" font-size="22" font-weight="bold">Relaciones del catálogo</text>
+<rect x="18" y="56" width="384" height="137" rx="12" fill="white" stroke="#174c76" stroke-width="2"/>
+<text x="210" y="87" font-size="22" font-weight="bold">Editorial 1 — N Libro</text>
+<text x="210" y="121" font-size="18">Cada libro tiene una editorial</text>
+<text x="210" y="155" font-size="18">Propietario: Libro.editorial</text>
+<text x="210" y="180" font-size="18">Clave: editorial_id en libro</text>
+<rect x="18" y="211" width="384" height="137" rx="12" fill="white" stroke="#174c76" stroke-width="2"/>
+<text x="210" y="242" font-size="22" font-weight="bold">Libro N — M Autor</text>
+<text x="210" y="276" font-size="18">Los autores se pueden compartir</text>
+<text x="210" y="310" font-size="18">Propietario: Libro.autores</text>
+<text x="210" y="335" font-size="18">Tabla de unión: libro_autor</text>
+<rect x="18" y="366" width="384" height="153" rx="12" fill="white" stroke="#174c76" stroke-width="2"/>
+<text x="210" y="397" font-size="22" font-weight="bold">Libro 1 — 0..1 Detalle</text>
+<text x="210" y="431" font-size="18">El detalle pertenece a un libro</text>
+<text x="210" y="465" font-size="18">Propietario: Libro.detalle</text>
+<text x="210" y="490" font-size="18">Clave única: detalle_id</text>
+</g></svg>

@@ -10,6 +10,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DESTINATION = ROOT / "site/descargas/codigo"
 PROJECTS = {
+    "biblioteca-guiado-inicial.zip": ROOT / "proyectos/hibernate/guiado-inicial",
+    "biblioteca-guiado-solucion.zip": ROOT / "proyectos/hibernate/guiado-solucion",
+    "biblioteca-final-inicial.zip": ROOT / "proyectos/hibernate/final-inicial",
+    "biblioteca-final-solucion.zip": ROOT / "proyectos/hibernate/final-solucion",
     "inventario-guiado-inicial.zip": ROOT / "proyectos/ficheros/guiado-inicial",
     "inventario-guiado-solucion.zip": ROOT / "proyectos/ficheros/guiado-solucion",
     "inventario-final-inicial.zip": ROOT / "proyectos/ficheros/final-inicial",

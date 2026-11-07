@@ -78,6 +78,9 @@ def check(name: str) -> None:
                 check_postman_urls(collection["item"])
                 check_postman_scripts(collection)
                 assert b"sha256:db3c73bd50998abdfe17c80755597fc9a0601dedef1dfb7812dbc4133fc63a08" in archive.read("compose.yaml")
+            if name.startswith("biblioteca-"):
+                assert "compose.yaml" in names
+                assert b"sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902" in archive.read("compose.yaml")
             archive.extractall(root)
         assert (root / "pom.xml").is_file() and (root / ".mvn/wrapper/maven-wrapper.properties").is_file()
         command = ["cmd", "/c", "mvnw.cmd", "test", "--batch-mode"] if os.name == "nt" else ["sh", "mvnw", "test", "--batch-mode"]

@@ -6,6 +6,16 @@ Este archivo recoge **capturas auténticas, GIF y otros recursos visuales** que 
 
 ## Solicitudes concretas al docente
 
+### [Opcional · Pendiente] Hibernate: ejecutar e inspeccionar las tres relaciones
+
+- **Páginas:** `docs/hibernate/proyecto.md` y `docs/hibernate/relaciones.md`.
+- **Objetivo:** relacionar los objetos de la aplicación con claves foráneas y tabla de unión.
+- **Pasos:** abrir el proyecto Maven resuelto, ejecutar `es.mjsplayground.acda.hibernate.biblioteca.config.MySqlLocal.main` y después `app.Launcher.main`. Crear o abrir el libro indicado en la guía con editorial, varios autores y detalle. En Workbench conectar al servidor local del README e inspeccionar las filas relacionadas y la tabla de unión, sin alterar los datos.
+- **Herramientas:** IntelliJ IDEA y MySQL Workbench; registrar versiones exactas del aula. No mostrar credenciales ni datos ajenos.
+- **Destinos:** `docs/assets/capturas/hibernate/intellij-biblioteca.webp` y `docs/assets/capturas/hibernate/workbench-relaciones.webp`.
+- **Alt/pies:** «Catálogo JavaFX iniciado desde Launcher en IntelliJ»; «Libro, editorial, detalle y autores relacionados en las tablas de MySQL».
+- **Estado:** pendientes dentro de IntelliJ y Workbench. Las pruebas realizadas utilizan JavaFX y MySQL reales, pero no simulan capturas de esas herramientas.
+
 ### [Opcional · Pendiente] Ficheros: ejecutar y cargar un catálogo desde IntelliJ
 
 - **Página:** `docs/ficheros/proyecto.md`, «Preparar y ejecutar».

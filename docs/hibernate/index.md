@@ -1,15 +1,22 @@
-# Herramientas de mapeo objeto-relacional (ORM) y JPA con Hibernate
+﻿# Herramientas ORM y JPA con Hibernate
 
-!!! warning "En construcción"
+!!! info "Disponible para revisión docente"
 
-    Este tema está pendiente de desarrollo y validación conforme al índice aprobado.
+    Incluye teoría, proyecto guiado, práctica final y soluciones públicas verificadas. La revisión pedagógica final corresponde al docente.
 
-Hibernate permite relacionar objetos Java con tablas de una base de datos. El objetivo es persistir entidades en MySQL y organizar las operaciones en repositorios y servicios con reglas de negocio.
+Aprenderás a relacionar objetos Java con tablas y asociaciones, persistir entidades y mantener operaciones coherentes mediante sesiones y transacciones. El proyecto es un catálogo de biblioteca con interfaz JavaFX preparada.
 
 ## Recorrido
 
-Se estudiarán los **fundamentos de ORM**, la **instalación y configuración**, la **persistencia, los servicios y el logging**, las **relaciones entre entidades** y las **consultas y recuperación**. Después llegarán las prácticas finales y **Ampliación**.
+1. [Arquitectura y fundamentos ORM](arquitectura.md): responsabilidades, desfase objeto-relacional y especificación frente a proveedor.
+2. [Configuración](configuracion.md): MySQL, Maven, Workbench y arranque.
+3. [Entidades](entidades.md): identidad, columnas, constructores, versión y alternativa XML.
+4. [Sesiones y transacciones](persistencia.md): estados, CRUD, cierre y errores.
+5. [Relaciones](relaciones.md): 1:1, 1:N, M:N y ciclo de vida.
+6. [HQL básico](consultas.md): filtros, parámetros y ordenación.
 
-Consulta [Ayuda y herramientas](../ayuda/index.md) para preparar Java, Maven, Docker y MySQL. Los bloques se desarrollarán progresivamente.
+El [proyecto guiado](proyecto.md) evoluciona con estas explicaciones sobre una sola aplicación. Completarás asociaciones, repositorios y casos de uso sin editar el frontend.
 
-Continúa con [Acceso a datos mediante componentes (Spring)](../spring/index.md).
+Después encontrarás una sola [práctica final de ampliación del catálogo](practica-final.md), con niveles Base, Aplicación y Reto avanzado; [cinco fichas de repaso en preparación](repaso.md); y [Ampliación](ampliacion.md) sobre consultas y rendimiento.
+
+Reutiliza las capas y el logging introducidos en [Ficheros](../ficheros/arquitectura.md), así como [preparación Maven](../ayuda/proyectos-maven.md), [contenedores](../ayuda/contenedores.md) y [diagnóstico](../ayuda/diagnostico.md). No se necesita conocer JDBC o Spring para seguir este tema.
