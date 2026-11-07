@@ -4,7 +4,7 @@
 
 Encargo integral autorizado en main. Orden obligatorio: JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring.
 
-**JDBC: publicado y preparado para revisión docente. Firestore: validación local completa, publicación en comprobación. Los otros cuatro temas siguen pendientes.**
+**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: en desarrollo. Ficheros, Hibernate y Spring pendientes.**
 
 ## Avances confirmados
 
@@ -64,6 +64,10 @@ Fallo técnico real comprobado: emulador detenido → HTTP 500 estructurado en 0
 
 Última ronda limpia terminada: `test_project_packages.py` correcto para los diez ZIP exactos, cada uno extraído y probado con su Wrapper; checkers global/JDBC/Firestore/enlaces correctos. UI final también comprobada: ocupado → cancelar con motivo → libre, filtros de estado/fecha/responsable y botones de paginación.
 
-**Pendiente:** comprobar Actions y Pages del hito Firestore. IAM, Firebase Authentication, consola, índices cloud y ejemplos de Ampliación remotos NO se han ejecutado contra un proyecto real ni con credenciales. No declarar esas comprobaciones realizadas.
+`b5dd0b4`: Actions [42410875882](https://github.com/MJSPlayground/fp-dam2-acda/actions/runs/42410875882) build y deploy correctos. Pages real comprobado con Chromium: tres páginas principales, cuatro ZIP íntegros con Postman v2.1, PDF Firestore27 páginas y global59 con HTTP200. IAM, Firebase Authentication, consola, índices cloud y ejemplos de Ampliación remotos NO se han ejecutado contra un proyecto real ni con credenciales. No declarar esas comprobaciones realizadas.
 
 **Siguiente tema:** MongoDB, únicamente después de confirmar el hito Firestore publicado. Docker Desktop ya responde (servidor29.9.2); no se han creado todavía contenedores Mongo/MySQL para esos temas.
+
+## MongoDB en curso
+
+Producción de teoría, cuatro proyectos y QA real Docker coordinada. Aún no hay un hito MongoDB listo para publicar. Siguiente paso: cerrar contrato equipos/jugadores y competición, construir y probar persistencia real e interfaz antes del cierre del tema.
