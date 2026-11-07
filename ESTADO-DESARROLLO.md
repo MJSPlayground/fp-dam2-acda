@@ -4,7 +4,7 @@
 
 Encargo integral autorizado en main. Orden obligatorio: JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring.
 
-**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: publicado y preparado para revisión docente. Ficheros: publicado y preparado para revisión docente. Hibernate: publicado y preparado para revisión docente. Spring: verificado localmente, publicación pendiente.**
+**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: publicado y preparado para revisión docente. Ficheros: publicado y preparado para revisión docente. Hibernate: publicado y preparado para revisión docente. Spring: publicado y preparado para revisión docente.**
 
 ## Avances confirmados
 
@@ -38,11 +38,11 @@ Entorno: Windows, Temurin 25.0.4.1, Python 3.13.7; herramientas web mediante `.v
 - No se ha ejecutado Run desde IntelliJ: recorrido documentado y captura opcional registrada en `CAPTURAS-PENDIENTES.md`. Sí se ejecutaron JavaFX y su interfaz real.
 - El proyecto JDBC principal utiliza SQLite. Sus fragmentos MySQL/Callable/Hikari se han ejecutado también contra servidor MySQL real, como detalla la comprobación adicional al final del registro. No se ha realizado una medición de rendimiento ni una prueba exhaustiva de aislamientos.
 - Sin aprobación pedagógica humana: la revisión final corresponde al docente.
-- La web completa de seis temas NO está terminada. No generar aún los treinta repasos opcionales.
+- Los seis temas están desarrollados y publicados para revisión docente. Los treinta repasos opcionales siguen sin desarrollar, con sus fichas En preparación, conforme al encargo.
 
 ## Siguiente paso concreto
 
-Desarrollar Spring completo: componentes, DI, Spring Data JPA y servicios del catálogo, con frontend MVC preparado; cerrar proyectos, pruebas, PDF y publicación. Mantener commits y push directos en main según autorización vigente, sin pedir nueva aprobación entre temas.
+Revisión pedagógica final del docente sobre la web publicada antes de difundirla al alumnado. Las capturas manuales del aula y la comprobación de Firestore en cloud real quedan identificadas como límites/propuestas de seguimiento; no hay desarrollo técnico pendiente de los seis temas aprobados. No iniciar los treinta proyectos opcionales de repaso.
 
 ## Firestore: entrega técnica y comprobaciones
 
@@ -183,3 +183,32 @@ Hibernate comienza después de ese control. Se producirán cuatro proyectos Java
 - Censo transversal: seis temas con cuatro proyectos y cuatro descargas cada uno; cinco fichas En preparación por tema, sin desarrollar los treinta proyectos opcionales.
 - Procesos y servicios propios detenidos; sin listeners3309/8084/8086/8087/8088/8089/8090/8091. Volumen propio acda-spring_spring-data conservado. Sin tocar servicios ajenos. IntelliJ no ejecutado manualmente.
 - Pendiente únicamente para cierre público: commit/push, Actions y comprobación integral de Pages.
+
+## Cierre integral publicado y comprobado — 2026-11-08
+
+**Los seis temas del encargo están desarrollados, versionados en main y publicados para revisión docente.** Las tareas de publicación señaladas como pendientes en los hitos históricos anteriores quedan resueltas por este cierre.
+
+| Tema | Proyecto guiado y práctica final | Commit de entrega |
+| --- | --- | --- |
+| JDBC | Almacén y ventas / Operaciones de almacén | ba97967 |
+| Cloud Firestore | API de reservas / Ampliación del sistema de reservas | b5dd0b4 |
+| MongoDB | Equipos y jugadores / Gestión de competición | 883a380 + corrección CI7eabc8f |
+| Ficheros | Inventario local / Nuevas funciones del inventario | f46bc9d |
+| Hibernate | Catálogo de biblioteca / Ampliación del catálogo | 092bc87 |
+| Spring | Servicios para el catálogo / Reglas y servicios del catálogo | d6e301a |
+
+- Entrega final `d6e301a`. Actions [42423344711](https://github.com/MJSPlayground/fp-dam2-acda/actions/runs/42423344711): **build SUCCESS y deploy SUCCESS**. Incluye24proyectos Java, MySQL real Hibernate/Spring, MongoDB real y ejemplos, emulador Firestore,24ZIP desde limpio, exportación PDF y comprobaciones de web/enlaces.
+- Comando real posdespliegue: `.venv/Scripts/python.exe scripts/check_published_site.py`, salida0. Chromium recorrió portada y64páginas de navegación, comparó H1 con las fuentes, descargó24ZIP con integridad/estructura limpia y abrió8PDF desde GitHub Pages. Inspección visual real de portada Spring publicada. Log local qa-public-final.log; capturas reales en qa-captures (no se incluyen en ZIP).
+- PDF públicos comprobados: Ficheros26, Hibernate26, Spring25, JDBC25, Firestore27, MongoDB23, Ayuda8 y documento global150páginas. Los recuentos son de la publicación real, no solo del build local.
+- Revisión local final:65páginas,1197enlaces,890fragmentos y462entradas de búsqueda vigentes;24ZIP coinciden con fuentes y24/24 compilaciones/pruebas desde carpetas limpias. Pruebas gráficas y de servicios optativas ejecutadas separadamente como detalla cada tema; no atribuirlas al modo ordinario.
+- Identidad visual, Zensical, navegación de seis temas más Ayuda, claro/oscuro, móvil/escritorio, teclado, diagramas y PDF conservados y verificados. Histórico de Ficheros fuera de publicación/buscador, conservado en Git. Cinco fichas de repaso por tema; ningún proyecto opcional ni material reservado desarrollado.
+- Sin ramas ni PR; todos los hitos mediante commit/push normal en main. No force push ni edición de estándares/skills. AI Workspace permanece limpio. Procesos/servicios propios de QA detenidos y volúmenes propios conservados; sin tocar servicios ajenos.
+
+### Límites y seguimiento humano
+
+- La aprobación pedagógica final corresponde al docente. No se declara aprobada automáticamente por una revisión IA.
+- IntelliJ, Workbench, Compass y Postman gráfico no se han comprobado manualmente. Sí los main/JavaFX/navegador/servidores reales y las colecciones importables mediante Newman; capturas opcionales concretas en CAPTURAS-PENDIENTES.md.
+- Firestore validado con emulador oficial real. No se ha usado un proyecto cloud con credenciales para comprobar IAM/Auth/índices remotos.
+- PDF generados y abiertos, con muestras renderizadas e inspeccionadas; no revisión visual exhaustiva humana de todas las páginas.
+- Caída de MySQL en Spring: timeout observado30,1s antes del500; recuperación y persistencia comprobadas. Propuesta futura: ajustar el timeout con una prueba de caída equivalente si se necesita respuesta más rápida.
+- Recomendación: completar capturas del aula y contraste cloud cuando existan los entornos; después realizar la revisión pedagógica del conjunto antes de distribuir la web. Mantener los treinta repasos pendientes hasta nuevo encargo.
