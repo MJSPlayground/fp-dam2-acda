@@ -1,0 +1,790 @@
+{
+  "info": {
+    "name": "Equipos y jugadores · final-solucion",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Ejecuta carpetas en orden sobre Mongo local, con baseUrl de tu variante. El Runner crea y limpia sus equipos. Los TODO iniciales producen501 hasta implementarse. No usar en bases con datos reales."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8080"
+    },
+    {
+      "key": "sufijo",
+      "value": ""
+    },
+    {
+      "key": "equipoId",
+      "value": ""
+    },
+    {
+      "key": "segundoId",
+      "value": ""
+    },
+    {
+      "key": "jugadorId",
+      "value": ""
+    },
+    {
+      "key": "primeraPaginaId",
+      "value": ""
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if(!pm.collectionVariables.get(\"sufijo\"))pm.collectionVariables.set(\"sufijo\",String(Date.now()));"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "1 · Proyecto guiado",
+      "item": [
+        {
+          "name": "Sedes de referencia",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/sedes"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Sedes preparadas\",()=>pm.expect(pm.response.json().some(s=>s.id===\"CENTRO\")).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear equipo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombre\": \"QA-{{sufijo}}\", \"categoria\": \"JUNIOR\", \"sedeId\": \"CENTRO\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP201\",()=>pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"equipoId\",pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear segundo equipo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombre\": \"QB-{{sufijo}}\", \"categoria\": \"JUNIOR\", \"sedeId\": \"CENTRO\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP201\",()=>pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"segundoId\",pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Agregar jugador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{equipoId}}/jugadores",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombre\": \"Alex\", \"dorsal\": 7, \"posicion\": \"MEDIO\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP200\",()=>pm.response.to.have.status(200));",
+                  "pm.collectionVariables.set(\"jugadorId\",pm.response.json().jugadores[0].id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Dorsal duplicado409",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{equipoId}}/jugadores",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombre\": \"Alex\", \"dorsal\": 7, \"posicion\": \"MEDIO\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP409\",()=>pm.response.to.have.status(409));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar categoría y posición",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos?categoria=JUNIOR&posicion=MEDIO&pagina=0&tamanio=20"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Filtros aplicados\",()=>{const p=pm.response.json();pm.expect(p.elementos.some(e=>e.id===pm.collectionVariables.get(\"equipoId\"))).to.eql(true);p.elementos.forEach(e=>{pm.expect(e.categoria).to.eql(\"JUNIOR\");pm.expect(e.jugadores.some(j=>j.posicion===\"MEDIO\")).to.eql(true);});});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sumar estadísticas atómicas",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{equipoId}}/jugadores/{{jugadorId}}/estadisticas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"goles\": 1, \"asistencias\": 0}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Contadores correctos\",()=>{const j=pm.response.json().jugadores.find(j=>j.id===pm.collectionVariables.get(\"jugadorId\"));pm.expect(j.estadisticas).to.eql({partidos:1,goles:1,asistencias:0});});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Dorsal fraccionario400",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{equipoId}}/jugadores",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombre\": \"Alex\", \"dorsal\": 1.5, \"posicion\": \"MEDIO\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP400\",()=>pm.response.to.have.status(400));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Identificador malformado400",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/no-id"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP400\",()=>pm.response.to.have.status(400));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Equipo inexistente404",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/000000000000000000000000"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP404\",()=>pm.response.to.have.status(404));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Primera página",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos?pagina=0&tamanio=1"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP200\",()=>pm.response.to.have.status(200));",
+                  "const p=pm.response.json();pm.test(\"Página válida\",()=>{pm.expect(p.elementos.length).to.eql(1);pm.expect(p.totalElementos).to.be.at.least(2);pm.expect(p.pagina).to.eql(0);});pm.collectionVariables.set(\"primeraPaginaId\",p.elementos[0].id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Página siguiente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos?pagina=1&tamanio=1"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP200\",()=>pm.response.to.have.status(200));",
+                  "const p=pm.response.json();pm.test(\"No repite fila\",()=>{pm.expect(p.pagina).to.eql(1);pm.expect(p.elementos.length).to.eql(1);pm.expect(p.elementos[0].id).not.to.eql(pm.collectionVariables.get(\"primeraPaginaId\"));});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Tamaño inválido400",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos?tamanio=0"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP400\",()=>pm.response.to.have.status(400));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2 · Competición",
+      "item": [
+        {
+          "name": "Registrar jornada",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{equipoId}}/jornadas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\": \"j1\", \"fecha\": \"2030-05-20\", \"rival\": \"Rivales\", \"golesFavor\": 2, \"golesContra\": 1, \"aportaciones\": [{\"jugadorId\": \"{{jugadorId}}\", \"goles\": 2, \"asistencias\": 0}]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Marcador y jugador coordinados\",()=>{const e=pm.response.json();pm.expect(e.jornadas.length).to.eql(1);pm.expect(e.jugadores[0].estadisticas.goles).to.eql(3);});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Misma jornada no duplica409",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{equipoId}}/jornadas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\": \"j1\", \"fecha\": \"2030-05-20\", \"rival\": \"Rivales\", \"golesFavor\": 2, \"golesContra\": 1, \"aportaciones\": [{\"jugadorId\": \"{{jugadorId}}\", \"goles\": 2, \"asistencias\": 0}]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP409\",()=>pm.response.to.have.status(409));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Racha de victorias",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{equipoId}}/racha"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Resultado V\",()=>pm.expect(pm.response.json().resultados).to.eql([\"V\"]));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Clasificación calculada",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/clasificacion"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Equipo con3 puntos\",()=>{const e=pm.response.json().find(e=>e.equipoId===pm.collectionVariables.get(\"equipoId\"));pm.expect(e.puntos).to.eql(3);pm.expect(e.diferencia).to.eql(1);});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cambiar disponibilidad",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{equipoId}}/jugadores/{{jugadorId}}/disponibilidad",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"disponible\": false}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Filtrar disponibles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{equipoId}}/jugadores?minGoles=1&disponibles=true"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"No disponible excluido\",()=>pm.expect(pm.response.json()).to.eql([]));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Participante no disponible409",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{equipoId}}/jornadas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\": \"j2\", \"fecha\": \"2030-05-20\", \"rival\": \"Rivales\", \"golesFavor\": 2, \"golesContra\": 1, \"aportaciones\": [{\"jugadorId\": \"{{jugadorId}}\", \"goles\": 2, \"asistencias\": 0}]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP409\",()=>pm.response.to.have.status(409));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "No borrar jugador con historial409",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{equipoId}}/jugadores/{{jugadorId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP409\",()=>pm.response.to.have.status(409));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Restaurar disponibilidad",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{equipoId}}/jugadores/{{jugadorId}}/disponibilidad",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"disponible\": true}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Marcador incoherente400",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{equipoId}}/jornadas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\": \"j2\", \"fecha\": \"2030-05-20\", \"rival\": \"Rivales\", \"golesFavor\": 3, \"golesContra\": 1, \"aportaciones\": [{\"jugadorId\": \"{{jugadorId}}\", \"goles\": 2, \"asistencias\": 0}]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP400\",()=>pm.response.to.have.status(400));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3 · Limpieza de estos datos",
+      "item": [
+        {
+          "name": "Eliminar equipo propio",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{equipoId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP204\",()=>pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Eliminar segundo propio",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/equipos/{{segundoId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP204\",()=>pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -41,7 +41,7 @@ El proveedor puede entregar varios productos a la vez. La encargada prepara las 
 
 Con los datos iniciales, recibir 2 teclados a 10,00 € y un monitor a 100,00 € cuesta 120,00 €. Con presupuesto de 120,00 € quedan 12 teclados y 6 monitores, con dos justificantes. Con 119,99 €, no cambia ningún producto ni aparece ningún justificante. Repite con una segunda línea que identifique un producto inexistente: tampoco debe persistir la primera.
 
-## Comprobación y entrega de aprendizaje
+## Comprobar los resultados
 
 Prueba las funciones anteriores desde **Operaciones** y vuelve a **Catálogo y ventas** para comprobar las existencias actualizadas. Conserva las funciones del guiado: alta, edición, eliminación permitida y venta atómica. Añade pruebas de servicio que distingan una operación completa de una operación parcialmente guardada, incluyendo un fallo técnico después de la primera escritura. Los avisos de la interfaz no sustituyen las validaciones del servicio.
 

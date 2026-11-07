@@ -23,8 +23,13 @@ nav = [
     "firestore/consultas.md", "firestore/rest.md", "firestore/proyecto.md",
     "firestore/practica-final.md", "firestore/repaso.md", "firestore/ampliacion.md",
   ] },
-  { "MongoDB" = [{ "MongoDB" = "mongodb/index.md" }] },
-  { "Ayuda" = ["ayuda/index.md", "ayuda/proyectos-maven.md", "ayuda/diagnostico.md"] },
+  { "MongoDB" = [
+    { "MongoDB" = "mongodb/index.md" },
+    "mongodb/documentos.md", "mongodb/configuracion.md", "mongodb/persistencia.md",
+    "mongodb/consultas.md", "mongodb/atomicidad.md", "mongodb/proyecto.md",
+    "mongodb/practica-final.md", "mongodb/repaso.md", "mongodb/ampliacion.md",
+  ] },
+  { "Ayuda" = ["ayuda/index.md", "ayuda/proyectos-maven.md", "ayuda/diagnostico.md", "ayuda/contenedores.md"] },
 ]
 
 [project.extra]

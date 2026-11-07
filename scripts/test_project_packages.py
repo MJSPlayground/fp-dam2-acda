@@ -24,6 +24,28 @@ def check_postman_urls(items):
         check_postman_urls(item.get("item", []))
 
 
+def postman_requests(items):
+    for item in items:
+        if "request" in item:
+            yield item
+        yield from postman_requests(item.get("item", []))
+
+
+def check_postman_scripts(collection):
+    """Compile JavaScript without executing pm requests or environment variables."""
+    scripts = []
+
+    def visit(item):
+        for event in item.get("event", []):
+            code = event.get("script", {}).get("exec", [])
+            scripts.append({"name": item.get("name", "collection"), "code": "\n".join(code) if isinstance(code, list) else code})
+        for child in item.get("item", []):
+            visit(child)
+
+    visit(collection)
+    subprocess.run(["node", "-e", "const vm=require('node:vm');const fs=require('node:fs');for(const s of JSON.parse(fs.readFileSync(0,'utf8')))new vm.Script(s.code,{filename:s.name});"], input=json.dumps(scripts), text=True, check=True)
+
+
 def check(name: str) -> None:
     archive_path = DESTINATION / name
     assert archive_path.is_file(), archive_path
@@ -42,9 +64,20 @@ def check(name: str) -> None:
                 assert collection["info"]["schema"].endswith("/v2.1.0/collection.json")
                 assert collection["item"], "Colección Postman vacía"
                 check_postman_urls(collection["item"])
+                check_postman_scripts(collection)
                 emulator = json.loads(archive.read("firebase.json"))
                 assert emulator["emulators"]["firestore"]["port"] == 8085
                 assert not any(b"-----BEGIN PRIVATE KEY-----" in archive.read(item) for item in names)
+            if name.startswith("jugadores-"):
+                assert "compose.yaml" in names
+                assert "src/main/resources/static/index.html" in names
+                collections = [member for member in names if member.startswith("postman/") and member.endswith(".postman_collection.json")]
+                assert len(collections) == 1
+                collection = json.loads(archive.read(collections[0]))
+                assert collection["info"]["schema"].endswith("/v2.1.0/collection.json")
+                check_postman_urls(collection["item"])
+                check_postman_scripts(collection)
+                assert b"sha256:db3c73bd50998abdfe17c80755597fc9a0601dedef1dfb7812dbc4133fc63a08" in archive.read("compose.yaml")
             if name.startswith("inventario-directorios-"):
                 source = archive.read("src/main/java/es/mjsplayground/acda/ficheros/codelab/InventarioCodelab.java").decode()
             if name == "inventario-directorios-inicial.zip":

@@ -6,6 +6,16 @@ Este archivo recoge **capturas auténticas, GIF y otros recursos visuales** que 
 
 ## Solicitudes concretas al docente
 
+### [Opcional · Pendiente] MongoDB: arranque y documento embebido en Compass
+
+- **Páginas:** `docs/mongodb/configuracion.md` y `docs/mongodb/proyecto.md`, tras el arranque.
+- **Objetivo:** relacionar la aplicación con el documento que guarda equipos, jugadores y estadísticas.
+- **Pasos:** con Docker disponible, abrir el proyecto Maven y ejecutar `es.mjsplayground.acda.mongodb.liga.config.MongoLocal.main`; después `LigaApplication.main`. Conectar Compass a `mongodb://localhost:27018`, abrir `acda_liga` para el guiado o `acda_liga_final` para la final y expandir un documento de `equipos` con su array de jugadores y estadísticas. Mostrar también la referencia `sedeId` sin confundirla con una clave foránea automática.
+- **Herramientas:** IntelliJ IDEA y MongoDB Compass; registrar versiones exactas del aula.
+- **Destino:** `docs/assets/capturas/mongodb/compass-equipo-plantilla.webp`.
+- **Alt/pie:** «Documento de equipo con jugadores y estadísticas embebidos y referencia a la sede en MongoDB Compass».
+- **Estado:** pendiente de captura desde las herramientas del aula. Las pruebas automatizadas utilizan MongoDB real y navegador; no representan una comprobación visual de Compass ni de IntelliJ.
+
 ### [Opcional · Pendiente] Firestore: dos configuraciones Run y colección Postman
 
 - **Páginas:** `docs/firestore/proyecto.md`, «Arranque desde IntelliJ» e «Importar la colección Postman».

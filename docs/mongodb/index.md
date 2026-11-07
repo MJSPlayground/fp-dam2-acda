@@ -1,15 +1,23 @@
-# Bases de datos NoSQL con MongoDB
+﻿# Bases de datos NoSQL con MongoDB
 
-!!! warning "En construcción"
+!!! info "Disponible para revisión docente"
 
-    Este tema está pendiente de desarrollo y validación conforme al índice aprobado.
+    Incluye teoría, proyecto guiado, práctica final y cuatro descargas. Los proyectos se han validado con MongoDB real en Docker; la revisión pedagógica final corresponde al docente.
 
-MongoDB organiza la información en documentos y permite consultarlos sin fijar todas las columnas de una tabla. El tema se centrará en el modelado, la persistencia y las consultas desde aplicaciones Java.
+MongoDB permite persistir documentos BSON y consultarlos desde Java. Reutilizaremos Spring y REST para concentrarnos en el modelo de equipos, jugadores embebidos, repositorios y actualizaciones seguras.
 
 ## Recorrido
 
-Se estudiarán **fundamentos MongoDB**, **instalación y modelado**, **persistencia con Spring Data MongoDB**, **consultas y agregaciones** e **integridad y pruebas**. El recorrido terminará con prácticas finales y **Ampliación**.
+1. [Documentos y modelado](documentos.md): BSON, identidad, embebidos y referencias.
+2. [Docker y Compass](configuracion.md): servidor local, conexión y observación de documentos.
+3. [Spring Data MongoDB](persistencia.md): entidades, repositorios, CRUD y servicios.
+4. [Consultas y paginación](consultas.md): métodos derivados, `@Query`, orden e índices.
+5. [Atomicidad y errores](atomicidad.md): versiones, incrementos y límites de consistencia.
 
-Consulta [Ayuda y herramientas](../ayuda/index.md) para preparar Docker y las herramientas de base de datos. Los bloques se desarrollarán progresivamente.
+El [proyecto guiado de equipos y jugadores](proyecto.md) evoluciona sobre una aplicación con frontend preparado. El alumnado trabaja en el backend y no modifica sus vistas.
+
+Al finalizar, una sola [práctica de gestión de competición](practica-final.md) incorpora consultas, disponibilidad, jornadas y clasificación con niveles Base, Aplicación y Reto avanzado. Encontrarás también [cinco fichas de repaso en preparación](repaso.md) y [Ampliación](ampliacion.md) sobre pipelines e interpretación de planes.
+
+Reutiliza [HTTP y REST](../firestore/rest.md), [preparación Maven](../ayuda/proyectos-maven.md), [contenedores](../ayuda/contenedores.md) y [diagnóstico](../ayuda/diagnostico.md) como referencias. No es necesario reconstruir esos conocimientos desde cero.
 
 Vuelve a la [portada de Acceso a Datos](../index.md).

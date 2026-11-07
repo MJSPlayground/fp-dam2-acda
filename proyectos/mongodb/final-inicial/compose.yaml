@@ -1,0 +1,15 @@
+name: acda-liga
+services:
+  mongodb:
+    image: mongodb/mongodb-community-server@sha256:db3c73bd50998abdfe17c80755597fc9a0601dedef1dfb7812dbc4133fc63a08
+    ports:
+      - "127.0.0.1:27018:27017"
+    volumes:
+      - liga-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "quit(db.adminCommand({ping:1}).ok ? 0 : 1)"]
+      interval: 3s
+      timeout: 5s
+      retries: 20
+volumes:
+  liga-data:

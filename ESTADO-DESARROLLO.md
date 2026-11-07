@@ -4,7 +4,7 @@
 
 Encargo integral autorizado en main. Orden obligatorio: JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring.
 
-**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: en desarrollo. Ficheros, Hibernate y Spring pendientes.**
+**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: validación local completa, publicación en comprobación. Ficheros, Hibernate y Spring pendientes.**
 
 ## Avances confirmados
 
@@ -42,7 +42,7 @@ Entorno: Windows, Temurin 25.0.4.1, Python 3.13.7; herramientas web mediante `.v
 
 ## Siguiente paso concreto
 
-Desarrollar Cloud Firestore completo (reservas, web preparada, API REST y colección Postman desde el primer hito), sin avanzar a MongoDB hasta pasar su puerta de calidad. Mantener commits y push directos en main según autorización vigente, sin pedir nueva aprobación entre temas.
+Cerrar MongoDB completo (equipos, jugadores y competición) y comprobar Actions/Pages antes de comenzar Ficheros. Mantener commits y push directos en main según autorización vigente, sin pedir nueva aprobación entre temas.
 
 ## Firestore: entrega técnica y comprobaciones
 
@@ -68,6 +68,23 @@ Fallo técnico real comprobado: emulador detenido → HTTP 500 estructurado en 0
 
 **Siguiente tema:** MongoDB, únicamente después de confirmar el hito Firestore publicado. Docker Desktop ya responde (servidor29.9.2); no se han creado todavía contenedores Mongo/MySQL para esos temas.
 
-## MongoDB en curso
+## MongoDB: entrega y comprobaciones locales
 
-Producción de teoría, cuatro proyectos y QA real Docker coordinada. Aún no hay un hito MongoDB listo para publicar. Siguiente paso: cerrar contrato equipos/jugadores y competición, construir y probar persistencia real e interfaz antes del cierre del tema.
+- Diez páginas del índice, guiado y final de tres niveles, cuatro proyectos Java25/Spring Data MongoDB con frontend preparado. Equipo agrega jugadores/estadísticas; Sede referenciada. Final añade jornadas, disponibilidad, consultas, clasificación y racha calculadas en Java.
+- MongoDB real8.0.34, imagen oficial `mongodb/mongodb-community-server@sha256:db3c73bd50998abdfe17c80755597fc9a0601dedef1dfb7812dbc4133fc63a08`; QA tmpfs aislada, sin montajes de datos ajenos.
+- Bases predeterminadas separadas: `acda_liga` y `acda_liga_final`, para evitar pérdida de campos al comparar modelos. Starter final conserva las funciones resueltas del guiado; nuevos algoritmos no filtrados.
+- Cuatro package correctos. Suite con `.\mvnw.cmd -q '-Dqa.mongo=true' test`: guiado12 (8 unit/API y4Mongo), final17 (10 y7), sin omitidas ni fallos. CAS, incrementos concurrentes, dorsal concurrente, jornada repetida sin duplicar contadores, límites20/10000/100000, conservación de jornadas y desempates comprobados.
+- Arranque real starters: guiado listado/sedes200 con operaciones pendientes501; final alta201/plantilla200/estadísticas200 y jornada pendiente501. No se han sustituido por persistencia ficticia.
+- `scripts/check_mongodb_app.py`: ambos proyectos reales correctos, CRUD, filtros, tipos/errores,20 incrementos HTTP concurrentes, edición que preserva datos embebidos, cancelación de formulario, disponibilidad, jornadas, racha y clasificación. Escritorio/móvil, claro/oscuro; capturas reales revisadas.
+- Newman exit0 incluidas comprobaciones de scripts: guiado15 peticiones/25 aserciones; final25/43. Corregido error de sintaxis en script y añadida compilación JavaScript de las ocho colecciones Postman actuales para evitar regresión.
+- `scripts/check_mongodb_examples.py`: cinco bloques JS extraídos de Ampliación y ejecutados en base QA aislada; pipelines con9 goles/8 intervenciones/lookup3 y explain/índices correctos, sin afirmar mejoras de rendimiento no medidas.
+- Catorce ZIP comparados contra nombres/bytes de fuentes y probados con Wrapper desde carpetas limpias. Checkers global/JDBC/Firestore/Mongo correctos. `check_links.py` ampliado:63 páginas,950 enlaces y737 fragmentos HTML válidos; corregida ancla con tilde que no existía en HTML.
+- PDF Mongo23 páginas, global81 y Ayuda8 generados sin incidencias; muestras renderizadas de teoría, código y final revisadas visualmente.
+- Fallo real DB detenida → HTTP500 estructurado en3,08s, sin lista vacía ni stack trace. `MongoLocal.main` ejecutado realmente desde Maven arrancó Compose y alcanzó HEALTHY27018; imagen8.0.34 y ping comprobados. Se usó proyecto QA nuevo `acda-liga-qa-launcher-20261107`, verificado ausente antes, sin modificar servicios/volúmenes ajenos.
+- Auditoría didáctica independiente: corregida separación de bases, precisión del alcance de @Version y un fragmento roto. Sin pruebas dentro de IntelliJ ni Compass: capturas opcionales registradas.
+
+**Pendiente:** Actions y Pages del hito MongoDB. Después continuar Ficheros, sin nuevas aprobaciones intermedias.
+
+## Preparación para Ficheros (sin implementación todavía)
+
+Inventario histórico en solo lectura: reutilizables ProductoFormatos (CSV/Jackson/DOM seguro), ComercialJsonDao (temporal y sustitución), SerializacionDemo (filtro), componentes de GestorApp/gestor.css/branding. Evitar trasladar el gestor comercial entero, tres finales, recursión profunda ordinaria, DAO y saltos UI→persistencia. Revisar conversiones JSON grandes sin truncar. Al sustituir páginas antiguas, impedir que materiales contradictorios huérfanos continúen en búsqueda pública; conservarlos como referencia en Git.
