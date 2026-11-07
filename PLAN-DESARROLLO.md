@@ -2,7 +2,7 @@
 
 > **Estado:** encargo integral aprobado para ejecución asistida por Minion. Este archivo describe la prioridad de producción; el alcance y los contenidos siguen definidos en `CONTENIDOS_ACDA.md`.
 >
-> **Regla:** desarrollar y comprobar **un tema completo cada vez**. No es necesario pedir nuevas órdenes entre temas si se cumplen sus controles de calidad; el orden es obligatorio salvo bloqueo documentado.
+> **Regla:** desarrollar y comprobar **un tema completo cada vez**, con publicación iterativa directamente en **`main`** autorizada expresamente por el docente (2026-11-07). No es necesario pedir nuevas órdenes entre temas si se cumplen sus controles de calidad; el orden es obligatorio salvo bloqueo documentado.
 
 ## 1. Secuencia de implementación
 
@@ -42,13 +42,13 @@ Todas las interfaces serán **JavaFX o web preparadas**, sin trabajo de frontend
 
 ## 4. Flujo recomendado para Minion
 
-1. Obtener la última versión de `main`, leer `CONTENIDOS_ACDA.md`, `AGENTS.md`, el estándar y skills aplicables de `ai-workspace`, e inspeccionar la configuración y recursos existentes. Trabajar en rama propia, por ejemplo `desarrollo/acda-temario-integral`.
+1. Obtener la última versión de `main`, comprobar estado limpio y sincronizado, leer `CONTENIDOS_ACDA.md`, `AGENTS.md`, el estándar y skills aplicables de `ai-workspace`, e inspeccionar configuración y recursos existentes. **Trabajar directamente en `main`, sin crear ramas**, por autorización expresa del docente.
 2. Actualizar navegación y placeholders **sin destruir** fuentes históricas útiles ni deshacer configuraciones correctas. Revisar visualmente el resultado local.
 3. Tomar el siguiente tema en el orden indicado. Diseñar un mapa breve `conceptos → etapas del proyecto → TODOs → pruebas → funcionalidades de práctica final`, de forma que **el código enseñado sea el código que realmente se usa**.
-4. Implementar por unidades pequeñas pero **completas** (página de teoría + ejemplo + vínculo válido; etapa guiada + código inicial/solución + comprobación; página de práctica final + descargables y soluciones). Confirmar cada unidad con commit y push a la rama al superar verificaciones aplicables. Evitar commits de esqueletos rotos o trabajo desconectado del contenido.
+4. Implementar por unidades pequeñas pero **completas** (página de teoría + ejemplo + vínculo válido; etapa guiada + código inicial/solución + comprobación; página de práctica final + descargables y soluciones). Confirmar cada unidad con commit y **push a `main`** al superar verificaciones aplicables; comprobar Actions/Pages después del push. Evitar commits de esqueletos rotos o trabajo desconectado del contenido.
 5. Finalizar el tema con compilación/ejecución limpia, tests de servicios y errores, UI, navegación, enlaces, descargas, ZIP, PDF y registro de resultados. Marcarlo listo para revisión; pasar autónomamente al siguiente tema si no hay bloqueo grave.
-6. Mantener registro de progreso versionado (se permite `ESTADO-DESARROLLO.md` en la rama) con tema actual, páginas/recursos listos, SHA de los últimos commits, pruebas reales y pendientes. Al interrumpirse el contexto o la sesión, **el siguiente agente debe poder continuar desde la rama sin rehacer pasos**.
-7. Al concluir los seis temas, emitir informe final y dejar la rama lista para revisión y autorización docente. **No fusionar automáticamente en `main`**.
+6. Mantener registro de progreso versionado (se permite `ESTADO-DESARROLLO.md` en `main`) con tema actual, páginas/recursos listos, SHA de los últimos commits, pruebas reales y pendientes. Al interrumpirse el contexto o la sesión, **el siguiente agente debe poder continuar desde `main` sin rehacer pasos**.
+7. Al concluir los seis temas, emitir informe final y dejar `main` desplegado y listo para revisión pedagógica docente. **No pedir autorización adicional para commits y publicaciones intermedias dentro del alcance aprobado**.
 
 ## 5. Validación técnica, didáctica y visual
 
@@ -56,17 +56,17 @@ Todas las interfaces serán **JavaFX o web preparadas**, sin trabajo de frontend
 - Ejecutar Java 25/Maven Wrapper desde **copias limpias** del starter y de las soluciones, con versiones compatibles comprobadas. No comprometer secretos ni `target/` y no empaquetar recursos ajenos.
 - Probar reglas de negocio **en servicios**, excepciones propias cuando correspondan, propagación de causas técnicas, transacciones/rollback, mensajes y estados de UI. Para API REST, verificar 2xx/4xx/5xx adecuados, errores estructurados y colección Postman en especial para Firestore.
 - Inspeccionar en navegador local Zensical: navegación, responsive, claro/oscuro, figuras, recursos de descarga y funcionamiento de los enlaces. Comprobar PDF renderizado e identificar capturas reales pendientes en `CAPTURAS-PENDIENTES.md`.
-- La URL de GitHub Pages **solo refleja lo que esté en `main`**: úsala para revisar el estado público actual o tras integración docente, pero no para validar cambios exclusivos de la rama. Para previsualizar cambios, usar sitio local o artefacto de CI/preview de la rama comprobado.
+- La URL de GitHub Pages **refleja los commits ya desplegados desde `main`**: comprobar el resultado público tras cada hito importante y diferenciar entre commit subido, workflow completado y web publicada. La validación local sigue siendo necesaria antes de cada push; evitar asumir despliegue inmediato.
 - Proponer mejoras de UX compatibles con los estilos existentes; evitar rediseñar todo por estética o introducir dependencias innecesarias.
 
 ## 6. Commits, límites y reanudación
 
 - Commits con nombres reconocibles, por ejemplo `docs(jdbc): explicar conexiones y preparar ejemplo`, `feat(jdbc): implementar repositorio y pruebas de CRUD`, `docs(firestore): incorporar guía REST y colección Postman`.
-- **Preferir commits pequeños, con pruebas y contenidos terminados**, antes de agotar el contexto. Hacer `push` después de cada hito autónomo; no acumular grandes lotes sin subir.
+- **Preferir commits pequeños en `main`, con pruebas y contenidos terminados**, antes de agotar el contexto. Hacer `push` después de cada hito autónomo; comprobar el resultado de Actions. Si falla la validación pública, reparar con un commit posterior o revertir, sin reescribir historial ni forzar pushes.
 - Nunca declarar «funciona» solo por la compilación de la web: contrastar starter, solución, UI y el comportamiento real.
 - Si una API externa, licencia o entorno impiden una verificación, registrar la limitación exacta y continuar con partes independientes sin fingir disponibilidad.
 - Las tareas evaluables, enunciados Moodle, exámenes y rúbricas están fuera de este alcance. Los 30 proyectos opcionales de repaso **no se desarrollan** en esta entrega.
 
 ## 7. Publicación y revisión humana
 
-El repositorio actual publica `main` mediante GitHub Pages. La ejecución de Minion puede ser autónoma en su rama y producir seis temas completos, pero su incorporación a `main` y la difusión pública de nuevos materiales requieren revisión y aprobación humana. Mientras tanto, no alterar la web pública por error ni confundir una previsualización con una publicación autorizada.
+**El docente autoriza expresamente** que Minion desarrolle, confirme y publique iterativamente **directamente en `main`** mediante GitHub Pages: el sitio no está todavía en uso. Cada hito debe ser íntegro y validado; mientras se construye, mostrar «En construcción» en temas pendientes. El docente revisará la web final directamente, sin aprobar cada commit. La difusión mediante Moodle o la declaración pedagógica de «curso terminado» siguen sujetas a su revisión humana.
