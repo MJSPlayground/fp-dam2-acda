@@ -4,9 +4,11 @@
 
 Encargo integral autorizado en main. Orden obligatorio: JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring.
 
-**JDBC: entrega técnica preparada para revisión docente; publicación del hito en comprobación. Los otros cinco temas siguen pendientes.**
+**JDBC: publicado y preparado para revisión docente. Firestore: en desarrollo. Los otros cuatro temas siguen pendientes.**
 
 ## Avances confirmados
+
+- `ba97967`: entrega JDBC. Actions [42408701956](https://github.com/MJSPlayground/fp-dam2-acda/actions/runs/42408701956) build y deploy completados con éxito. Pages real: tres páginas JDBC, cuatro ZIP íntegros e importables y PDF JDBC/global con HTTP 200.
 
 - `a60e79e`: navegación inicial de seis temas, avisos En construcción, material histórico de Ficheros fuera de navegación sin eliminar sus fuentes. Actions [42408265936](https://github.com/MJSPlayground/fp-dam2-acda/actions/runs/42408265936) completado con éxito. GitHub Pages real comprobado con Chromium: Ficheros HTTP 200 y aviso visible.
 - JDBC: conexiones (SQLite y ejemplo MySQL), SQL/CRUD/ResultSet, repositorios/servicios/errores/decimales, transacciones. Un proyecto guiado de almacén y ventas con etapas 2–5 TODO (conexión inicial resuelta para permitir arranque).
@@ -40,4 +42,8 @@ Entorno: Windows, Temurin 25.0.4.1, Python 3.13.7; herramientas web mediante `.v
 
 ## Siguiente paso concreto
 
-Comprobar Actions y Pages del commit JDBC y registrar su SHA/resultado; después desarrollar Cloud Firestore completo (reservas, web preparada, API REST y colección Postman desde el primer hito), sin avanzar a MongoDB hasta pasar su puerta de calidad. Mantener commits y push directos en main según autorización vigente, sin pedir nueva aprobación entre temas.
+Desarrollar Cloud Firestore completo (reservas, web preparada, API REST y colección Postman desde el primer hito), sin avanzar a MongoDB hasta pasar su puerta de calidad. Mantener commits y push directos en main según autorización vigente, sin pedir nueva aprobación entre temas.
+
+## Firestore en curso
+
+Producción coordinada de cuatro proyectos con Firebase Admin SDK, emulador sin claves, web/REST/Postman; teoría completa y adaptación de QA/descargas. Docker instalado pero motor no disponible; no se asume persistencia verificada hasta ejecutar emulador real. No hay aún un hito Firestore listo para publicar.
