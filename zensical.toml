@@ -21,7 +21,11 @@ nav = [
     "hibernate/persistencia.md", "hibernate/relaciones.md", "hibernate/consultas.md",
     "hibernate/proyecto.md", "hibernate/practica-final.md", "hibernate/repaso.md", "hibernate/ampliacion.md",
   ] },
-  { "Spring" = [{ "Spring" = "spring/index.md" }] },
+  { "Spring" = [
+      { "Spring" = "spring/index.md" },
+      "spring/componentes.md", "spring/configuracion.md", "spring/persistencia.md", "spring/servicios.md",
+      "spring/transacciones.md", "spring/proyecto.md", "spring/practica-final.md", "spring/repaso.md", "spring/ampliacion.md",
+    ] },
   { "JDBC" = [
     { "JDBC" = "jdbc/index.md" },
     "jdbc/conexiones.md", "jdbc/consultas.md", "jdbc/repositorios.md", "jdbc/transacciones.md",

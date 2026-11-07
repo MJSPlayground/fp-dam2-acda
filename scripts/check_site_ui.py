@@ -16,7 +16,7 @@ PREFIX = "/fp-dam2-acda/"
 SECTIONS = (
     ("ficheros", "Ficheros", "Manejo de ficheros y directorios"),
     ("hibernate", "Hibernate", "Herramientas ORM y JPA con Hibernate"),
-    ("spring", "Spring", "Acceso a datos mediante componentes (Spring)"),
+    ("spring", "Spring", "Acceso a datos mediante componentes Spring"),
     ("jdbc", "JDBC", "Conexiones a bases de datos relacionales (JDBC)"),
     ("firestore", "Firestore", "Bases de datos documentales con Cloud Firestore"),
     ("mongodb", "MongoDB", "Bases de datos NoSQL con MongoDB"),

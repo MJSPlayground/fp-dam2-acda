@@ -56,6 +56,16 @@ Este archivo recoge **capturas auténticas, GIF y otros recursos visuales** que 
 - **Alt y pie:** «Proyecto Maven de almacén abierto en IntelliJ y aplicación JavaFX iniciada desde Launcher».
 - **Estado:** pendiente; instrucciones textuales disponibles sin enlaces a capturas inexistentes. Las capturas reales de las pruebas gráficas están en `target/qa` y no se distribuyen en los ZIP.
 
+### [Opcional · Pendiente] Spring: arranque MVC y perfiles desde IntelliJ
+
+- **Páginas:** `docs/spring/proyecto.md` y `docs/spring/ampliacion.md`, tras el arranque y en la demostración de seguridad.
+- **Objetivo:** identificar los procesos MySQL/aplicación y configurar argumentos de programa sin editar el frontend.
+- **Pasos:** abrir `catalogo-guiado-solucion.zip` como Maven; ejecutar `es.mjsplayground.acda.spring.catalogo.config.MySqlLocal.main` con la carpeta del proyecto como Working directory y después `CatalogoApplication.main`. Abrir `http://127.0.0.1:8080`. Detener la aplicación y añadir `--spring.profiles.active=seguro` a sus argumentos Run para mostrar el login local preparado.
+- **Herramienta:** IntelliJ IDEA y navegador; registrar versiones reales del aula.
+- **Destino:** `docs/assets/capturas/spring/intellij-catalogo-perfiles.webp`.
+- **Alt/pie:** «Configuración Run del catálogo Spring con perfil seguro y formulario de acceso local».
+- **Estado:** pendiente de comprobación manual dentro del IDE; no enlazar la imagen hasta disponer de la captura real. La ejecución y las pruebas automatizadas se registran separadamente en `ESTADO-DESARROLLO.md`.
+
 ## Referencia histórica
 
 Las solicitudes del antiguo codelab de directorios se conservan en [el archivo histórico](referencias/ficheros-historico/CAPTURAS-HISTORICAS.md). Se sustituirán por solicitudes concretas del nuevo inventario cuando proceda.

@@ -1,15 +1,21 @@
-# Acceso a datos mediante componentes (Spring)
+﻿# Acceso a datos mediante componentes Spring
 
-!!! warning "En construcción"
+!!! info "Disponible para revisión docente"
 
-    Este tema está pendiente de desarrollo y validación conforme al índice aprobado.
+    Incluye teoría, proyecto guiado, práctica final y soluciones públicas verificadas. La revisión pedagógica final corresponde al docente.
 
-Spring ayuda a construir componentes reutilizables y a separar controladores, servicios y repositorios. En este tema se aplicará esa estructura al acceso a datos y a interfaces MVC con Thymeleaf.
+Ya sabemos separar persistencia y reglas y hemos utilizado [Hibernate](../hibernate/index.md) para relacionar objetos con tablas. Ahora aprenderemos a construir y conectar esos componentes con Spring Boot, a declarar repositorios Spring Data JPA y a coordinar casos de uso mediante servicios transaccionales.
+
+El proyecto **Servicios para el catálogo** conserva las ideas de libros y editoriales y añade stock. La aplicación dispone de interfaz web terminada: el trabajo del alumnado se centra en el backend. No es necesario conocer JDBC ni construir páginas HTML para seguir el recorrido.
 
 ## Recorrido
 
-El itinerario sigue **programación orientada a componentes**, **componentes y configuración Spring**, **componentes de acceso a datos**, **aplicaciones web con Thymeleaf** y **composición y reutilización**. Después habrá prácticas finales y **Ampliación**.
+1. [Componentes e inyección de dependencias](componentes.md): contratos, composición, beans y contenedor.
+2. [Spring Boot y configuración](configuracion.md): arranque, dependencias, propiedades y perfiles.
+3. [Repositorios con Spring Data JPA](persistencia.md): CRUD y consultas derivadas.
+4. [Servicios, reglas y colaboración](servicios.md): validaciones, excepciones y eventos.
+5. [Transacciones y conflictos](transacciones.md): límites del caso de uso y concurrencia.
 
-Puedes revisar los requisitos generales en [Ayuda y herramientas](../ayuda/index.md). Los bloques se publicarán progresivamente.
+Aplica cada parte en [el proyecto guiado](proyecto.md). Después desarrolla [Reglas y servicios del catálogo](practica-final.md), con niveles Base, Aplicación y Reto avanzado. Las cinco [prácticas de repaso](repaso.md) están en preparación. [Ampliación](ampliacion.md) profundiza en MVC, formularios, pruebas, diagnóstico, JAR, seguridad y Docker.
 
-Continúa con [Conexiones a bases de datos relacionales (JDBC)](../jdbc/index.md).
+Para preparar IntelliJ consulta [proyectos Maven](../ayuda/proyectos-maven.md); para problemas de ejecución, utiliza [diagnóstico](../ayuda/diagnostico.md).

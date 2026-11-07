@@ -4,7 +4,7 @@
 
 Encargo integral autorizado en main. Orden obligatorio: JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring.
 
-**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: publicado y preparado para revisión docente. Ficheros: publicado y preparado para revisión docente. Hibernate: publicado y preparado para revisión docente. Spring: en desarrollo.**
+**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: publicado y preparado para revisión docente. Ficheros: publicado y preparado para revisión docente. Hibernate: publicado y preparado para revisión docente. Spring: verificado localmente, publicación pendiente.**
 
 ## Avances confirmados
 
@@ -36,7 +36,7 @@ Entorno: Windows, Temurin 25.0.4.1, Python 3.13.7; herramientas web mediante `.v
 ## Límites concretos
 
 - No se ha ejecutado Run desde IntelliJ: recorrido documentado y captura opcional registrada en `CAPTURAS-PENDIENTES.md`. Sí se ejecutaron JavaFX y su interfaz real.
-- Ejemplos MySQL, procedimiento almacenado y HikariCP ilustrativos, contrastados con documentación oficial pero sin integración contra un servidor MySQL en esta sesión. El proyecto principal reproducible utiliza SQLite.
+- El proyecto JDBC principal utiliza SQLite. Sus fragmentos MySQL/Callable/Hikari se han ejecutado también contra servidor MySQL real, como detalla la comprobación adicional al final del registro. No se ha realizado una medición de rendimiento ni una prueba exhaustiva de aislamientos.
 - Sin aprobación pedagógica humana: la revisión final corresponde al docente.
 - La web completa de seis temas NO está terminada. No generar aún los treinta repasos opcionales.
 
@@ -152,3 +152,34 @@ Hibernate comienza después de ese control. Se producirán cuatro proyectos Java
 - `092bc87`, sincronizado con origin/main. Actions [42419950876](https://github.com/MJSPlayground/fp-dam2-acda/actions/runs/42419950876): build y deploy SUCCESS, incluyendo MySQL real.
 - Chromium sobre GitHub Pages: portada, guiado y final Hibernate HTTP 200, sin aviso En construcción; cuatro ZIP descargados e íntegros con POM/README/Wrapper. PDF Hibernate 26 páginas y global 128, HTTP 200. Capturas reales de las tres páginas.
 - Se inicia Spring después de superar esta puerta de calidad. No quedan comprobaciones técnicas bloqueantes conocidas de Hibernate; IntelliJ/Workbench y revisión pedagógica final mantienen las limitaciones indicadas.
+
+### Comprobación adicional JDBC/MySQL durante el cierre del módulo
+
+- Ejecutado realmente con Java 25, MySQL 8.4.13, Connector/J 9.5.0 y HikariCP 6.3.3 desde la caché Maven: metadatos/alias de columnas, procedimiento `consultar_stock` y parámetro OUT=42, lote con escritura inicial correcta seguida de clave duplicada y rollback completo, préstamo Hikari devuelto (cero conexiones activas). Salida 0.
+- Comando: `java -cp $taskJdbcClasspath qa-captures/JdbcMysqlSmoke.java`; classpath incluye esos JAR y SLF4J 2.0.17/Log4j2 2.25.3. Clase de comprobación local en qa-captures (no distribuida como un nuevo proyecto). El manifiesto de Hikari no informa ImplementationVersion; la versión procede del JAR explícito del classpath.
+- Esquema temporal propio `acda_jdbc_qa_UUID`, nombre validado por expresión fija antes de DDL, eliminado al terminar; sin afectar a esquemas Spring ni datos de aplicaciones. Esto completa la ejecución MySQL/Callable/Hikari que anteriormente figuraba como limitación, sin cambiar los proyectos JDBC publicados. No se ha medido rendimiento ni probado cada nivel de aislamiento.
+
+## Spring — cierre local (2026-11-07)
+
+- Diez páginas cubren componentes/IoC/ciclo de vida, DI por constructor, Boot/configuración/perfiles, Spring Data JPA, servicios/reglas/eventos y transacciones/conflictos. Una figura de colaboración; cinco fichas En preparación. Ampliación desarrolla MVC/Thymeleaf, formularios, JUnit/BootTest, diagnóstico/perfiles, JAR, Security y Docker.
+- Cuatro proyectos Java25/Boot3.5.16/Thymeleaf/JPA/MySQL8.4.13. Guiado: servicios para libros y editoriales del catálogo. Final: reposición, presupuesto sin mutación y pedido atómico con instantánea. Inicial final conserva el guiado completo, sin resolver las operaciones nuevas. Frontend y controladores MVC preparados.
+- Cuatro `mvnw.cmd package` superados. Soluciones `mvnw.cmd -Dqa.mysql=true test`: guiado9/final13, sin fallos ni omisiones, repetidos tras cambios de UI. Iniciales: ComponentesTest2; final inicial añade ReglasCatalogoTest (4 en total); el flag no inventa integraciones ausentes. README iniciales corregidos para explicarlo.
+- Pruebas MySQL: consulta/CRUD, versiones de formulario, reglas/perfiles/DI, evento AFTER_COMMIT, claves `Pedido_A`/`pedido_a` diferentes mediante ascii_bin, repetición exacta rechazada, concurrencia y rollback después de actualizaciones de stock reales antes de una restricción UNIQUE. Snapshot histórico e importes inmutables.
+- Navegador real sobre soluciones: formularios, títulos con LF/tildes, errores de tipo, validaciones, confirmaciones, presupuesto sin mutación, reposición y pedido. Starters arrancados realmente en8090/8091: guiado comunica TODO; final mantiene CRUD y no inventa presupuesto.
+- Seguridad: login, roles lector/gestor, CSRF y logout. Corregidos menú seguro desbordado en móvil, acción POST visible para lector y separación/área táctil de Cancelar. Inspección independiente parent de capturas escritorio/móvil claro/oscuro.
+- Auditoría didáctica posterior de solo lectura contra cuatro proyectos/README/TODO sin defectos materiales residuales. Corregidas variables/perfiles de ejemplos, secuencia de datos de prueba, constructor real del evento, explicación de copias defensivas y redondeo desde perspectiva del cliente. Sin aprobación pedagógica humana.
+- `scripts/export_pdfs.py`: Spring25 páginas, global150, siete secciones más global. Muestras reales renderizadas e inspeccionadas: portada, Java/configuración, figura, guía y Security/JAR. No inspección visual exhaustiva de todas las páginas.
+- `scripts/check_published_site.py --topic hibernate`: comprobación reproducible ya ejecutada sobre Pages real (portada +11 páginas,4ZIP,2PDF). Se ejecutará completa después del despliegue final, fuera de la construcción CI.
+- Pendiente para publicar Spring: terminar JAR/Docker/ZIP24/web, commit/push y comprobar Actions/Pages reales.
+
+### Cierre de QA Spring (2026-11-08)
+
+- `check_spring_app.py --base http://127.0.0.1:8084 --label guiado` y equivalentes final8086/final-inicial8091 correctos; guiado-inicial8090 revisado aparte con TODO visible, formulario y datos conservados. Cuatro `package` repetidos tras cambios de UI.
+- `check_spring_security.py --base http://127.0.0.1:8087` y Docker8089 correctos: login fallido/correcto, roles, POST sin CSRF403 y con token, logoutPOST y móvil. Regresiones cubren menú autenticado, acciones por rol y Cancelar44px/separación.
+- `sh scripts/test_spring_real.sh` correcto. Suites optativas con MySQL9/13 sin omisiones; modo ordinario por variante2/9/4/13 totales, con0/5/0/9 omitidas explícitamente. No confundir los modos.
+- `config.MySqlLocal.main` real y `docker compose --profile app up --build -d` en ambas soluciones correctos, UI completa guiado8088/final8089. Docker USER10001, Temurin25.0.5; digest base construido ecdc0adb37bde1a281c4d245a3cd535004b1fc8322d560f5b09463b248c81df0.
+- Reinicio JAR final conservó exactamente4 instantáneas; reinicio Compose conservó2. Caída controlada del MySQL propio: GET/pedidos devuelve500 real sin stack; recuperación conserva las2 instantáneas. **Limitación medida:** espera30,1s por el timeout de conexión Hikari ante esa caída. Captura real spring-docker-db-caida-500.png.
+- Descargas:24/24ZIP comparados byte a byte con fuentes y Maven Wrapper desde carpetas limpias, salida0. Global y Spring:9 subpáginas×escritorio/móvil×claro/oscuro,4descargas, guía5casillas con persistencia/reinicio y figura343×531legible. `check_links.py`:65páginas/1197enlaces/890fragmentos/462entradas de búsqueda correctos.
+- Censo transversal: seis temas con cuatro proyectos y cuatro descargas cada uno; cinco fichas En preparación por tema, sin desarrollar los treinta proyectos opcionales.
+- Procesos y servicios propios detenidos; sin listeners3309/8084/8086/8087/8088/8089/8090/8091. Volumen propio acda-spring_spring-data conservado. Sin tocar servicios ajenos. IntelliJ no ejecutado manualmente.
+- Pendiente únicamente para cierre público: commit/push, Actions y comprobación integral de Pages.
