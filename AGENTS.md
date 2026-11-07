@@ -31,9 +31,9 @@ No ocultar desacuerdos técnicos o curriculares: registrarlos para revisión doc
 ## Desarrollo incremental, Git y publicación
 
 - Seguir la secuencia y las puertas de calidad de `PLAN-DESARROLLO.md`. Se autoriza un **encargo integral** de los seis temas, pero cada tema se completa y verifica antes de avanzar al siguiente.
-- Hacer **commits y push frecuentes por páginas, funcionalidades o contenidos completos y coherentes**, siempre con código, enlaces y pruebas relacionados cuando proceda. No acumular cambios sin publicar en la rama, ni confirmar como terminada una página con recursos rotos o lógica engañosa.
-- `main` publica GitHub Pages: **no fusionar ni publicar ramas con material parcial**. Trabajar en rama de desarrollo, preservar la configuración actual y solicitar revisión docente antes de integrar material nuevo en `main`. La validación automática no sustituye la aprobación humana.
-- Revisar localmente la web, PDFs y aplicaciones con herramientas disponibles. La web de Pages en `main` muestra solamente lo ya integrado, no el estado de una rama; no usar esa URL como prueba de cambios aún no publicados.
+- Hacer **commits y push frecuentes directamente en `main`**, por páginas, funcionalidades o contenidos completos y coherentes, con código, enlaces y pruebas relacionados cuando proceda. No acumular cambios locales sin subir ni confirmar páginas con recursos rotos o lógica engañosa.
+- **Autorización expresa del docente para este rediseño (2026-11-07): trabajar y hacer `push` directamente en `main`, que publica GitHub Pages.** La web aún no se usa con el alumnado y el docente revisará los resultados en producción. Se permiten publicaciones iterativas de hitos coherentes, sin aprobaciones intermedias; los temas y recursos incompletos deben mostrar «En construcción» o mantenerse fuera de navegación. No introducir enlaces rotos ni material no evaluable presentado como finalizado. La validación automática no sustituye la revisión pedagógica posterior del docente.
+- Validar localmente páginas, PDF, aplicaciones y recursos **antes** de cada `push` a `main`; después comprobar GitHub Actions y revisar el sitio real de GitHub Pages publicado. Si un despliegue falla, corregir o revertir mediante nuevos commits, **nunca `force push`**.
 - Mantener un registro de incidencias y capturas reales pendientes en `CAPTURAS-PENDIENTES.md` o informe asociado. Nunca inventar capturas, resultados, enlaces de documentación o pruebas ejecutadas.
 
 ## Revisión crítica
