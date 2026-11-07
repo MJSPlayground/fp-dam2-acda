@@ -88,3 +88,15 @@ Fallo técnico real comprobado: emulador detenido → HTTP 500 estructurado en 0
 ## Preparación para Ficheros (sin implementación todavía)
 
 Inventario histórico en solo lectura: reutilizables ProductoFormatos (CSV/Jackson/DOM seguro), ComercialJsonDao (temporal y sustitución), SerializacionDemo (filtro), componentes de GestorApp/gestor.css/branding. Evitar trasladar el gestor comercial entero, tres finales, recursión profunda ordinaria, DAO y saltos UI→persistencia. Revisar conversiones JSON grandes sin truncar. Al sustituir páginas antiguas, impedir que materiales contradictorios huérfanos continúen en búsqueda pública; conservarlos como referencia en Git.
+
+## Incidencia CI MongoDB y corrección
+
+El primer despliegue `883a380`, Actions [42412766847](https://github.com/MJSPlayground/fp-dam2-acda/actions/runs/42412766847), falló en Initialize containers, antes de tests: fatal12257600 por comprobación de kernel/TCMalloc. La imagen UBI8 probada localmente no podía arrancar en el runner.
+
+Fuentes primarias consultadas en origen: [incidencia MongoDB](https://jira.mongodb.org/browse/SERVER-121912), [guardia de arranque8.0.34](https://github.com/mongodb/mongo/blob/r8.0.34/src/mongo/db/startup_check_rseq.cpp), [TCMalloc y registro rseq](https://www.mongodb.com/docs/manual/administration/tcmalloc-performance/) y [corrección específica Ubuntu](https://jira.mongodb.org/browse/SERVER-131779).
+
+Primer experimento negativo: misma imagen UBI8 con `GLIBC_TUNABLES=glibc.pthread.rseq=1` seguía devolviendo `usingPerCPUCaches=true`, por lo que no se publicó como arreglo válido. Prueba positiva: Docker Official Image Ubuntu del mismo MongoDB8.0.34, digest `sha256:b9924c330a8bbc5800fe9c69f04a84e221eca7b28fd049a0354147d9908fa142`, glibc2.39 y el ajuste anterior: ping/CRUD correctos, `usingPerCPUCaches=false`, suite12/17 correcta sin omisiones y cinco ejemplos JS correctos. Se cambia solo CI; Compose del alumnado ya validado permanece igual. El workflow comprueba explícitamente ese modo y registra el kernel.
+
+Comando real de integración de esta prueba: `$env:MONGODB_URI='mongodb://127.0.0.1:27019/acda_mongodb_ci_rseq?serverSelectionTimeoutMS=3000&connectTimeoutMS=3000'; & 'C:/Program Files/Git/bin/sh.exe' scripts/test_mongodb_real.sh`. Contenedores temporales propios de esta incidencia detenidos, sin modificar recursos ajenos.
+
+Pendiente confirmar el nuevo commit en Actions/Pages: la prueba local no reproduce el kernel del runner y no se declara despliegue correcto hasta observarlo.

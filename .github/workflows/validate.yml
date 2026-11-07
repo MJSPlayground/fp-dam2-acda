@@ -17,7 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mongodb:
-        image: mongodb/mongodb-community-server@sha256:db3c73bd50998abdfe17c80755597fc9a0601dedef1dfb7812dbc4133fc63a08
+        image: mongo@sha256:b9924c330a8bbc5800fe9c69f04a84e221eca7b28fd049a0354147d9908fa142
+        env:
+          GLIBC_TUNABLES: glibc.pthread.rseq=1
         ports:
           - 27018:27017
         options: >-
@@ -29,6 +31,11 @@ jobs:
           --health-retries 12
     steps:
       - uses: actions/checkout@v4
+      - name: Verificar modo compatible de TCMalloc en CI
+        run: |
+          uname -r
+          docker exec "${{ job.services.mongodb.id }}" mongosh --quiet --eval \
+            'if (db.serverStatus().tcmalloc.usingPerCPUCaches !== false) quit(1); print(db.version())'
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
