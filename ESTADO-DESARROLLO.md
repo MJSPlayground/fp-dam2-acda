@@ -4,7 +4,7 @@
 
 Encargo integral autorizado en main. Orden obligatorio: JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring.
 
-**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: validación local completa, publicación en comprobación. Ficheros, Hibernate y Spring pendientes.**
+**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: publicado y preparado para revisión docente. Ficheros: en desarrollo. Hibernate y Spring pendientes.**
 
 ## Avances confirmados
 
@@ -42,7 +42,7 @@ Entorno: Windows, Temurin 25.0.4.1, Python 3.13.7; herramientas web mediante `.v
 
 ## Siguiente paso concreto
 
-Cerrar MongoDB completo (equipos, jugadores y competición) y comprobar Actions/Pages antes de comenzar Ficheros. Mantener commits y push directos en main según autorización vigente, sin pedir nueva aprobación entre temas.
+Cerrar Ficheros completo (inventario, CSV/JSON/serialización y final) y comprobar Actions/Pages antes de comenzar Hibernate. Mantener commits y push directos en main según autorización vigente, sin pedir nueva aprobación entre temas.
 
 ## Firestore: entrega técnica y comprobaciones
 
@@ -100,3 +100,11 @@ Primer experimento negativo: misma imagen UBI8 con `GLIBC_TUNABLES=glibc.pthread
 Comando real de integración de esta prueba: `$env:MONGODB_URI='mongodb://127.0.0.1:27019/acda_mongodb_ci_rseq?serverSelectionTimeoutMS=3000&connectTimeoutMS=3000'; & 'C:/Program Files/Git/bin/sh.exe' scripts/test_mongodb_real.sh`. Contenedores temporales propios de esta incidencia detenidos, sin modificar recursos ajenos.
 
 Pendiente confirmar el nuevo commit en Actions/Pages: la prueba local no reproduce el kernel del runner y no se declara despliegue correcto hasta observarlo.
+
+## MongoDB publicado y comienzo de Ficheros
+
+`7eabc8f` resolvió la compatibilidad de CI: Actions [42413255221](https://github.com/MJSPlayground/fp-dam2-acda/actions/runs/42413255221) build y deploy correctos. Pages real comprobado: tres páginas MongoDB, cuatro ZIP íntegros con Compose y PDF Mongo23/global81 páginas con HTTP200. La publicación tardó más de lo habitual, pero terminó correctamente; no se omitieron pruebas ni se reescribió historial.
+
+Ficheros comienza después de esa comprobación. Se trasladaron27 Markdown históricos desde `docs/ficheros/` a `referencias/ficheros-historico/`, con rutas absolutas verificadas dentro del repositorio y sin sobrescribir destinos. Así se conservarán en Git sin aparecer como apuntes actuales en publicación/búsqueda. Las capturas antiguas también quedan identificadas como históricas. Se preparan cuatro proyectos nuevos reutilizando componentes válidos del código anterior; no se borran los proyectos antiguos.
+
+QA JDBC adicional local, pendiente de consolidar con este hito: misma prueba JavaFX ampliada para cancelar/confirmar eliminación, Cancel seguro, evento Escape, vender2, actualizar stock/historial y rechazar borrar producto vendido. Suite `qa.ui=true`:8servicio+1UI correctas. Escape es evento JavaFX automatizado, no una tecla física ni Run en IntelliJ.
