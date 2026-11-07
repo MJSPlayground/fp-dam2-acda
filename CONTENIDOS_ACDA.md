@@ -1,392 +1,524 @@
 # Acceso a Datos
 
-## Índice de contenidos
+> **Estado:** índice aprobado para la web pública. Fuente de estructura y alcance del módulo en este repositorio.
+>
+> **Ámbito:** DAM2 · Acceso a Datos (ACDA). Este documento fija el alcance de la web pública, el enfoque didáctico y los proyectos de aprendizaje. No es un enunciado evaluable ni sustituye a la programación didáctica o al seguimiento de resultados de aprendizaje.
 
-Cada tema se organiza en bloques temáticos, páginas de contenido, **una práctica guiada de cierre por bloque**, prácticas finales y una sección de **Ampliación**. Antes de cada práctica de cierre, las páginas explican gradualmente los conceptos nuevos con ejemplos pequeños e interpretados. Cada práctica de cierre adopta un formato *codelab*: contexto, preparación, pasos razonados y comprobables, código incremental, pistas o soluciones parciales desplegables cuando sean útiles, pequeños retos de integración y acceso destacado a la solución pública completa. No se crean simultáneamente otra «práctica de bloque» autónoma con los mismos objetivos; sus retos se integran en el codelab. **Las prácticas finales siguen siendo autónomas**, con enunciado, proyecto inicial cuando proceda y solución pública al final, sin resolverlas paso a paso. En las actividades de persistencia se suministran interfaces preparadas cuando su desarrollo no es el objetivo. La complejidad de las reglas de negocio progresa con los contenidos. Los números de bloques orientan dentro del tema; no se usan números de UT en el material público.
+## 1. Objetivo y planificación
+
+El módulo enseña a **guardar, recuperar, consultar, modificar y transformar datos** mediante ficheros, bases relacionales, ORM, componentes de acceso a datos y bases documentales. Se trabajará sobre todo con Java y con aplicaciones cuya presentación ya esté preparada.
+
+| Tema (denominación docente) | RA de referencia | Horas ordinarias aproximadas |
+| --- | :---: | ---: |
+| UT1 — Manejo de ficheros y directorios | RA1 | 7 |
+| UT2 — Herramientas ORM y JPA con Hibernate | RA3 | 9 |
+| UT3 — Acceso a datos mediante componentes Spring | RA6 | 6 |
+| UT5 — Conexiones a bases de datos relacionales (JDBC) | RA2 | 11 |
+| UT6 — Bases de datos documentales con Cloud Firestore | RA5 | 7 |
+| UT7 — Bases de datos NoSQL con MongoDB | RA4 | 7 |
+| **Total de enseñanza ordinaria** | | **47** |
+
+Las 25 horas restantes de las 72 planificadas corresponden a los dos períodos de proyectos intermodulares (UT4 y UT8). **No se presupone que esas horas estén disponibles para introducir contenidos nuevos**. Las 47 horas incluyen trabajo en clase, acompañamiento, realización de actividades y evaluación; no son 47 horas libres para explicar teoría. El ritmo podrá ser exigente, pero los fundamentos deben entenderse antes de ampliar la complejidad.
+
+El alcance tecnológico actualizado es una **decisión didáctica**. La trazabilidad de RA y criterios de evaluación se mantendrá separadamente en la documentación docente, contrastando la normativa y la programación aplicables sin transformar automáticamente los títulos de las unidades en tecnologías equivalentes a los RA. No afirmar una cobertura curricular que no se haya comprobado.
+
+## 2. Organización de los contenidos y de la web
+
+- La **web y sus PDF públicos se organizan exclusivamente por títulos de temas**, bloques, páginas y recursos. No mostrar códigos o números de UT, referencias a proyectos intermodulares ni organización por evaluaciones. No incluir `ut1`, `ut2`, etc. en slugs, rutas, enlaces o paquetes Java.
+- Se permite usar **«Bloque 1», «Bloque 2»**, etc. como orientación local dentro de un tema, sin convertir la numeración en parte de la URL.
+- El contenido original se redacta principalmente en **Markdown**, integrado en el Zensical existente. Conservar su diseño, configuración, navegación, accesibilidad, modo claro/oscuro y exportación PDF. Reutilizar estilos y componentes existentes antes de crear otros.
+- La estructura de páginas se ajustará a la dificultad de cada concepto: **no imponer una página por punto del índice** ni una estructura idéntica en todos los temas.
+- Cada explicación debe poder ser seguida por quien **no conoce todavía esa tecnología**. Introducir problema, concepto, API y resultado de manera progresiva; explicar el código **antes y después** de mostrarlo, sin relleno ni saltos de conocimientos.
+- Incluir ejemplos pequeños ejecutables o fragmentos claros dentro del proyecto principal, documentación oficial contextualizada y **enlaces internos a conceptos ya tratados**; no repetir capítulos enteros en temas posteriores.
+- El alumnado avanzará de forma autónoma siguiendo la web. El docente indicará hitos o páginas a alcanzar en cada sesión y resolverá dudas; las páginas deben indicar qué se va a aprender, qué debe completarse, cómo ejecutarlo y cómo comprobar que funciona.
+- Mantener la distinción entre **contenido ordinario** y **Ampliación**. El nombre de la sección adicional será siempre **«Ampliación»**, sin calificativos. Las ampliaciones no se presuponen impartidas en las horas ordinarias.
+- Las páginas públicas no indicarán qué entra en el examen ni etiquetarán una actividad como «nivel de examen». La equivalencia de dificultad se reserva a la planificación docente.
+- No crear una página principal de «práctica guiada de cierre» por cada bloque. **Un único proyecto guiado incremental por tema** concentra la práctica de sus bloques.
+
+## 3. Metodología de aprendizaje y actividades
+
+### 3.1. Un proyecto incremental por tema
+
+Cada tema tendrá **un solo proyecto conductor** que evoluciona de manera visible a lo largo de la teoría. Puede ofrecerse una base generosa, ya importable y ejecutable, con la interfaz gráfica y la infraestructura ajenas al objetivo de la actividad resueltas. Los pasos del proyecto se insertarán en los puntos adecuados de las páginas o en etapas enlazadas de una misma guía; **no se generan prácticas autónomas adicionales por bloque**.
+
+En cada etapa:
+
+1. Explicar el concepto y un ejemplo pequeño, con resultado interpretable.
+2. Mostrar dónde encaja en el proyecto y qué partes del código ya existen.
+3. Indicar con claridad los `TODO` del alumnado, preferentemente en repositorios, servicios, modelos y, cuando proceda, controladores REST; **nunca exigir cambios al frontend**.
+4. Ofrecer una comprobación observable: prueba, registro, resultado en pantalla, consulta, fichero o petición Postman.
+5. Añadir progresivamente casos límite y reglas de negocio que exijan razonar y usar conocimientos de programación de primero: objetos, colecciones, bucles, condicionales, algoritmos, cálculos, manejo de excepciones, etc.
+6. Proporcionar pistas graduadas si se justifican, inicialmente ocultas, y acceso a la **solución pública completa** del proyecto de aprendizaje.
+
+Las etapas se diseñarán para que el proyecto inicial pueda ejecutarse desde IntelliJ; los `TODO` aún no resueltos pueden mostrar resultados ficticios o estados controlados en la interfaz, **nunca dar apariencia engañosa de persistencia real**. Evitar copiar clases completas sin contexto o exigir configuraciones repetidas que consuman la sesión.
+
+### 3.2. Práctica final única por tema
+
+Al acabar la teoría se ofrece **una sola práctica final autónoma**, vinculada al mismo dominio funcional del proyecto incremental, pero con funcionalidades **nuevas**. El alumnado recibirá como código inicial **el proyecto guiado completo y resuelto** (interfaz incluida), para no depender de que sus pasos anteriores hayan quedado perfectos.
+
+El enunciado se plantea desde las necesidades de un cliente o usuario, expresa comportamientos, restricciones y criterios observables, y **no dicta la solución técnica**. Sus tres niveles pertenecen al mismo proyecto:
+
+- **Nivel 1 — Base:** trabajo común que debe realizar todo el alumnado; exige comprender y aplicar lo esencial.
+- **Nivel 2 — Aplicación:** nuevos requisitos de dificultad semejante a la exigencia prevista para una prueba práctica, con razonamiento, validaciones y combinación de conocimientos. En la web usar solo «Aplicación».
+- **Nivel 3 — Reto avanzado:** más difícil que la evaluación ordinaria; integra casos límite, operaciones coordinadas o lógica adicional sin introducir como obligatoria una API que solo figure en Ampliación.
+
+El material de la práctica final incluirá: enunciado; proyecto inicial específico derivado de la solución del guiado; conjunto de datos y preparación; forma de ejecutarlo; criterios de aceptación comprobables; y **solución pública independiente**. Los `TODO` de la práctica final serán menos prescriptivos que los de la guiada para que el alumno decida cómo programar. Las tres dificultades **no constituyen tres prácticas finales independientes**.
+
+La práctica final es de aprendizaje y **no entregable** por defecto.
+
+### 3.3. Tarea evaluable anual (Moodle, fuera de la web pública)
+
+Cada tema tendrá **una tarea/proyecto evaluable** que podrá variar de un curso a otro. Su enunciado, código inicial específico, solución, rúbrica y materiales de corrección se gestionarán en **Moodle y en el repositorio docente privado**, nunca en la web o repositorio público. Se diseñará posteriormente a partir de los contenidos del tema. La implementación inicial de la web **no debe generar estas tareas ni sus soluciones**, ni acceder a Moodle.
+
+### 3.4. Repaso opcional y Ampliación
+
+- Cada tema tendrá una sección **«Prácticas de repaso»** con previsión de **cinco proyectos independientes**, completos y variados, cada uno con enunciado, proyecto inicial funcional con frontend preparado y solución pública.
+- **En esta fase** se crearán las páginas de entrada y cinco fichas identificadas inequívocamente como **«En preparación»**, sin inventar proyectos, enunciados ni enlaces de descarga. Los proyectos se producirán progresivamente más adelante. No presentar contenido pendiente como completo.
+- Cada tema tendrá otra sección distinta llamada simplemente **«Ampliación»**, con los temas adicionales especificados en este documento. Pueden incluir explicaciones, ejemplos y proyectos cuando merezca la pena, pero **no pertenecen al itinerario ordinario**.
+
+## 4. Criterios técnicos y transversales obligatorios
+
+### 4.1. Arquitectura y responsabilidades
+
+Usar nomenclatura **Repository** desde los primeros temas, explicando brevemente que *DAO* es otro patrón/nombre válido y sin afirmar que esté obsoleto. Mantener una arquitectura coherente y proporcionada a la aplicación, por ejemplo:
+
+```text
+es.mjsplayground.acda.<tema>.<proyecto>
+├── model
+│   ├── entity        # Entidades u objetos de dominio
+│   ├── repository    # Contratos y acceso a los datos
+│   └── service       # Casos de uso, validaciones y reglas de negocio
+├── config            # Conexiones y configuración, cuando corresponda
+├── ui                # Interfaz ya preparada (JavaFX/web)
+└── app               # Punto de entrada, cuando corresponda
+```
+
+En Spring, los controladores, la configuración y los repositorios se adaptarán a las convenciones reales del framework, conservando responsabilidades claras. **No obligar a crear todos los paquetes si no existen clases que los justifiquen.** Los nombres `es.mjsplayground.acda.ficheros`, `.hibernate`, `.spring`, `.jdbc`, `.firestore` y `.mongodb` son estables y no contienen numeración de UT.
+
+- **Repositorio:** lectura, escritura, consultas, conversión técnica a objetos y gestión de fallos de persistencia; no decide reglas comerciales.
+- **Servicio:** valida datos y reglas, orquesta repositorios y otros servicios cuando proceda, define casos de uso y transacciones. Evitar dependencias circulares.
+- **UI/controlador:** muestra resultados y errores, recoge entradas y llama a servicios; no incorpora SQL, operaciones de fichero ni reglas comerciales. Puede hacer validación inmediata de formato por experiencia de uso, **pero el servicio vuelve a validar lo importante**.
+- **Entidad/DTO:** representar datos del dominio o contratos de intercambio sin introducirles persistencia ni decisiones de interfaz.
+
+### 4.2. Gestión profesional de errores, logging y validaciones
+
+Es un **objetivo transversal desde UT1**, no un temario nuevo que se imparta íntegramente en cada tema:
+
+- Validar en el servicio requisitos como campos vacíos, rangos, duplicados, disponibilidad, existencias, permisos de operación y coherencia de estados; introducir cada regla cuando el alumnado tenga herramientas para comprenderla.
+- Crear **excepciones de dominio propias cuando aporten semántica**, por ejemplo `EntidadNoEncontradaException`, `StockInsuficienteException` o `OperacionNoPermitidaException`, sin inventar una clase distinta por cada posible error.
+- Distinguir errores **esperables de negocio** de errores **técnicos** (`IOException`, `SQLException`, problemas de conexión o serialización). Encapsular fallos técnicos en el límite adecuado y **conservar la causa original**. No usar excepciones para el flujo normal ni tragarlas con `catch` vacío.
+- El servicio comunica fallos de negocio; la capa de entrada/UI o el manejador centralizado transforma esos fallos en **mensajes comprensibles y acciones posibles**. No exponer contraseñas, consultas internas, credenciales ni stack traces al usuario.
+- Donde haya HTTP/REST, devolver códigos correctos y consistentes: por ejemplo **400** para petición mal formada o validación de entrada, **404** cuando el recurso no existe, **409** ante conflictos de estado y **500** para fallos internos inesperados; **201** en creaciones y **204** cuando una operación exitosa no devuelve cuerpo. Definir y reutilizar un formato de error coherente; no responder siempre 200 ante fallos. No convertir automáticamente cualquier fallo técnico en 404.
+- Registrar hechos técnicos mediante **SLF4J y Log4j2 desde UT1**, distinguiendo `DEBUG`, `INFO`, `WARN` y `ERROR` y usando mensajes parametrizados. Evitar `System.out.println` como método habitual de diagnóstico, registros duplicados y exposición de secretos. En Spring, gestionar correctamente el backend de logging para no tener implementaciones SLF4J en conflicto.
+- Introducir depuración, lectura de stack traces, pruebas manuales y, cuando proceda, tests automatizados. Verificar tanto casos correctos como fallos y reglas de negocio.
+- Aplicar buenas prácticas **sin sobreingeniería**: primero entender una excepción, una validación y un caso de uso real; después introducir jerarquías y manejadores compartidos cuando estén justificados.
+
+### 4.3. Proyectos y entornos
+
+- **Java 25** como objetivo inicial, **Maven y Maven Wrapper** en proyectos Java, con verificación de compatibilidad real de dependencias antes de distribuirlos. Utilizar IntelliJ IDEA como flujo principal de importación, ejecución y depuración.
+- Datos de solo lectura de ejemplo preferentemente en `src/main/resources/data/` y cargados como recursos; archivos que el programa vaya a crear/modificar en una **ubicación externa y configurable**, nunca en recursos empaquetados.
+- Interfaces gráficas **completamente construidas, atractivas, accesibles y funcionales** desde la base del ejercicio: **JavaFX** para ficheros, Hibernate y JDBC; **web preparada** para Spring, Firestore y MongoDB, salvo una justificación técnica mejor. El alumnado **no tendrá que crear o editar vistas, JavaScript, FXML, CSS ni componentes frontend**.
+- En REST, los controladores/backend **sí pueden ser parte del aprendizaje** porque enrutan peticiones y definen respuestas. El frontend web permanece terminado, con contratos y estados de error previstos; las páginas deben indicar qué backend se completa. No llamar «frontend» a los endpoints REST que deben programar.
+- Para **Firestore** entregar además una colección **Postman importable con todas las peticiones, variables, cuerpos y ejemplos de error ya preparados**, para ejecutar sin construir manualmente las peticiones. Usar la misma idea donde aporte valor a otras API.
+- Proporcionar datos de ejemplo, modo de reinicio/restablecimiento, README, pruebas de funcionamiento y solución íntegra. Mantener coherencia entre frontend, controladores, servicios, repositorios, datos y tests.
+- Las credenciales y claves privadas nunca se incluyen en Git, archivos ZIP públicos, ejemplos en claro ni logs. Preparar `.env.example` o configuración equivalente sin secretos.
+- Aplicar el estándar `MJSPlayground/ai-workspace/TEACHING-STANDARD.md` a los criterios generales **excepto donde este índice establezca explícitamente la nueva metodología específica de ACDA**. Actualizar posteriormente los pasajes específicos obsoletos del estándar y las skills, sin cambiar en silencio las pautas de otros módulos.
+
+## 5. Temario y proyectos conductores
 
 ---
 
 ## Manejo de ficheros y directorios
 
-**Propósito:** gestionar archivos y persistencia local, leer y escribir distintos formatos y transformar información entre ellos.
+**Dedicación orientativa:** 7 horas.  
+**Propósito:** gestionar almacenamiento local mediante rutas, texto, CSV, JSON y persistencia binaria, separando responsabilidades y manejando errores.
 
-### Bloque 1. Ficheros y directorios en Java
+### Bloque 1. Ficheros, directorios y entorno Java
 
-- **Sistemas de ficheros y rutas.** Archivos, directorios, rutas absolutas y relativas, directorio de trabajo y permisos.
-- **Gestión de ficheros con `Path` y `Files`.** Crear, copiar, mover, eliminar, inspeccionar propiedades y gestionar fallos.
-- **Recorrido y búsqueda de archivos.** Listar, filtrar, recorrer árboles de directorios e inventariar archivos.
-- **Orientación para leer los proyectos de ejemplo.** Reconocer de manera introductoria las clases de datos, lectura/escritura, reglas y ejecución de un programa Java sin adelantar la enseñanza formal de patrones, ORM ni Spring.
-- **Práctica guiada de cierre del bloque:** Organizar e inventariar directorios con `Path` y `Files`, incorporando recorrido, filtros, tamaños, estadísticas, exportación y tratamiento de incidencias.
+- **Sistemas de ficheros y rutas.** Archivos y directorios, rutas absolutas/relativas, directorio de trabajo y permisos.
+- **`Path` y `Files`.** Comprobar propiedades y crear, copiar, mover y borrar archivos/directorios con gestión adecuada de excepciones.
+- **Recorrido y búsqueda básica integrados.** Listar archivos de un directorio y aplicar un filtro simple dentro de los ejemplos del bloque y del proyecto; **no** enseñar recursión compleja, inventarios extensos o estadísticas de árboles como contenido obligatorio.
+- **Maven desde el primer tema.** `pom.xml`, dependencias y sincronización en IntelliJ, aprovechando la posterior integración de Jackson y logging.
+- **Primeros pasos con SLF4J y Log4j2.** Logger y niveles, sustitución de `sout`, registro de incidencias sin datos sensibles y guía de configuración reutilizable.
 
-### Bloque 2. Ficheros de texto y CSV
+### Bloque 2. Texto, CSV y JSON
 
-- **Lectura y escritura de texto.** UTF-8, `Files.readString`, `Files.writeString` y flujos de caracteres.
-- **Procesamiento eficiente de texto.** Lectura línea a línea, `BufferedReader`, `BufferedWriter` y `try-with-resources`.
-- **Ficheros CSV.** Delimitadores, encabezados, comillas, campos vacíos, bibliotecas CSV y validación.
-- **Práctica guiada de cierre del bloque:** Importar, validar y combinar CSV, generar un informe de texto y exportar registros filtrados respetando el formato.
+- **Procesamiento por líneas.** `BufferedReader`, `BufferedWriter`, codificación UTF-8, `try-with-resources` y errores. Se explicarán las operaciones mínimas de lectura/escritura necesarias **dentro de este apartado**, sin reintroducir como bloque separado la teoría general de `Files.readString`/`writeString`.
+- **CSV.** Encabezados, delimitadores, comillas, campos vacíos, importación/exportación y validación. Evitar analizadores caseros incorrectos ante comillas o delimitadores; usar una biblioteca sencilla si el caso lo requiere y explicar su papel.
+- **JSON.** Objetos, arrays, valores, anidamiento y casos de uso.
+- **Jackson.** `ObjectMapper`, objetos Java ↔ JSON, lectura, escritura y manejo de errores. Las operaciones sobre árboles JSON se introducirán solo cuando sean necesarias para el proyecto.
 
-### Bloque 3. Ficheros XML
+### Bloque 3. Binarios, acceso aleatorio y serialización
 
-- **Lectura, escritura y transformación XML con DOM.** Analizar documentos, recorrer elementos, modificar nodos, generar XML y configurar el analizador de forma segura frente a entidades externas (XXE).
-- **Práctica guiada de cierre del bloque:** Leer XML con DOM seguro, exportar registros a CSV y construir después XML a partir de CSV con validaciones.
+- **Flujos binarios:** `InputStream`, `OutputStream`, `DataInputStream` y `DataOutputStream`; diferencias respecto a texto.
+- **Acceso aleatorio:** `RandomAccessFile`, posiciones y registros de tamaño fijo; **explicación y demostración pequeña**, sin exigir un subsistema de registros aleatorios en la práctica central.
+- **Serialización Java:** `Serializable`, `ObjectInputStream`, `ObjectOutputStream`, compatibilidad y precauciones al deserializar. **Este será el mecanismo binario que utilizará principalmente el alumnado en la práctica**, solo sobre datos generados y controlados por la propia aplicación. Aclarar que la serialización nativa de Java no es el formato de intercambio recomendado para datos externos o no confiables.
 
-### Bloque 4. Ficheros JSON
+### Bloque 4. Arquitectura de acceso a ficheros y transformación
 
-- **Estructura y tipos de datos JSON.** Objetos, arrays, valores, estructuras anidadas y diferencias respecto a XML.
-- **Lectura y escritura JSON con Jackson.** `ObjectMapper`, árboles JSON, conversión de objetos Java y manejo de errores.
-- **Práctica guiada de cierre del bloque:** Leer estructuras JSON con Jackson y transformar registros entre JSONy y CSV, incluyendo anidamiento y filtros.
+- **Capas iniciales:** `model.entity`, `model.repository`, `model.service`, configuración y entrada de la aplicación. Explicar sus responsabilidades mientras evoluciona el proyecto, sin adelantar JPA ni Spring.
+- **Importadores/exportadores reutilizables.** Separación entre lectura/escritura técnica, transformación y validación de negocio; uso de clases y métodos comprensibles.
+- **Validaciones y errores.** Datos incompletos o repetidos, formatos incorrectos, errores de lectura/escritura, excepciones propias útiles y logging. Mantener información válida y evitar pérdidas accidentales.
 
-### Bloque 5. Ficheros binarios
+### Proyecto guiado incremental — Inventario local de productos
 
-- **Flujos de datos binarios.** `InputStream`, `OutputStream`, `DataInputStream` y `DataOutputStream`.
-- **Acceso aleatorio.** `RandomAccessFile`, desplazamientos, registros de longitud fija y actualización de datos.
-- **Serialización de objetos Java.** `Serializable`, streams de objetos, `serialVersionUID`, compatibilidad y riesgos de deserializar datos no confiables.
-- **Práctica guiada de cierre del bloque:** Guardar, leer y modificar registros binarios de tamaño fijo; calcular informes de existencias y exportarlos a CSV o JSON.
+**Interfaz JavaFX preparada.** Aplicación que muestra productos y permite cargarlos, filtrarlos, editarlos y guardarlos en distintos formatos. El proyecto parte de un catálogo y vistas ya diseñadas.
 
-### Bloque 6. Transformación de formatos y aplicación
+Hitos didácticos integrados en la teoría: seleccionar una ubicación y listar archivos; leer y escribir CSV; importar/exportar JSON con Jackson; guardar y recuperar el catálogo en un fichero binario mediante serialización; separar repositorio y servicio; aplicar reglas sobre identificadores, precios y existencias; informar de fallos mediante excepciones y logs. El acceso aleatorio se muestra en una demostración breve, no se convierte en requisito del proyecto.
 
-- **Organización básica del código de ejemplo.** Distinguir modelos de datos (`model.entity`), clases de lectura/escritura (`model.dao`), reglas de aplicación (`model.service`) y código de presentación o ejecución, con ejemplos sencillos y sin adelantar el estudio formal de ORM, JPA o inyección de dependencias.
-- **Importadores y exportadores reutilizables.** Separar lectura, transformación, validación y escritura en clases con responsabilidades claras.
-- **Validación y recuperación ante errores.** Registros incompletos, codificaciones, escrituras fallidas y conservación de información válida.
-- **Práctica guiada de cierre del bloque:** Construir progresivamente un conversor multiformato con importadores, validaciones, informes de incidencias y exportadores reutilizables.
+### Práctica final — Nuevas funciones del inventario
 
-### Prácticas finales
+El **starter** es la solución completa del proyecto guiado; se añaden requisitos de cliente que obligan a crear código nuevo.
 
-- **Final fácil — Conversor de datos de clientes.** Leer un formato, comprobar reglas sencillas y generar otro formato (No incluir XML).
-- **Final intermedia — Importador y exportador de inventario.** Leer y combinar archivos, validar existencias y precios, generar informes y convertir entre varios formatos (No incluir XML).
-- **Final avanzada — Gestor universal de información comercial.** Aplicación con JavaFX preparado, conversión multiformato, filtros, cálculos, errores y persistencia (No incluir XML).
+- **Base:** una ampliación funcional de importación/exportación y validación con interfaz ya preparada.
+- **Aplicación:** conciliación de datos con duplicados, reglas de stock/precios, incidencias y resultados verificables.
+- **Reto avanzado:** recuperación ante fallos, transformaciones combinadas y lógica adicional de inventario.
+
+### Prácticas de repaso
+
+Cinco proyectos opcionales **en preparación**; publicar inicialmente sus cinco fichas sin enlaces ficticios.
 
 ### Ampliación
 
-- **Procesamiento streaming de ficheros grandes.** Procesamiento incremental sin cargar archivos completos en memoria.
-- **Monitorización de directorios con `WatchService`.** Detección y tratamiento de cambios en el sistema de archivos.
-- **Canales de ficheros y NIO avanzado.** `FileChannel` y operaciones especializadas.
-- **Escrituras fiables.** Archivos temporales, sustitución atómica y recuperación ante interrupciones.
+- XML con DOM: lectura, escritura, transformación y defensa frente a XXE.
+- Procesamiento streaming de archivos grandes.
+- Monitorización de cambios con `WatchService`.
+- Escrituras fiables con temporales, sustitución atómica y recuperación.
 
 ---
 
 ## Herramientas de mapeo objeto-relacional (ORM) y JPA con Hibernate
 
-**Propósito:** persistir entidades Java en MySQL mediante Hibernate, diseñando repositorios y servicios que apliquen reglas de negocio.
+**Dedicación orientativa:** 9 horas.  
+**Propósito:** mapear objetos Java en una base relacional, ejecutar CRUD y consultas, gestionar transacciones y relaciones, y organizar repositorios y servicios.
 
-### Bloque 1. Fundamentos de ORM
+### Bloque 1. Arquitectura de persistencia y fundamentos ORM
 
-- **Desfase objeto-relacional y herramientas ORM.** Tablas frente a objetos, ventajas y limitaciones del mapeo.
-- **JPA, Jakarta Persistence e Hibernate.** Especificación, implementación, API de persistencia y papel del proveedor.
-- **Práctica guiada de cierre del bloque:** Reconocer entidades, claves y relaciones de un caso de negocio antes de realizar el mapeo.
+- **Arquitectura desde el principio.** Estructura real de paquetes y responsabilidades de `entity`, `repository`, `service` y `config/connection`; flujo de llamadas. Reaprovechar el concepto iniciado en Ficheros y formalizarlo con un ejemplo de BD.
+- **Desfase objeto-relacional y ORM.** Tablas, objetos, asociaciones y ventajas/limitaciones de la abstracción.
+- **JPA, Jakarta Persistence e Hibernate.** Especificación frente a proveedor, API y alcance de la herramienta.
 
-### Bloque 2. Instalación y configuración
+### Bloque 2. Configuración y entidades
 
-- **MySQL con Docker y MySQL Workbench.** Contenedor persistente, conexión, esquemas y publicación del puerto interno 3306 como 3306 o 3308 en el equipo.
-- **Primer proyecto Hibernate con Maven.** Dependencias, configuración, conexión, registro de entidades y mención breve al mapeo XML (`orm.xml`) como alternativa, sin protagonismo en las prácticas.
-- **POJO, JavaBean y entidad persistente.** Constructores, propiedades, accesores y requisitos de persistencia.
-- **Mapeo de entidades mediante anotaciones.** `@Entity`, `@Table`, `@Id`, `@Column`, identificadores, tipos Java modernos y restricciones.
-- **Práctica guiada de cierre del bloque:** Configurar una aplicación Hibernate, persistir una entidad en MySQL y ampliar el modelo con otra entidad y sus restricciones.
+- **MySQL con Docker y Workbench.** Conexión, esquema, puerto y comprobación del contenedor. Preparar configuración reutilizable para evitar perder tiempo en instalaciones.
+- **Proyecto Hibernate con Maven.** Dependencias, conexión, configuración de sesiones/entidades y ejecución.
+- **Anotaciones de mapeo:** `@Entity`, `@Table`, `@Id`, `@Column`, tipos, identificadores y restricciones. Explicar los constructores/accesores necesarios dentro del mapeo, **sin una página independiente de POJO/JavaBean**.
+- **Mapeo XML:** mención y ejemplo corto como alternativa a las anotaciones, sin convertirse en un segundo itinerario práctico.
 
-### Bloque 3. Persistencia, servicios y logging
+### Bloque 3. CRUD, sesiones, servicios y transacciones
 
-- **Sesiones y estados de las entidades.** Contexto de persistencia, estados transitorio, persistente y separado.
-- **Repositorios y operaciones CRUD.** Guardar, buscar, modificar y eliminar mediante la API de persistencia.
-- **Transacciones con Hibernate.** Inicio, `commit`, `rollback` y manejo de recursos.
-- **Capa de servicio y reglas de negocio.** Validar invariantes y coordinar repositorios sin poner lógica comercial en la interfaz.
-- **Logging profesional con SLF4J y Log4j2.** Fachada e implementación, niveles, configuración, mensajes parametrizados y registro de excepciones.
-- **Práctica guiada de cierre del bloque:** Implementar un repositorio y un servicio con CRUD, reglas de negocio, transacciones, recuperación de errores y logging.
+- **Sesiones y estados de entidades.** Transitorio, persistente y separado; cuándo importa cada uno.
+- **CRUD mediante repositorios Hibernate.** Alta, consulta, modificación y borrado; cierre de recursos.
+- **Transacciones:** inicio, `commit`, `rollback`, límites y errores.
+- **Servicios y reglas de negocio.** Algunas validaciones y casos de error representativos, sin distraer con lógica comercial desmesurada; reutilizar las convenciones de excepción y logging de UT1.
 
-### Bloque 4. Relaciones entre entidades
+### Bloque 4. Relaciones y ciclo de vida
 
-- **Relaciones uno a uno (1:1).** `@OneToOne`, claves externas y persistencia relacionada.
-- **Relaciones uno a muchos y muchos a uno (1:N / N:1).** `@OneToMany`, `@ManyToOne`, lado propietario y colecciones.
-- **Relaciones muchos a muchos (M:N).** `@ManyToMany`, tablas intermedias y entidades de asociación con datos propios.
-- **Carga y ciclo de vida de las relaciones.** `LAZY`, `EAGER`, cascadas, `orphanRemoval` y errores habituales.
-- **Práctica guiada de cierre del bloque:** Relacionar entidades y gestionar operaciones sobre relaciones con restricciones de negocio, comprobando los resultados en MySQL.
+- **Relación 1:1:** `@OneToOne`, propiedad y persistencia.
+- **Relaciones 1:N / N:1:** `@OneToMany` y `@ManyToOne`, claves foráneas y lado propietario.
+- **Relación M:N:** `@ManyToMany`, tabla de unión y operaciones básicas.
+- **Ciclo de vida:** `LAZY`/`EAGER`, cascadas, `orphanRemoval` y errores habituales, con profundidad proporcional al caso de uso. Mantener **las tres cardinalidades** en el itinerario ordinario.
 
-### Bloque 5. Consultas y recuperación
+### Bloque 5. Consultas HQL/JPQL
 
-- **Consultas HQL y JPQL.** Parámetros, filtros, ordenación y consultas tipadas.
-- **Consultas sobre relaciones.** Joins, proyecciones, agregaciones sencillas y paginación.
-- **Consultas SQL nativas con Hibernate.** Cuándo acceder a tablas directamente y cómo recuperar resultados.
-- **Práctica guiada de cierre del bloque:** Crear consultas parametrizadas y ampliar el repositorio con filtros, joins, informes y validaciones basadas en consultas.
+- **HQL/JPQL básico.** Consultas parametrizadas, filtros, condiciones y ordenación, recuperando entidades desde repositorios.
 
-### Prácticas finales
+### Proyecto guiado incremental — Catálogo de biblioteca
 
-- **Final fácil — Catálogo de productos.** CRUD con servicio y reglas de precios, existencias y duplicados.
-- **Final intermedia — Gestión de biblioteca.** Relaciones, disponibilidad, préstamos, devoluciones, reglas de negocio y consultas.
-- **Final avanzada — Sistema de gestión de pedidos.** Varias entidades, cálculos, consultas, transacciones y restricciones comerciales, con interfaz JavaFX preparada.
+**Interfaz JavaFX preparada.** Entidades: editoriales, libros, autores y detalles de publicación. El ejemplo permite visualizar relaciones **1:N** (editorial-libros), **M:N** (libros-autores) y **1:1** (libro-detalle), con mapeo gradual, CRUD, transacciones y consultas HQL sencillas. La interfaz, datos semilla y configuración de ejecución estarán preparados; los `TODO` se concentran en entidades, repositorios y servicios.
+
+### Práctica final — Ampliación del catálogo
+
+- **Base:** nuevas operaciones CRUD y reglas sencillas sobre entidades ya mapeadas.
+- **Aplicación:** operaciones con varias entidades relacionadas y consultas HQL parametrizadas.
+- **Reto avanzado:** restricciones de negocio y transacciones que coordinen varias modificaciones.
+
+### Prácticas de repaso
+
+Cinco proyectos opcionales **en preparación**.
 
 ### Ampliación
 
-- **Rendimiento de Hibernate.** Problema N+1, `JOIN FETCH`, consultas generadas y diagnóstico.
-- **Bloqueo optimista y concurrencia.** `@Version` y conflictos de actualización.
-- **Migraciones de esquemas con Flyway.** Versionado de cambios de base de datos.
-- **Pruebas avanzadas de persistencia.** Verificación automatizada de repositorios, relaciones y consultas.
+- Consultas HQL/JPQL sobre relaciones: joins, proyecciones, agregaciones y paginación.
+- SQL nativo con Hibernate.
+- Rendimiento de Hibernate: N+1, `JOIN FETCH`, consultas generadas y diagnóstico.
 
 ---
 
-## Acceso a datos mediante componentes (Spring)
+## Acceso a datos mediante componentes Spring
 
-**Propósito:** construir componentes de persistencia reutilizables con Spring; trabajar IoC, inyección, servicios, repositorios, Spring Data JPA y aplicaciones MVC con Thymeleaf. Las API REST se estudian más adelante al construir servicios sobre Cloud Firestore.
+**Dedicación orientativa:** 6 horas.  
+**Propósito:** desarrollar y reutilizar componentes de persistencia con Spring Boot, inyección de dependencias y Spring Data JPA, sin invertir horas en enseñar frontend.
 
-### Bloque 1. Programación orientada a componentes
+### Bloque 1. Componentes y Spring Boot
 
-- **Componentes software y reutilización.** Interfaces, encapsulación, composición, ventajas e inconvenientes.
-- **Spring Framework y Spring Boot.** Ecosistema, starters, autoconfiguración y ejecución.
-- **Práctica guiada de cierre del bloque:** Crear y ejecutar una aplicación sencilla con componentes Spring, entendiendo su responsabilidad y reutilización.
-
-### Bloque 2. Componentes y configuración Spring
-
-- **Contenedor IoC y ciclo de vida de beans.** Registro, creación, inicialización y gestión.
+- **Componentes software.** Interfaces, encapsulación, composición, reutilización, ventajas y límites.
+- **Spring Framework y Spring Boot.** Ecosistema, starters, autoconfiguración y ejecución de una aplicación preparada.
+- **IoC y ciclo de vida de beans.** Contenedor, creación y gestión; detalles suficientes para entender los componentes.
 - **Inyección de dependencias.** `@Component`, `@Service`, `@Repository`, `@Bean` e inyección por constructor.
-- **Propiedades, perfiles y eventos.** `application.properties`, configuración externa y comunicación entre componentes.
-- **Práctica guiada de cierre del bloque:** Configurar componentes y sustituir implementaciones de un servicio mediante inyección de dependencias.
+- **Propiedades, perfiles y eventos.** `application.properties`, configuración externa, perfiles y una comunicación por eventos a nivel introductorio, integrados con ejemplos y sin framework adicional.
 
-### Bloque 3. Componentes de acceso a datos
+### Bloque 2. Componentes de acceso a datos
 
-- **Arquitectura por capas en Spring.** Controlador, servicio, repositorio, entidad y responsabilidades.
-- **Spring Data JPA.** `JpaRepository`, CRUD y consultas derivadas.
-- **Servicios, validación y transacciones.** Reglas de negocio, coordinación y `@Transactional`.
-- **Componentes de persistencia reutilizables.** Interfaces e implementaciones sobre ficheros y ORM.
-- **Práctica guiada de cierre del bloque:** Conectar un servicio con Spring Data JPA e incorporar reglas de negocio sobre una aplicación parcialmente preparada.
+- **Arquitectura Spring por capas:** controlador preparado, servicio, repositorio y entidad.
+- **Spring Data JPA:** `JpaRepository`, CRUD y consultas derivadas.
+- **Servicios, reglas y validaciones:** aprovechamiento de lo aprendido con Hibernate, excepciones de dominio y colaboración entre componentes.
+- **Transacciones:** `@Transactional` y sus límites básicos.
+- **Reutilización de persistencia:** contratos e implementaciones intercambiables **integrados en la explicación de repositorios y DI**, sin página propia ni práctica redundante para ficheros/ORM.
 
-### Bloque 4. Aplicaciones web con Thymeleaf
+### Bloque 3. Composición de servicios
 
-- **Spring MVC y Thymeleaf.** Modelo, vista y controlador; lectura y adaptación de plantillas existentes.
-- **Formularios y visualización de datos.** Listados, formularios, mensajes y validación de entrada.
-- **Práctica guiada de cierre del bloque:** Integrar servicios con una interfaz MVC/Thymeleaf preparada y completar persistencia, formularios y validaciones.
+- **Colaboración entre varios servicios:** coordinación de operaciones y responsabilidades.
+- **Diseño de componentes reutilizables:** interfaces, sustitución de implementaciones, bajo acoplamiento y prevención de dependencias circulares.
 
-### Bloque 5. Composición y reutilización
+### Proyecto guiado incremental — Servicios para el catálogo
 
-- **Integración de varios servicios.** Coordinación de operaciones y colaboración sin dependencias circulares.
-- **Diseño de componentes reutilizables.** Interfaces, sustitución de implementaciones, bajo acoplamiento y empaquetado conceptual.
-- **Práctica guiada de cierre del bloque:** Coordinar varios servicios y reglas de negocio en un sistema MVC preparado, evitando acoplamiento innecesario.
+**Aplicación Spring Boot con interfaz web y controladores de UI ya preparados**, que reutiliza el dominio o parte de los datos del catálogo Hibernate. Transformar progresivamente el acceso a datos en repositorios Spring Data JPA, introducir DI y servicios, añadir consultas derivadas, operaciones coordinadas, reglas y transacciones. El alumnado **no modifica Thymeleaf, HTML, CSS ni JavaScript**. Se pueden usar componentes falsos iniciales para explicar sustitución por implementaciones reales.
 
-### Prácticas finales
+### Práctica final — Reglas y servicios del catálogo
 
-- **Final fácil — Gestor web de artículos.** Con interfaz y controladores preparados, implementar servicios, repositorio y validaciones.
-- **Final intermedia — Gestión de reservas.** Entidades relacionadas, disponibilidad y coordinación de servicios.
-- **Final avanzada — Aplicación web de gestión empresarial.** Servicios reutilizables, persistencia, reglas complejas y operaciones coordinadas; interfaz suministrada.
+- **Base:** un nuevo caso de uso que precise repositorios y servicio.
+- **Aplicación:** coordinación de varios componentes, consultas y validaciones de negocio.
+- **Reto avanzado:** varias operaciones relacionadas con una transacción y gestión de conflictos.
+
+### Prácticas de repaso
+
+Cinco proyectos opcionales **en preparación**.
 
 ### Ampliación
 
-- **Pruebas con JUnit y Spring Boot Test.** Pruebas de servicios, repositorios e integración.
-- **Diagnóstico avanzado.** Logging, excepciones, perfiles y resolución de incidencias.
-- **Empaquetado y ejecución de Spring Boot.** JAR ejecutable, configuración y distribución.
-- **Spring Security para aplicaciones MVC.** Autenticación y autorización.
-- **Spring Boot Actuator.** Estado, indicadores y métricas.
-- **Despliegue de Spring con Docker.** Imagen, contenedor y configuración de ejecución.
-- **Testcontainers.** Pruebas de integración utilizando bases de datos reales en contenedores.
+- Spring MVC y Thymeleaf: estructura, funcionamiento y adaptación de plantillas.
+- Formularios, listados, mensajes y validación de entrada en aplicaciones web.
+- JUnit y Spring Boot Test.
+- Diagnóstico avanzado con logging, excepciones y perfiles.
+- Empaquetado y ejecución de Spring Boot como JAR.
+- Spring Security para MVC: autenticación y autorización.
+- Despliegue de Spring Boot con Docker.
 
 ---
 
-## Conexiones a bases de datos relacionales (JDBC)
+## Conexiones a bases de datos relacionales con JDBC
 
-**Propósito:** programar manualmente el acceso a bases relacionales mediante JDBC. Spring puede proporcionar componentes e interfaz MVC, pero no sustituirá la implementación JDBC del repositorio por Spring Data.
+**Dedicación orientativa:** 11 horas.  
+**Propósito:** entender el acceso SQL directo desde Java, construir repositorios manuales y coordinar operaciones de forma segura mediante servicios y transacciones.
 
-### Bloque 1. Conectores y bases relacionales
+### Bloque 1. Conectores y conexiones
 
-- **JDBC frente a herramientas ORM.** Drivers, arquitectura, control directo, ventajas y límites.
-- **Bases embebidas y de servidor.** SQLite y MySQL; características, elección y configuración.
-- **Práctica guiada de cierre del bloque:** Preparar las conexiones iniciales a SQLite y MySQL con Docker, comparar su configuración y probar operaciones sencillas.
+- **JDBC frente a ORM.** Drivers, arquitectura, ventajas, límites y control directo.
+- **Bases de datos embebidas y de servidor.** SQLite y MySQL, usos y configuración; reutilizar conocimientos de MySQL/Docker.
+- **Conexión JDBC.** `DriverManager`, `Connection`, URL, credenciales, apertura y cierre.
 
-### Bloque 2. Conexiones y operaciones SQL
+### Bloque 2. Operaciones SQL y recuperación de resultados
 
-- **Conexiones JDBC.** `DriverManager`, `Connection`, URL, credenciales y ciclo de vida.
-- **Ejecución de instrucciones SQL.** `Statement`, scripts, DDL, inserciones, actualizaciones y eliminaciones.
-- **Recuperación de resultados con `ResultSet`.** Filas, columnas, tipos y conversión a objetos Java.
-- **Consultas seguras con `PreparedStatement`.** Parámetros, reutilización y prevención de inyección SQL.
-- **Práctica guiada de cierre del bloque:** Desarrollar consultas parametrizadas y CRUD, importar registros y realizar búsquedas seguras mediante JDBC.
+- **`Statement`:** ejecución de SQL de definición y modificación; usar ejemplos controlados y explicar sus limitaciones con datos externos.
+- **`ResultSet`:** lectura de filas/columnas, tipos y conversión a entidades Java.
+- **`PreparedStatement`:** parámetros, operaciones CRUD y prevención de inyección SQL.
 
-### Bloque 3. Repositorios y servicios JDBC
+### Bloque 3. Repositorios, servicios, errores y transacciones
 
-- **Repositorios JDBC manuales.** Contratos, implementaciones y encapsulación de SQL.
-- **Servicios y reglas de negocio.** Verificaciones, coordinación, validación y errores.
-- **Integración con Spring MVC.** Usar repositorios JDBC creados desde cero mediante servicios Spring e interfaz web preparada.
-- **Práctica guiada de cierre del bloque:** Completar una aplicación con vistas preparadas, repositorios JDBC manuales y reglas comerciales en servicios.
+- **Repositorios JDBC manuales:** encapsulación de consultas y mapeo de resultados.
+- **Servicios y reglas de negocio:** validación, disponibilidad, existencias, cálculos y operaciones coordinadas; el backend Java es el trabajo del alumnado.
+- **Transacciones JDBC:** ACID básico, `autoCommit`, `commit`, `rollback` y recuperación ante fallos.
+- **Recursos y errores:** `try-with-resources`, `SQLException`, excepciones propias pertinentes y logging; no dejar conexiones abiertas ni ocultar errores.
+- **Integración con interfaz:** controladores/presentación Spring MVC o JavaFX **se entregan ya implementados**; solo deben integrar correctamente el servicio y repositorios que construye el alumnado, sin enseñar un nuevo frontend.
 
-### Bloque 4. Metadatos y consultas complejas
+### Proyecto guiado incremental — Gestión de almacén y ventas
 
-- **Metadatos de JDBC.** `DatabaseMetaData` y `ResultSetMetaData`.
-- **Consultas de varias tablas.** Joins, claves generadas y transformación de relaciones a objetos.
-- **Procedimientos almacenados.** `CallableStatement`, parámetros de entrada/salida y resultados en MySQL.
-- **Práctica guiada de cierre del bloque:** Recuperar datos relacionados y metadatos para construir consultas e informes con reglas de negocio.
+**Interfaz JavaFX preparada**, con tablas, formularios y acciones ya diseñadas. Usar SQLite para ilustrar una BD embebida y MySQL para una conexión de servidor; el proyecto principal tendrá un almacenamiento definido y reproducible, evitando que cada paso requiera reimplementar dos veces el mismo CRUD. Completar conexiones, repositorios `Jdbc`, consultas parametrizadas, mapeo de resultados, reglas de stock y una operación de venta atómica con `commit`/`rollback`.
 
-### Bloque 5. Transacciones y fiabilidad
+### Práctica final — Operaciones de almacén
 
-- **Transacciones JDBC.** ACID, `autoCommit`, `commit`, `rollback` y coordinación entre operaciones.
-- **Gestión de recursos y errores.** `try-with-resources`, `SQLException` y logging profesional.
-- **Pruebas de persistencia y consistencia.** CRUD, errores, fallos parciales e invariantes.
-- **Práctica guiada de cierre del bloque:** Ejecutar operaciones compuestas y provocar `rollback`; ampliar el caso a una gestión de inventario con cambios atómicos.
+- **Base:** nuevas búsquedas y modificaciones seguras, con validaciones.
+- **Aplicación:** compra o venta con cálculos y condiciones de stock, reutilizando transacciones.
+- **Reto avanzado:** operación coordinada que deba revertirse si falla alguna condición o una escritura.
 
-### Prácticas finales
+### Prácticas de repaso
 
-- **Final fácil — Gestor de clientes.** CRUD JDBC, servicios y validaciones de datos.
-- **Final intermedia — Gestión de almacén.** Relaciones, control de existencias, consultas y reglas comerciales.
-- **Final avanzada — Sistema de gestión de ventas.** Transacciones, cálculos, relaciones, consultas y restricciones comerciales, con interfaz preparada.
+Cinco proyectos opcionales **en preparación**.
 
 ### Ampliación
 
-- **Pool de conexiones con HikariCP.** Reutilización de conexiones y configuración.
-- **Procesamiento por lotes con JDBC.** Inserciones y actualizaciones batch.
-- **Optimización SQL.** Índices, planes de ejecución y análisis de consultas.
-- **Concurrencia y aislamiento.** Problemas entre transacciones y niveles de aislamiento.
-- **Tipos compuestos y persistencia objeto-relacional con PostgreSQL.** Definición de tipos mediante `CREATE TYPE`, atributos compuestos, consultas y una demostración breve de acceso desde Java.
-- **Bases de datos orientadas a objetos con ObjectDB.** Diferencias respecto a ORM y bases documentales; demostración breve de persistencia, consultas y transacciones. Preparar el entorno con Docker, sin instalación adicional de ObjectDB en el equipo. Antes de distribuir el ejemplo, comprobar la compatibilidad real con Java 25 y las condiciones de la licencia gratuita; evitar imágenes de terceros sin mantenimiento.
+- `DatabaseMetaData` y `ResultSetMetaData`.
+- Consultas `JOIN` y transformación de datos relacionados a objetos.
+- Procedimientos almacenados con `CallableStatement`.
+- Pool de conexiones HikariCP.
+- Operaciones JDBC por lotes.
+- Índices, planes de ejecución y optimización SQL.
+- Concurrencia y niveles de aislamiento.
 
 ---
 
 ## Bases de datos documentales con Cloud Firestore
 
-**Propósito:** gestionar colecciones y documentos en Cloud Firestore y diseñar API REST con Spring Boot que intercambien JSON, incorporando validación, tratamiento de errores, pruebas y documentación OpenAPI/Swagger UI.
+**Dedicación orientativa:** 7 horas.  
+**Propósito:** modelar documentos y colecciones, implementar persistencia en Firestore y exponerla mediante una API REST comprensible, segura y verificable.
 
-### Bloque 1. Persistencia documental
+### Bloque 1. Modelo documental y Firestore
 
-- **Bases relacionales y documentales.** Modelos, flexibilidad, ventajas, limitaciones y usos.
-- **Firebase y Cloud Firestore.** Servicios, arquitectura y componentes de una solución documental.
-- **Práctica guiada de cierre del bloque:** Diseñar un modelo documental de colecciones, documentos y relaciones para un caso empresarial, razonando decisiones básicas.
+- **Bases relacionales frente a documentales:** modelos, flexibilidad, ventajas, límites y casos de uso.
+- **Firebase y Cloud Firestore:** ecosistema, arquitectura y características.
+- **Colecciones y documentos:** identificadores, campos, tipos, mapas, listas y conversiones.
+- **Relaciones documentales:** mapas, subcolecciones, referencias, duplicación y criterios de elección.
 
 ### Bloque 2. Configuración y acceso seguro
 
-- **Creación y configuración de Cloud Firestore.** Proyecto, base, región y consola.
-- **SDK de administración de Firebase con Spring Boot.** Dependencias, inicialización e integración.
-- **Credenciales y seguridad de acceso.** Cuentas de servicio, IAM, variables de entorno y protección de secretos.
-- **Práctica guiada de cierre del bloque:** Configurar y conectar una aplicación de servicio a Firestore con credenciales y configuración externas seguras.
+- **Proyecto y base Firestore:** consola, región y configuración inicial.
+- **Firebase Admin SDK desde Spring Boot:** dependencias, inicialización y conexión.
+- **Credenciales y permisos:** cuentas de servicio, IAM, variables de entorno y protección de secretos. Diferenciar los privilegios del SDK Admin de las reglas de seguridad de clientes; **nunca** poner claves privadas en recursos públicos ni en el frontend.
 
-### Bloque 3. Modelado y persistencia
+### Bloque 3. Persistencia, consultas y servicios
 
-- **Colecciones, documentos y tipos.** Identificadores, campos, mapas, listas y conversiones.
-- **Modelado de relaciones documentales.** Mapas, subcolecciones, referencias, duplicación y elección de estructura.
-- **Repositorios y servicios Firestore.** CRUD, reglas de negocio y gestión de fallos.
-- **Práctica guiada de cierre del bloque:** Implementar CRUD documental y completar operaciones sobre documentos relacionados con validaciones comerciales.
+- **Repositorio/servicio Firestore:** CRUD, traducción entre documentos y objetos y gestión de errores.
+- **Reglas de negocio y validación en servicio.**
+- **Consultas:** igualdad, rangos, condiciones combinadas y ordenación.
+- **Índices y paginación:** límites, cursores e interpretación de requisitos de índices; nivel introductorio, aprovechando los resultados reales del proyecto.
 
-### Bloque 4. HTTP y REST
+### Bloque 4. API REST y pruebas
 
-- **Fundamentos de HTTP.** Peticiones, respuestas, cabeceras, JSON y códigos de estado.
-- **Diseño de API REST.** Recursos, rutas, GET/POST/PUT/PATCH/DELETE, idempotencia y convenciones.
-- **Controladores REST con Spring Boot.** `@RestController`, mappings, parámetros, cuerpos y `ResponseEntity`.
-- **Práctica guiada de cierre del bloque:** Publicar el CRUD de Firestore como API REST y ampliar sus endpoints a un segundo recurso con reglas de negocio.
+- **HTTP:** peticiones, respuestas, cabeceras, JSON, métodos y códigos de estado.
+- **Diseño REST:** recursos, rutas, GET/POST/PUT/PATCH/DELETE, idempotencia y operaciones.
+- **Controladores Spring Boot:** `@RestController`, rutas, parámetros, cuerpos y `ResponseEntity`.
+- **DTO y validación de entrada:** distinguir representación pública de modelo persistido.
+- **Errores REST:** excepciones de negocio, manejador común (por ejemplo `@RestControllerAdvice`), formato de error y uso coherente de 400, 404, 409 y 500.
+- **Postman:** importar una **colección completa ya preparada** y modificar únicamente variables, IDs o datos de petición; observar tanto respuestas correctas como errores.
 
-### Bloque 5. Buenas prácticas de API
+### Proyecto guiado incremental — API de reservas de espacios
 
-- **DTO y validación de entrada.** Contratos independientes del modelo persistente, Bean Validation y validación de servicio.
-- **Respuestas y tratamiento de errores.** Estados HTTP, `@RestControllerAdvice`, excepciones y formato coherente.
-- **OpenAPI y Swagger UI.** Esquemas, operaciones, respuestas y documentación interactiva.
-- **Pruebas manuales de API con Postman.** Colecciones, variables, escenarios normales y errores.
-- **Práctica guiada de cierre del bloque:** Documentar y probar una API con OpenAPI y Postman, incorporando validaciones y respuestas de error consistentes.
+**Interfaz web terminada y API base preparada**, con rutas y operaciones iniciales de ejemplo para poder usar la aplicación desde el primer paso. Completar progresivamente repositorio Firestore, servicio, modelos, validaciones y nuevos endpoints REST. Debe comprenderse qué ruta, método, cuerpo y respuesta corresponde a cada operación, y el alumno implementará parte de esos controladores. Incluir desde el comienzo una **colección Postman importable**, peticiones CRUD, variables, ejemplos correctos e incorrectos y documentación breve para ejecutarlas; el frontend no se modifica.
 
-### Bloque 6. Consultas y consistencia
+### Práctica final — Ampliación del sistema de reservas
 
-- **Consultas y filtros Firestore.** Condiciones de igualdad, rangos y filtros combinados.
-- **Índices y paginación con cursores.** Ordenación, índices, límites, cursores y costes de lectura.
-- **Escrituras agrupadas y transacciones.** Operaciones coordinadas, consistencia y recuperación ante fallos.
-- **Práctica guiada de cierre del bloque:** Construir consultas paginadas y operaciones coordinadas en Firestore, comprobando índices, costes y reglas comerciales.
+- **Base:** nuevos endpoints y persistencia documental con validaciones.
+- **Aplicación:** disponibilidad, conflictos, consultas y códigos HTTP acordes al resultado.
+- **Reto avanzado:** restricciones de negocio más complejas, consultas paginadas y coordinación sin asumir transacciones avanzadas no impartidas.
 
-### Prácticas finales
+### Prácticas de repaso
 
-- **Final fácil — API de catálogo de libros.** CRUD REST, DTO, servicio, validaciones y respuestas HTTP.
-- **Final intermedia — API de reservas.** Documentos relacionados, disponibilidad, consultas y reglas de negocio.
-- **Final avanzada — API de gestión comercial en la nube.** Recursos relacionados, filtros, transacciones, validación, errores y OpenAPI.
+Cinco proyectos opcionales **en preparación**.
 
 ### Ampliación
 
-- **Firebase Authentication.** Identidad y autorización de usuarios.
-- **Firestore en tiempo real.** Listeners y sincronización de cambios.
-- **Firebase Emulator Suite.** Pruebas y desarrollo local aislado.
-- **Pruebas automatizadas de API.** MockMvc y pruebas de integración.
-- **Seguridad profesional de API.** Tokens, autenticación, autorización y protección de recursos.
+- Documentación OpenAPI y Swagger UI.
+- Escrituras agrupadas y transacciones Firestore.
+- Firebase Authentication.
+- Firestore en tiempo real y listeners.
+- Seguridad de API: tokens, autenticación, autorización y protección de endpoints.
 
 ---
 
 ## Bases de datos NoSQL con MongoDB
 
-**Propósito:** trabajar con MongoDB standalone mediante Docker y Spring Data MongoDB, modelando documentos y realizando consultas y agregaciones. Las arquitecturas replicadas y las transacciones multidocumento se introducen en Ampliación.
+**Dedicación orientativa:** 7 horas.  
+**Propósito:** persistir objetos simples y estructuras documentales en MongoDB mediante Spring Data, modelar relaciones y resolver consultas, errores y reglas de negocio.
 
-### Bloque 1. Fundamentos MongoDB
+### Bloque 1. Modelo de datos MongoDB
 
-- **MongoDB y bases documentales.** Arquitectura, casos de uso y comparación con el modelo relacional y Firestore.
-- **BSON, documentos e identificadores.** `ObjectId`, tipos, listas y estructuras anidadas.
-- **Práctica guiada de cierre del bloque:** Diseñar documentos MongoDB para una necesidad empresarial y justificar el modelo elegido.
+- **MongoDB y bases documentales:** arquitectura, casos de uso y comparación con Firestore y SQL, sin repetir toda la introducción de UT6.
+- **BSON y documentos:** colecciones, `ObjectId`, tipos, listas y estructuras anidadas.
 
-### Bloque 2. Instalación y modelado
+### Bloque 2. Configuración y diseño
 
-- **MongoDB standalone con Docker y Compass.** Contenedor, volúmenes, conexión y exploración visual.
-- **Diseño de documentos MongoDB.** Embebidos, referencias, esquemas flexibles y validación.
-- **Práctica guiada de cierre del bloque:** Crear y consultar documentos con Compass, analizando después embebidos frente a referencias según las consultas requeridas.
+- **MongoDB con Docker y Compass:** conexión, volúmenes, exploración y operaciones visuales.
+- **Modelado documental:** embebidos, referencias, esquemas flexibles, validación y criterios de elección.
 
-### Bloque 3. Persistencia con Spring Data MongoDB
+### Bloque 3. Spring Data MongoDB y persistencia
 
-- **MongoDB con Spring Boot.** Dependencias, conexión y configuración.
-- **Documentos Java y `MongoRepository`.** `@Document`, `@Id`, mapeo y CRUD.
-- **Servicios y reglas de negocio.** Validación, coordinación y errores de persistencia.
-- **Persistencia de estructuras relacionadas.** Listas, documentos embebidos, referencias y recuperación.
-- **Práctica guiada de cierre del bloque:** Persistir documentos mediante Spring Data MongoDB y completar reglas de negocio sobre documentos relacionados.
+- **Spring Boot + MongoDB:** dependencias y configuración.
+- **Entidades documentales:** `@Document`, `@Id`, mapeo, `MongoRepository` y CRUD.
+- **Servicios y reglas de negocio:** operaciones, validaciones, excepciones y coordinación.
+- **Objetos estructurados:** listas, subdocumentos, referencias y recuperación de información.
 
-### Bloque 4. Consultas y agregaciones
+### Bloque 4. Consultas, integridad y comprobación
 
-- **Consultas personalizadas.** Consultas derivadas, `@Query`, filtros y operadores.
-- **Ordenación, paginación e índices.** Resultados paginados y búsquedas eficientes.
-- **Aggregation Pipeline.** `$match`, `$group`, `$project`, `$sort`, `$lookup` y cálculos.
-- **Práctica guiada de cierre del bloque:** Construir consultas y agregaciones sobre colecciones y generar informes y estadísticas de sus resultados.
+- **Consultas personalizadas:** derivadas, `@Query`, filtros y operadores básicos.
+- **Ordenación, paginación e índices:** uso introductorio y comprobable.
+- **Atomicidad:** actualizaciones seguras sobre un documento y límites de consistencia.
+- **Pruebas de persistencia:** comprobación de CRUD, consultas, validaciones, errores y resultados, combinando UI y pruebas de servicio/repositorio que aporten valor.
 
-### Bloque 5. Integridad y pruebas
+### Proyecto guiado incremental — Gestión de equipos y jugadores
 
-- **Atomicidad y operaciones seguras sobre documentos.** Actualizaciones atómicas de un documento y límites de consistencia.
-- **Pruebas de persistencia MongoDB.** CRUD, consultas, validaciones, fallos y resultados.
-- **Práctica guiada de cierre del bloque:** Detectar y corregir problemas de integridad, validando invariantes y probando operaciones documentales.
+**Interfaz web preparada.** Persistir jugadores, equipos y estadísticas con documentos simples y embebidos; introducir referencias cuando el modelo lo justifique. Construir entidades, repositorios, servicios y consultas, implementar reglas sobre plantillas y estadísticas, probar operaciones y errores. Reaprovechar la arquitectura Spring aprendida y concentrarse en lo nuevo de MongoDB.
 
-### Prácticas finales
+### Práctica final — Gestión de competición
 
-- **Final fácil — Gestor de jugadores.** CRUD, repositorio, servicio y validaciones.
-- **Final intermedia — Gestión de equipos y competiciones.** Datos relacionados, filtros y reglas de negocio.
-- **Final avanzada — Sistema de análisis deportivo.** Estructuras documentales, cálculos, consultas, agregaciones y validaciones complejas.
+- **Base:** nuevas consultas y actualizaciones documentales.
+- **Aplicación:** cálculos sobre jugadores/equipos, restricciones y operaciones seguras.
+- **Reto avanzado:** estadísticas y reglas combinadas que exijan programar, sin depender del Aggregation Pipeline de Ampliación.
+
+### Prácticas de repaso
+
+Cinco proyectos opcionales **en preparación**.
 
 ### Ampliación
 
-- **Replica sets y transacciones multidocumento.** Descripción conceptual de arquitectura y requisitos, sin despliegue práctico obligatorio.
-- **MongoDB Atlas.** Servicio gestionado y conexiones seguras.
-- **Change Streams.** Procesamiento de eventos de cambios.
-- **Optimización de consultas.** `explain`, índices compuestos y análisis de rendimiento.
-- **`MongoTemplate`.** Operaciones especializadas que superan los métodos habituales de repositorio.
+- Aggregation Pipeline: `$match`, `$group`, `$project`, `$sort`, `$lookup` y cálculos.
+- Optimización de consultas: `explain`, índices compuestos y análisis de rendimiento.
 
 ---
 
-## Ayuda y herramientas
+## 6. Ayuda y herramientas
 
-Páginas operativas comunes, enlazadas desde los temas donde sean útiles para evitar duplicaciones.
+Estas guías son **consultables desde todos los temas**, no constituyen horas lectivas añadidas. Integrar enlaces contextuales y reutilizarlas en lugar de duplicar explicaciones.
 
 ### Entorno Java y proyectos
 
-- **Java 25: instalación y configuración.** Instalar y seleccionar JDK, comprobar versión y solucionar problemas habituales.
-- **IntelliJ IDEA.** Importar y ejecutar proyectos, autoimportación, optimización de imports, atajos, búsqueda y refactorización.
-- **Maven y Maven Wrapper.** `pom.xml`, dependencias, `mvnw`/`mvnw.cmd`, compilación, ejecución, pruebas y descarga reproducible.
-- **Depuración de Java.** Breakpoints, inspección de variables, paso a paso, evaluación y stack traces.
-- **JavaFX en proyectos preparados.** Arranque, vistas, formularios, tablas y diagnóstico de problemas de interfaz.
-- **Thymeleaf en aplicaciones preparadas.** Ubicación de plantillas y recursos, ejecución y pequeñas modificaciones.
+- **Java 25:** instalación, JDK, selección y diagnóstico.
+- **IntelliJ IDEA:** importar proyecto Maven, seleccionar JDK, descargar dependencias, autoimportar clases, optimizar imports, refactorizar, ejecutar y solucionar problemas habituales.
+- **Run Configurations:** establecer un punto de entrada `main` reutilizable, ejecutar la configuración elegida mediante el botón Run, configurar directorio de trabajo y argumentos cuando proceda. Aclarar que el botón contextual de ejecución de otra clase **puede crear o elegir otra configuración**; no prometer que cualquier icono Run ejecute siempre el mismo `main`.
+- **Maven y Maven Wrapper:** `pom.xml`, dependencias, sincronización, compilación, importación y uso básico desde IntelliJ. Comandos opcionales para desarrolladores/QA.
+- **Depuración:** breakpoints, variables, paso a paso, excepciones y stack traces.
+- **JavaFX en proyectos preparados:** importar, ejecutar, usar la interfaz y resolver incidencias, sin enseñar a diseñarla.
+- **Thymeleaf en aplicaciones preparadas:** estructura y ejecución, sin requerir modificar vistas.
 
 ### Contenedores y bases de datos
 
-- **Docker y Docker Compose.** Imágenes, contenedores, puertos, volúmenes, redes, comandos y archivos Compose; ejemplos MySQL y MongoDB.
-- **MySQL y Workbench.** Conexión, esquemas, importación de scripts y puerto anfitrión 3308/puerto del contenedor 3306.
-- **SQLite.** Bases en archivos locales y herramientas de exploración.
-- **MongoDB Compass.** Conexión al contenedor, exploración de documentos y ejecución de consultas.
-- **Firebase Console.** Gestión de proyectos, bases y credenciales sin exponer secretos.
+- Docker y Docker Compose.
+- MySQL y Workbench.
+- SQLite.
+- MongoDB Compass.
+- Firebase Console.
 
 ### Calidad, API y seguridad
 
-- **Logging profesional.** SLF4J, Log4j2, configuración, niveles y lectura de registros.
-- **Pruebas con JUnit.** Ejecutar, interpretar y depurar tests.
-- **Postman.** Colecciones, entornos, parámetros, cuerpos y pruebas de respuestas.
-- **OpenAPI y Swagger UI.** Localizar documentación y probar endpoints.
-- **Configuración y secretos.** Variables de entorno, perfiles, credenciales, `.gitignore` y datos sensibles.
-- **Documentación oficial de APIs y dependencias.** Localizar clases, métodos, manuales y versiones.
-- **Solución de problemas frecuentes.** Errores de JDK, Maven, puertos, conexiones, recursos, Docker y ejecución.
+- SLF4J y Log4j2: configuración, niveles y diagnóstico.
+- Pruebas con JUnit: ejecutar y comprender tests.
+- Postman: importar colecciones, variables, ejecutar y comprobar respuestas.
+- OpenAPI y Swagger UI.
+- Variables de entorno, configuración, credenciales y `.gitignore`.
+- Documentación oficial de Java, Maven, Hibernate, Spring, Firebase y MongoDB, enlazada desde las páginas pertinentes.
+- Solución de problemas frecuentes: JDK, Maven, rutas, puertos, Docker, bases de datos, conectividad, recursos, interfaces y ejecución.
 
----
+### Autonomía de aprendizaje
 
-## Criterios técnicos compartidos
+- Cómo seguir la web, practicar y comprobar cada hito.
+- Cómo interpretar y completar `TODO` sin modificar la UI.
+- Cómo leer un mensaje de error, depurar e investigar documentación antes de pedir ayuda.
+- Cómo usar las soluciones públicas como contraste del aprendizaje, no como sustituto del trabajo.
+- Enlaces cruzados entre contenidos anteriores, con navegación estable.
 
-- Los proyectos Java utilizan **Java 25** como objetivo inicial, **Maven Wrapper** y paquetes bajo `es.mjsplayground`, con versiones verificadas antes de su distribución. Los paquetes vinculados a actividades utilizarán nombres temáticos estables (`es.mjsplayground.acda.<tema>.<proyecto>`), sin depender del orden de impartición.
-- Las interfaces estarán preparadas cuando desarrollarlas no sea el objetivo de la actividad. En aplicaciones Spring MVC predominan las vistas **Thymeleaf** suministradas; en aplicaciones de escritorio de persistencia, **JavaFX**.
-- Las **reglas de negocio residen en servicios**. Los repositorios encapsulan persistencia, y las vistas o controladores gestionan interacción y validaciones inmediatas de formato.
-- En los proyectos de persistencia y componentes se emplearán **SLF4J y Log4j2** y técnicas de depuración profesional, en lugar de `System.out.println` como mecanismo habitual de diagnóstico.
-- Las prácticas de bloque y finales combinarán, progresivamente, validaciones, consultas, errores, cálculos, invariantes y coordinación de operaciones.
-- Cada tema incluye **prácticas finales fácil, intermedia y avanzada**, seguidas de **Ampliación**. Las soluciones de aprendizaje públicas y los proyectos iniciales se desarrollarán posteriormente conforme al estándar docente.
-- La web mantendrá accesibles los contenidos de aprendizaje y sus ampliaciones de forma autónoma respecto de la organización docente de cada curso.
+## 7. Publicación, calidad y entrega de los materiales
+
+- **Repositorio público `MJSPlayground/fp-dam2-acda`:** teoría, guías, ejemplos, proyecto incremental inicial y resuelto, práctica final inicial y resuelta, Ampliación pública y fichas de repaso. Preservar el proyecto Zensical ya existente y adaptar sus rutas, documentación y scripts sin reconstruirlo desde cero.
+- **Repositorio privado del profesorado:** evaluaciones Moodle, soluciones, rúbricas y recursos de corrección. No generarlo ni publicarlo como parte de esta fase de desarrollo público.
+- **Fuentes existentes:** `CONTENIDOS_ACDA.md` aprobado como alcance principal, programación y hoja de presentación para trazabilidad curricular; antiguos PDF como fuentes históricas secundarias, nunca como estructura predominante.
+- **Estándar común:** `MJSPlayground/ai-workspace/TEACHING-STANDARD.md`; habilidades `fp-contenidos`, `fp-practicas`, `mjs-interfaces`, `fp-ut-completa`, `fp-revision-didactica` y `mjs-docs-ux` según su disponibilidad y compatibilidad. Cuando alguna skill presuponga una práctica por bloque o tres finales independientes, **la metodología específica aprobada en este documento prevalece para ACDA**, y debe actualizarse esa referencia explícitamente antes de generar contenido masivo.
+- **QA mínimo por cada tema:** trazabilidad entre teoría y etapas; ejecución limpia de los starters; compilación con Maven Wrapper; pruebas de CRUD, servicios, excepciones y casos límite; coherencia entre datos, código y frontend; importación y funcionamiento de Postman donde corresponda; enlaces de descarga existentes; revisión visual de la interfaz, Zensical y PDF; capturas reales o registro `CAPTURAS-PENDIENTES.md`; contraste de documentación técnica y dependencias.
+- **Regla de disponibilidad:** no afirmar que una actividad, descarga, solución o ejemplo está terminado hasta haberlo creado y verificado. Para los cinco repasos pendientes, **«En preparación»**; no enlaces rotos ni simulaciones engañosas.
+- **Publicación:** conservar la configuración GitHub Pages existente. Trabajar en rama de desarrollo para material incompleto, con commits trazables y validación antes de incorporar a `main`, puesto que `main` publica la web. No realizar operaciones destructivas ni difundir material no revisado sin aprobación humana.
+
+## 8. Inventario mínimo de entregables por tema
+
+Se considera listo para revisión docente cuando existe:
+
+1. Teoría de todos los bloques obligatorios, explicada de forma autónoma y con referencias cruzadas.
+2. Un proyecto incremental con **starter funcional**, interfaz completa y etapas `TODO` alineadas con el temario.
+3. Una **solución completa** y ejecutable del proyecto incremental, con explicación o vínculo desde la web.
+4. Una **práctica final** con niveles Base, Aplicación y Reto avanzado, cuyo starter es la solución del guiado más la infraestructura de nuevas funciones, con interfaz ya preparada.
+5. Solución íntegra y ejecutable de los tres niveles de la práctica final, claramente identificados.
+6. Una sección **«Prácticas de repaso»** y cinco fichas «En preparación» sin proyectos simulados.
+7. Sección **«Ampliación»** con las páginas previstas, cuando procedan, distinguidas del itinerario ordinario.
+8. Descargas, instrucciones de importación/Run, datos de ejemplo y comprobaciones manuales o automatizadas.
+9. Cuando el tema sea REST, colección Postman preparada y validada; en Firestore, obligatoria desde la primera entrega.
+10. Navegación web y PDF, enlaces, responsive, modo oscuro, interfaz y accesibilidad revisados; incidencias y capturas pendientes registradas.
+
+**No forman parte de esta entrega inicial:** las seis tareas evaluables anuales de Moodle, los treinta proyectos completos de repaso ni sus soluciones. Solo sus espacios públicos de repaso estarán creados.
