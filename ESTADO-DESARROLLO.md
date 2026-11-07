@@ -4,7 +4,7 @@
 
 Encargo integral autorizado en main. Orden obligatorio: JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring.
 
-**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: publicado y preparado para revisión docente. Ficheros: en desarrollo. Hibernate y Spring pendientes.**
+**JDBC: publicado y preparado para revisión docente. Firestore: publicado y preparado para revisión docente. MongoDB: publicado y preparado para revisión docente. Ficheros: validación local completa, publicación en comprobación. Hibernate y Spring pendientes.**
 
 ## Avances confirmados
 
@@ -105,8 +105,24 @@ Pendiente confirmar el nuevo commit en Actions/Pages: la prueba local no reprodu
 
 `7eabc8f` resolvió la compatibilidad de CI: Actions [42413255221](https://github.com/MJSPlayground/fp-dam2-acda/actions/runs/42413255221) build y deploy correctos. Pages real comprobado: tres páginas MongoDB, cuatro ZIP íntegros con Compose y PDF Mongo23/global81 páginas con HTTP200. La publicación tardó más de lo habitual, pero terminó correctamente; no se omitieron pruebas ni se reescribió historial.
 
-Ficheros comienza después de esa comprobación. Trabajo local en curso, todavía pendiente del commit del hito Ficheros: traslado de27 Markdown históricos desde `docs/ficheros/` a `referencias/ficheros-historico/`, con rutas absolutas verificadas dentro del repositorio y sin sobrescribir destinos. Así se conservarán en Git sin aparecer como apuntes actuales en publicación/búsqueda. Las capturas antiguas también se están identificando como históricas en el trabajo local. Se preparan cuatro proyectos nuevos reutilizando componentes válidos del código anterior; no se borran los proyectos antiguos.
+Ficheros comienza después de esa comprobación. Traslado consolidado con el hito Ficheros de27 Markdown históricos desde `docs/ficheros/` a `referencias/ficheros-historico/`, con rutas absolutas verificadas dentro del repositorio y sin sobrescribir destinos. Así se conservarán en Git sin aparecer como apuntes actuales en publicación/búsqueda. Las capturas antiguas también quedan archivadas como referencia histórica. Se preparan cuatro proyectos nuevos reutilizando componentes válidos del código anterior; no se borran los proyectos antiguos.
 
 QA JDBC adicional local, pendiente de consolidar con este hito: misma prueba JavaFX ampliada para cancelar/confirmar eliminación, Cancel seguro, evento Escape, vender2, actualizar stock/historial y rechazar borrar producto vendido. Suite `qa.ui=true`:8servicio+1UI correctas. Escape es evento JavaFX automatizado, no una tecla física ni Run en IntelliJ.
 
-Al retomar desde una copia limpia de GitHub, el último hito completo es MongoDB. Los traslados y el nuevo Ficheros solo estarán disponibles en GitHub al consolidar ese tema; comprobar primero `git status` si se retoma en este mismo equipo.
+Al retomar, comprobar primero estado Git y el último workflow: el código Ficheros está consolidado en este hito, pero su publicación solo se considera confirmada cuando Actions y Pages estén comprobados.
+
+## Ficheros: entrega técnica consolidada
+
+- Diez páginas conformes al índice; un inventario JavaFX incremental y una final Base/Aplicación/Reto. CSV RFC4180/UTF8, Jackson con objetos/array y binario principal Serializable; Repository/Service, validaciones, causas y SLF4J/Log4j2 desde el comienzo. Listado simple sin recursión compleja; RandomAccessFile queda en demostración breve.
+- XML/DOM seguro, streaming, WatchService y escrituras fiables desarrollados en Ampliación. Dos clases de demostración y cinco pruebas reales correctas; cinco fichas de repaso En preparación.
+- Cuatro proyectos nuevos `proyectos/ficheros/{guiado,final}-{inicial,solucion}`. Históricos preservados sin presentarlos como actuales. Inicial final conserva núcleo guiado y deja pendientes exportación filtrada, conciliación/incidencias, preview/aplicación/recuperación. Datos y criterios verificables4 productos/4 incidencias/P01=12.
+- Paquetes y recursos reales comprobados: CSV con comillas, Unicode y LF; muestras CSV/JSON3 productos y lote correcto; corregido CRCRLF. JSON rechaza rangos, fracciones, campos ausentes/null, coerciones y claves duplicadas; lectura simplificada a Producto[].class coherente con teoría. Binario rechaza clases ajenas/arrays grandes; valida catálogo antes de reemplazarlo.
+- Fallos de carga/escritura conservan catálogo/archivo anterior; no se sobrescriben respaldos previos. Recuperación y respaldo fallido comprobados. Corregida selección de último BIN al recuperar tras aplicar sin exigir deseleccionar CSV.
+- JavaFX real en cuatro variantes: `.\mvnw.cmd -q '-Dqa.ui=true' test` → guiado inicial2, guiado solución15, final inicial2, final solución16 correctas sin omisiones. Default desde ZIP suma los mismos casos pero omite una UI por proyecto, de forma explícita.
+- UI: alta, edición, cancelación, confirmaciones de carga/guardado/borrado y Escape automatizado, formatos3, precio/stock, nombres CSV multilínea preservados, JSON inválido, filtros, preview/aplicar/recovery/exportincidencias. Formulario contextual desplazable tras detectar recorte real al reducir ventana; captura compacta886×523 y normal revisadas. Cuatro Launcher.main ejecutados vía Maven y detenidos; no Run dentro IntelliJ.
+- Figura propia de rutas vertical400×444 y fuente18, móvil/PDF revisados. Cinco casillas del recorrido usan el componente existente, con persistencia y reinicio; se corrigió Markdown que se mostraba como texto.
+- Exportador sin incidencias: Ficheros26 páginas, global105, Ayuda8. Muestras renderizadas de figura, código, teoría, práctica y Ampliación revisadas.
+- `package_projects.py` genera16ZIP exactos; guardias contra ZIP obsoletos y diferencias con fuentes. Todos compilados/probados desde copias limpias. `check_site_ui.py` conserva navegación/foco/figuras/reduced-motion y adapta controles al itinerario actual, sin depender del codelab histórico. `check_links.py`:46 páginas/867 enlaces/662 fragmentos válidos,315 entradas de búsqueda exclusivamente del nav vigente. Las27 páginas archivadas no están publicadas ni indexadas.
+- QA adicional JDBC de diálogos se consolida también en este hito; no cambia producción.
+
+**Pendiente:** Actions y Pages del hito Ficheros; después Hibernate. Revisión pedagógica humana final, ejecución manual en IntelliJ y capturas de aula siguen pendientes donde está indicado.

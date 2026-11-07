@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 from pathlib import Path
+import json
+import tomllib
 from urllib.parse import unquote, urljoin, urlparse
 from bs4 import BeautifulSoup
 
@@ -9,6 +11,29 @@ ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
 PREFIX = "/fp-dam2-acda/"
 REPO = "github.com"
+
+
+def check_search_index():
+    with (ROOT / "zensical.toml").open("rb") as handle:
+        navigation = tomllib.load(handle)["project"]["nav"]
+    allowed = {""}
+
+    def visit(node):
+        if isinstance(node, str) and node.endswith(".md"):
+            path = Path(node)
+            allowed.add((path.parent if path.name == "index.md" else path.with_suffix("")).as_posix().strip("./"))
+        elif isinstance(node, list):
+            for entry in node:
+                visit(entry)
+        elif isinstance(node, dict):
+            for entry in node.values():
+                visit(entry)
+
+    visit(navigation)
+    index = json.loads((SITE / "search.json").read_text(encoding="utf-8"))
+    locations = {unquote(urlparse(item["location"]).path).strip("/") for item in index["items"]}
+    assert locations <= allowed, "La búsqueda incluye páginas fuera del itinerario vigente: " + ", ".join(sorted(locations - allowed))
+    return len(index["items"])
 
 
 def check():
@@ -49,7 +74,8 @@ def check():
                 assert local.exists(), f"Proyecto enlazado inexistente: {rel} → {target}"
                 comprobados += 1
     assert not missing_fragments, "Fragmentos HTML rotos:\n" + "\n".join(missing_fragments)
-    print(f"OK: {len(pages)} páginas, {comprobados} enlaces internos/proyectos y {fragmentos} fragmentos HTML comprobados")
+    search_items = check_search_index()
+    print(f"OK: {len(pages)} páginas, {comprobados} enlaces internos/proyectos, {fragmentos} fragmentos HTML y {search_items} entradas de búsqueda vigentes")
 
 
 if __name__ == "__main__":

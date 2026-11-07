@@ -1,6 +1,6 @@
 # Acceso a Datos · 2.º DAM
 
-Web pública de aprendizaje de Acceso a Datos de MJS Playground. [CONTENIDOS_ACDA.md](CONTENIDOS_ACDA.md) es el **índice aprobado** y la referencia de contenidos y metodología. El sitio está en proceso de revisión: el material histórico publicado puede no coincidir todavía con el nuevo índice. Consulta [PLAN-DESARROLLO.md](PLAN-DESARROLLO.md) para el orden de implementación **JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring**, los hitos, el trabajo directo en `main` y el control de calidad. Cada tema tendrá un proyecto guiado incremental y una práctica final con tres niveles; los cinco proyectos opcionales de repaso por tema quedan pendientes.
+Web pública de aprendizaje de Acceso a Datos de MJS Playground. [CONTENIDOS_ACDA.md](CONTENIDOS_ACDA.md) es el **índice aprobado** y la referencia de contenidos y metodología. El sitio está en proceso de revisión: los temas pendientes muestran su estado de construcción. Consulta [PLAN-DESARROLLO.md](PLAN-DESARROLLO.md) para el orden de implementación **JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring**, los hitos, el trabajo directo en `main` y el control de calidad. Cada tema tendrá un proyecto guiado incremental y una práctica final con tres niveles; los cinco proyectos opcionales de repaso por tema quedan pendientes.
 
 **Web:** https://mjsplayground.github.io/fp-dam2-acda/
 
@@ -29,7 +29,7 @@ Abre http://127.0.0.1:8000/fp-dam2-acda/. Los PDF se generan en `docs/descargas/
 
 `docs/` contiene la portada, una carpeta por tema (`ficheros`, `hibernate`, `spring`, `jdbc`, `firestore`, `mongodb`) y `ayuda/`. Al desarrollar contenidos, los bloques y páginas se añadirán dentro de su tema siguiendo el índice aprobado y se registrarán en `zensical.toml`. Rutas, paquetes Java y PDF usarán identificadores temáticos estables.
 
-Los proyectos del tema histórico de ficheros están en `proyectos/ficheros/` y serán adaptados al nuevo alcance cuando corresponda. No se incluyen evaluaciones reservadas, datos del alumnado ni credenciales.
+Las páginas históricas de Ficheros se conservan en `referencias/ficheros-historico/`, fuera de la publicación y del buscador. Los proyectos históricos permanecen en `proyectos/ficheros/` como fuente de componentes reutilizables. No se incluyen evaluaciones reservadas, datos del alumnado ni credenciales.
 
 Los proyectos publicados de cada tema se organizan en `guiado-inicial`, `guiado-solucion`, `final-inicial` y `final-solucion`. El [registro de desarrollo](ESTADO-DESARROLLO.md) identifica los temas disponibles, commits, pruebas reales y límites pendientes. Los ZIP individuales se generan en `site/descargas/codigo/`; para probarlos desde carpetas limpias, ejecuta `scripts/test_project_packages.py` con el Python del entorno.
 

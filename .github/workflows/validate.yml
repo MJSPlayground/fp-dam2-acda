@@ -42,10 +42,10 @@ jobs:
           java-version: '25'
       - name: Probar proyectos Java
         run: |
-          (cd proyectos/ficheros/codelab-inicial && ./mvnw test --batch-mode)
-          (cd proyectos/ficheros/codelab-solucion && ./mvnw test --batch-mode)
-          (cd proyectos/ficheros/inicial && ./mvnw test --batch-mode)
-          (cd proyectos/ficheros/solucion && ./mvnw test --batch-mode)
+          (cd proyectos/ficheros/guiado-inicial && sh mvnw test --batch-mode)
+          (cd proyectos/ficheros/guiado-solucion && sh mvnw test --batch-mode)
+          (cd proyectos/ficheros/final-inicial && sh mvnw test --batch-mode)
+          (cd proyectos/ficheros/final-solucion && sh mvnw test --batch-mode)
           (cd proyectos/jdbc/guiado-inicial && sh mvnw test --batch-mode)
           (cd proyectos/jdbc/guiado-solucion && sh mvnw test --batch-mode)
           (cd proyectos/jdbc/final-inicial && sh mvnw test --batch-mode)
@@ -87,6 +87,8 @@ jobs:
         run: python scripts/check_site_ui.py
       - name: Probar páginas y cuatro descargas de JDBC
         run: python scripts/check_jdbc_ui.py
+      - name: Probar páginas y cuatro descargas de Ficheros
+        run: python scripts/check_ficheros_ui.py
       - name: Probar páginas y cuatro descargas de Firestore
         run: python scripts/check_firestore_ui.py
       - name: Probar páginas y cuatro descargas de MongoDB

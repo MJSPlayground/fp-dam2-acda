@@ -9,7 +9,12 @@ site_dir = "site"
 extra_css = ["stylesheets/colors.css", "stylesheets/extra.css"]
 extra_javascript = ["javascripts/extra.js"]
 nav = [
-  { "Ficheros" = [{ "Ficheros" = "ficheros/index.md" }] },
+  { "Ficheros" = [
+    { "Ficheros" = "ficheros/index.md" },
+    "ficheros/rutas.md", "ficheros/texto-csv.md", "ficheros/json.md", "ficheros/binarios.md",
+    "ficheros/arquitectura.md", "ficheros/proyecto.md", "ficheros/practica-final.md",
+    "ficheros/repaso.md", "ficheros/ampliacion.md",
+  ] },
   { "Hibernate" = [{ "Hibernate" = "hibernate/index.md" }] },
   { "Spring" = [{ "Spring" = "spring/index.md" }] },
   { "JDBC" = [

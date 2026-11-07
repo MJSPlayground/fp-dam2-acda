@@ -1,77 +1,88 @@
-﻿# Sistemas de ficheros y rutas
+﻿# Ficheros, directorios y rutas
 
-Antes de leer un archivo, un programa debe saber **dónde buscarlo**. Un sistema de ficheros organiza entradas en una estructura de directorios. Un *archivo* conserva bytes (por ejemplo, un CSV o una imagen); un *directorio* agrupa entradas, que a su vez pueden ser archivos u otros directorios. El nombre `clientes.csv` identifica una entrada dentro de su carpeta, pero por sí solo no dice en qué carpeta está.
+Un programa puede tener productos en memoria mientras está abierto. Para recuperarlos después necesita guardarlos en algún almacenamiento. En este tema utilizamos archivos: cada uno conserva bytes en un sistema de ficheros, organizado mediante directorios.
 
-```text
-entregas/
-├── clientes.csv
-├── notas.txt
-└── historico/
-    └── clientes-2025.csv
-```
-
-La ruta `entregas/historico/clientes-2025.csv` describe cómo llegar al archivo desde un punto de partida. El diagrama también muestra por qué `clientes.csv` y `historico/clientes-2025.csv` no son el mismo archivo.
+Un directorio agrupa entradas que pueden ser otros directorios o archivos. El nombre `catalogo.csv` identifica una entrada dentro de su carpeta; para encontrarla necesitamos una **ruta**.
 
 <figure class="mjs-figure" markdown="span">
-  ![El directorio trabajo-codelab se divide en entrada con los archivos examinados y salida con las copias y el informe.](../assets/figures/rutas-bloque1.svg)
-  <figcaption>Figura 1. Separar entrada y salida evita que el informe se incluya en su propio inventario.</figcaption>
+  ![La carpeta de trabajo contiene entrada con catalogo.csv y salida con una exportación JSON y una copia binaria.](figuras/rutas.svg)
+  <figcaption>Separar entradas y salidas ayuda a conservar el original. Esquema conceptual del trabajo con archivos, no una captura de la aplicación.</figcaption>
 </figure>
 
-## Ruta relativa, absoluta y directorio de trabajo
+## Representar una ruta con Path
 
-Una ruta **absoluta** comienza desde la raíz de un sistema de ficheros: en Windows podría ser `C:\datos\entregas`; en Linux, `/home/ana/entregas`. Una ruta **relativa**, como `entregas/clientes.csv`, necesita un punto de partida. Para un programa Java ese punto es el **directorio de trabajo del proceso**. IntelliJ permite configurarlo en la ejecución; no hay que suponer que sea siempre la carpeta donde está el `.java` ni `src/main/resources`.
-
-[`Path.of`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Path.html#of(java.lang.String,java.lang.String...)) crea un objeto `Path` a partir de uno o varios componentes. `Path.of("")` representa el directorio de trabajo como ruta relativa vacía. [`toAbsolutePath`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Path.html#toAbsolutePath()) permite ver dónde se interpretará:
+[`Path`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Path.html) representa una ubicación. No contiene los datos del archivo ni lo crea por sí solo. `Path.of` permite construirlo a partir de partes; `resolve` añade una ruta a otra.
 
 ```java
-System.out.println("Trabajo: " + Path.of("").toAbsolutePath());
-Path datos = Path.of("entregas", "clientes.csv"); // (1)!
-System.out.println("Buscaré: " + datos.toAbsolutePath());
+Path carpeta = Path.of("trabajo"); // (1)!
+Path catalogo = carpeta.resolve("entrada").resolve("catalogo.csv");
 ```
 
-1. `Path.of` solo representa la ruta. Si el archivo no existe, esta línea sigue funcionando; fallará después una operación física como `Files.size`.
+1. Aquí solo creamos un objeto que representa una ruta. La carpeta `trabajo` puede no existir; el acceso físico se realizará después con `Files`.
 
-Si el proceso arranca en `C:\proyectos\inventario`, la segunda línea termina en `C:\proyectos\inventario\entregas\clientes.csv`. En otro equipo cambiará el prefijo y quizá el separador. **Las llamadas anteriores solo construyen y muestran rutas; no comprueban si el archivo existe.** Para depurar un `NoSuchFileException`, imprime primero el directorio de trabajo y la ruta absoluta que intentaste abrir.
+El resultado representa `trabajo/entrada/catalogo.csv`, con los separadores adecuados al sistema. Los métodos devuelven nuevos objetos de ruta: construir `catalogo` no modifica `carpeta`.
 
-!!! tip "Separadores portables"
-    `Path.of("entregas", "historico", "clientes-2025.csv")` deja al proveedor del sistema elegir el separador. Evita incrustar `C:\...` en ejercicios que deben funcionar en otros equipos. El texto mostrado por `Path` puede usar `\` o `/`; no compares la salida completa con una ruta propia de otro sistema.
+Una ruta **absoluta** identifica su ubicación desde una raíz, como `C:\trabajo\entrada\catalogo.csv`. Una **relativa**, como la anterior, necesita un punto de partida. En Java se interpreta respecto al **directorio de trabajo del proceso**.
 
-## Construir y examinar una ruta
+## Directorio de trabajo y diagnóstico
 
-[`resolve`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Path.html#resolve(java.lang.String)) añade una ruta al final de otra y devuelve un **nuevo** `Path`; no modifica el original. Así puedes conservar la carpeta base y construir varias ubicaciones:
+IntelliJ permite seleccionar el directorio de trabajo en la configuración Run. No tiene por qué ser la carpeta del `.java`. Esta comprobación permite inspeccionar dónde buscará una ruta relativa:
 
 ```java
-Path entrada = Path.of("entregas");
-Path csv = entrada.resolve("historico").resolve("clientes-2025.csv");
-System.out.println(entrada);           // entregas
-System.out.println(csv.getFileName()); // clientes-2025.csv
-System.out.println(csv.getParent());   // entregas/historico
+Path trabajo = Path.of("").toAbsolutePath();
+Path catalogo = Path.of("trabajo", "entrada", "catalogo.csv").toAbsolutePath();
 ```
 
-[`getFileName`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Path.html#getFileName()) devuelve el último componente como `Path`; [`getParent`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Path.html#getParent()) devuelve lo anterior, o `null` si no hay padre en la representación. `resolve` con una segunda ruta absoluta devuelve esa ruta absoluta: si aceptas datos del usuario, comprueba que un nombre esperado como `clientes.csv` no se convierte por sorpresa en otra ubicación.
+Observa ambas variables en el depurador. Si el programa arranca desde otro lugar, cambia el prefijo de la segunda. Cuando un archivo parece haber desaparecido, comprueba primero si estabas buscando la misma ruta absoluta.
 
-[`normalize`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Path.html#normalize()) simplifica componentes `.` y `..` **solo en el texto de la ruta**:
+`getFileName()` devuelve el último componente; `getParent()`, el anterior. Para una ruta sencilla como `catalogo.csv`, el padre puede ser nulo. `normalize()` simplifica partes como `..` en la representación, pero no comprueba existencia ni permisos.
+
+## Files realiza operaciones reales
+
+[`Files`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html) ofrece métodos estáticos para consultar o modificar el sistema. Estos fragmentos utilizan rutas de una carpeta de experimentación; no debes apuntarlos a archivos importantes:
 
 ```java
-Path ruta = Path.of("entregas", "2025", "..", "clientes.csv");
-System.out.println(ruta.normalize()); // entregas/clientes.csv
+Path salida = Path.of("trabajo", "salida");
+Files.createDirectories(salida);
+Path copia = salida.resolve("catalogo-copia.csv");
+Files.copy(Path.of("trabajo", "entrada", "catalogo.csv"), copia);
 ```
 
-No crea carpetas, no sigue enlaces simbólicos y no garantiza que el archivo exista. [`toRealPath`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Path.html#toRealPath(java.nio.file.LinkOption...)) sí consulta el sistema y puede fallar con `IOException`. Para mostrar un nombre relativo al directorio inspeccionado, [`relativize`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Path.html#relativize(java.nio.file.Path)) calcula la parte restante: `entrada.relativize(csv)` produce `historico/clientes-2025.csv`. Ambas rutas deben ser compatibles (por ejemplo, ambas relativas).
+`createDirectories` prepara la carpeta y los padres necesarios. `copy` copia el contenido del origen y, sin una opción de reemplazo, rechaza que el destino ya exista. Esa protección obliga a decidir si queremos conservarlo antes de sobrescribir.
 
-## Representación frente a acceso real
+`Files.move(origen, destino)` mueve o renombra una entrada. `Files.delete(ruta)` elimina la entrada indicada y falla si no existe; `deleteIfExists` permite tratar la ausencia como un resultado normal. Estas operaciones no son demostraciones inocuas: deben probarse solo con datos de trabajo y confirmación de la aplicación cuando corresponda.
 
-`Path` es como escribir una dirección en un papel. [`Files`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html) es la clase que crea, lee, copia o borra entradas físicas. `Path.of("desconocido.csv")` funciona aunque el archivo no exista; `Files.size` sobre esa ruta normalmente lanzará `NoSuchFileException`. Un archivo puede desaparecer o cambiar de permisos entre una comprobación y la operación siguiente. Por eso `Files.exists` sirve para informar, pero no sustituye el tratamiento de excepciones en la operación real.
+`Files.isRegularFile(ruta)` comprueba si una entrada representa un archivo regular; `Files.isDirectory` comprueba directorios. Una propiedad puede cambiar entre la consulta y la operación siguiente: `exists` no garantiza que una lectura posterior vaya a funcionar. La operación real siempre debe tratar su error.
 
-## Recursos incluidos en la aplicación
+## Listar el primer nivel sin recorrer todo el árbol
 
-Un archivo en `src/main/resources/data/` se empaqueta en el **classpath**: es adecuado para datos de muestra de solo lectura. Se localiza por su nombre lógico, incluso cuando la aplicación está dentro de un JAR. No se debe tratar como carpeta externa modificable.
+Para ofrecer los archivos CSV de una carpeta, basta con recorrer sus entradas directas. `DirectoryStream` permite hacerlo con un bucle y se cierra mediante `try-with-resources`:
 
 ```java
-try (InputStream entrada = Ejemplo.class.getResourceAsStream("/data/clientes.csv")) {
-    if (entrada == null) throw new FileNotFoundException("Falta /data/clientes.csv");
-    // En el bloque de texto aprenderemos a leer su contenido.
+try (DirectoryStream<Path> entradas = Files.newDirectoryStream(carpeta)) {
+    for (Path entrada : entradas) {
+        if (Files.isRegularFile(entrada)
+                && entrada.getFileName().toString().toLowerCase(Locale.ROOT).endsWith(".csv")) {
+            // La interfaz puede añadir esta ruta al listado.
+        }
+    }
 }
 ```
 
-[`getResourceAsStream`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Class.html#getResourceAsStream(java.lang.String)) devuelve `null` si no encuentra el recurso. Para un inventario, copias o informes que el usuario modifica, usaremos **rutas externas** entregadas como argumentos.
+Este fragmento supone una variable `carpeta` válida. Solo observa archivos del primer nivel; no entra en subdirectorios ni calcula estadísticas de un árbol. Convertir el nombre a minúsculas permite reconocer también `.CSV`, sin cambiar el nombre real del archivo. La [referencia de DirectoryStream](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/DirectoryStream.html) explica su ciclo de vida.
+
+No debe utilizarse este listado para dar apariencia de que un producto ya se ha importado. Seleccionar una ruta y leer su contenido son acciones distintas.
+
+## Permisos y excepciones
+
+Una operación puede fallar porque no existe la entrada, se deniega el acceso, el destino está ocupado o el formato no se puede interpretar. Las operaciones de ficheros pueden lanzar `IOException` y subtipos más concretos.
+
+El programa debe informar de qué operación falló y conservar la causa para diagnosticarla. Una carpeta inaccesible no equivale a un listado vacío. En [arquitectura y errores](arquitectura.md) veremos cómo comunicarlo mediante servicios, excepciones propias y logging, sin llenar la aplicación de `System.out.println`.
+
+## Recursos incluidos y datos modificables
+
+Los ejemplos de `src/main/resources/data/` pertenecen al **classpath**: se empaquetan con la aplicación y se leen como recursos. No deben utilizarse como destino para el catálogo que modifica el usuario.
+
+Para leer uno se utiliza `getResourceAsStream("/data/productos.csv")` sobre una clase del proyecto y se comprueba que el resultado no sea nulo. Los datos guardados por el usuario van a una ruta externa elegida en la interfaz. El [proyecto guiado](proyecto.md) muestra qué parte está preparada y dónde completar el listado.
+
+Continúa con [texto y CSV](texto-csv.md).

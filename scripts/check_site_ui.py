@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import functools
 import io
-import zipfile
 import threading
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -107,114 +106,89 @@ def check():
                     page.locator(".md-header__button.md-logo").click()
                     assert page.url == base, "El logo no vuelve a la portada"
                     print(f"OK {PREFIX}{path}: enlaces, recursos y {len(names)} descargas", flush=True)
-                for path in ("ficheros/rutas/", "ficheros/guiada-csv/", "ficheros/final-gestor/", "ficheros/ampliacion-watchservice/"):
+                captures = SITE.parent / "qa-captures"
+                captures.mkdir(exist_ok=True)
+                current_pages = ("ficheros/rutas/", "ficheros/texto-csv/", "ficheros/proyecto/", "ficheros/practica-final/", "ficheros/ampliacion/")
+                for path in current_pages:
                     response = page.goto(base + path, wait_until="load")
                     assert response and response.ok and page.locator("h1").is_visible(), path
                     assert page.locator(".md-sidebar--primary").count() == 1, path
                     assert page.locator(".md-tabs__link").count() == len(SECTIONS), path
-                page.goto(base + "ficheros/rutas/", wait_until="load")
-                assert page.locator(".md-annotation").count() >= 1
-                assert page.locator(".md-tooltip__inner").filter(has_text="Path.of").count() >= 1
                 tabs = page.locator(".md-tabs__link").all()
-                assert all(tab.bounding_box() and tab.bounding_box()["x"] + tab.bounding_box()["width"] <= 1366 for tab in tabs), "Pestañas desbordadas a 1366 px"
+                assert all(tab.bounding_box() and tab.bounding_box()["x"] + tab.bounding_box()["width"] <= 1366 for tab in tabs), "Pestañas desbordadas"
                 page.set_viewport_size({"width": 768, "height": 900})
                 page.reload(wait_until="load")
-                assert page.locator("h1").is_visible(), "Contenido no visible en pantalla menor"
-                # Piloto Bloque 1: pie nativo, figuras y codelab en varios tamaños.
-                captures = SITE.parent / "qa-captures"
-                captures.mkdir(exist_ok=True)
+                assert page.locator("h1").is_visible()
                 for width in (1366, 390):
                     page.set_viewport_size({"width": width, "height": 844})
-                    for path, expected in (("ficheros/", 1), ("hibernate/", 2)):
+                    for path, expected in (("ficheros/", 1), ("ficheros/rutas/", 2)):
                         page.goto(base + path, wait_until="load")
                         links = page.locator(".md-footer__link")
                         assert links.count() == expected, path
                         boxes = [link.bounding_box() for link in links.all()]
                         assert all(box and box["width"] <= 280 and box["height"] < 100 for box in boxes), (path, width, boxes)
-                        assert all(link.locator(".md-footer__title").is_visible() for link in links.all()), (path, width, "Título del pie oculto")
+                        assert all(link.locator(".md-footer__title").is_visible() for link in links.all()), path
                         if expected == 1:
-                            assert boxes[0]["x"] + boxes[0]["width"] > width - 90, "El enlace único siguiente debe quedar a la derecha"
+                            assert boxes[0]["x"] + boxes[0]["width"] > width - 90
                         elif width > 600:
-                            assert boxes[0]["x"] + boxes[0]["width"] < boxes[1]["x"], "Los enlaces deben ocupar extremos opuestos"
-                        assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 2"), (path, width)
-                    page.goto(base + "ficheros/rutas/", wait_until="load")
-                    figure = page.locator("figure.mjs-figure")
-                    assert figure.evaluate("el => Math.abs((el.getBoundingClientRect().left + el.getBoundingClientRect().right) / 2 - (el.parentElement.getBoundingClientRect().left + el.parentElement.getBoundingClientRect().right) / 2) < 3"), "La figura no está centrada"
-                    page.goto(base + "ficheros/", wait_until="load")
-                    page.screenshot(path=str(captures / f"footer-unico-{width}.png"), full_page=True)
-                page.goto(base + "hibernate/", wait_until="load")
+                            assert boxes[0]["x"] + boxes[0]["width"] < boxes[1]["x"]
+                        assert page.evaluate("document.documentElement.scrollWidth <= innerWidth + 2"), path
+                    page.screenshot(path=str(captures / f"ficheros-navegacion-{width}.png"), full_page=True)
+                sequence = ("rutas", "texto-csv", "json", "binarios", "arquitectura", "proyecto", "practica-final", "repaso", "ampliacion")
+                for previous, following in zip(sequence, sequence[1:]):
+                    page.goto(base + f"ficheros/{previous}/", wait_until="load")
+                    next_link = page.locator(".md-footer__link--next")
+                    assert next_link.get_attribute("href") and next_link.evaluate("el => el.href") == base + f"ficheros/{following}/", (previous, following)
                 page.locator(".md-footer__link--next").focus()
                 assert page.locator(".md-footer__link--next").evaluate("el => getComputedStyle(el).outlineStyle !== 'none'")
+                page.set_viewport_size({"width": 1366, "height": 844})
                 page.goto(base + "ficheros/rutas/", wait_until="load")
-                page.locator("figure.mjs-figure img").hover()
+                assert page.locator(".md-annotation").count() >= 1, "La anotación preparada no se ha renderizado"
+                figure = page.locator("figure.mjs-figure").first
+                picture = figure.locator("img").first
+                assert picture.evaluate("img => img.complete && img.naturalWidth > 0")
+                assert picture.get_attribute("alt") and figure.locator("figcaption").inner_text().strip()
+                assert figure.evaluate("el => Math.abs((el.getBoundingClientRect().left + el.getBoundingClientRect().right) / 2 - (el.parentElement.getBoundingClientRect().left + el.parentElement.getBoundingClientRect().right) / 2) < 3"), "Figura descentrada"
+                picture.hover()
                 page.wait_for_timeout(300)
-                assert page.locator("figure.mjs-figure img").evaluate("el => getComputedStyle(el).transform !== 'none'")
+                assert picture.evaluate("el => getComputedStyle(el).transform !== 'none'")
                 page.emulate_media(reduced_motion="reduce")
-                assert page.locator("figure.mjs-figure img").evaluate("el => getComputedStyle(el).transform === 'none'")
+                assert picture.evaluate("el => getComputedStyle(el).transform === 'none'")
                 page.emulate_media(reduced_motion="no-preference")
-                page.screenshot(path=str(captures / "rutas-desktop.png"), full_page=True)
-                page.goto(base + "ficheros/guiada-directorios/", wait_until="load")
-                assert page.locator(".mjs-task input[type=checkbox]").count() == 11
-                cards = page.locator("a.mjs-code-resource")
-                assert cards.count() == 2
-                assert page.locator("a.mjs-resource-source").count() == 2
-                assert page.locator("article").get_by_text("Generador de datos", exact=True).count() == 0
-                for i, kind in enumerate(("inicial", "solucion")):
-                    filename = f"inventario-directorios-{kind}.zip"
-                    card = cards.nth(i)
-                    assert card.get_attribute("href") == f"{PREFIX}descargas/codigo/{filename}"
-                    assert card.locator(".mjs-code-resource__format").inner_text() == "ZIP"
-                    card.focus()
-                    page.keyboard.press("Tab")
-                    page.keyboard.press("Shift+Tab")
-                    assert card.evaluate("el => el.matches(':focus-visible') && getComputedStyle(el).outlineStyle !== 'none'"), kind
-                    with page.expect_download() as info:
-                        card.click()
-                    downloaded = info.value
-                    assert downloaded.suggested_filename == filename and downloaded.failure() is None
-                    with zipfile.ZipFile(downloaded.path()) as archive:
-                        names = set(archive.namelist())
-                        assert archive.testzip() is None and {"pom.xml", "README.md", "mvnw", "mvnw.cmd", ".mvn/wrapper/maven-wrapper.jar", ".mvn/wrapper/maven-wrapper.properties"} <= names
-                        source = archive.read("src/main/java/es/mjsplayground/acda/ficheros/codelab/InventarioCodelab.java").decode()
-                        assert ("TODO 5" in source) == (kind == "inicial")
-                        assert ("Files.walkFileTree(" in source) == (kind == "solucion")
-                assert page.locator("figure.mjs-figure img").evaluate("img => img.complete && img.naturalWidth > 0")
+                page.goto(base + "ficheros/proyecto/", wait_until="load")
+                boxes = page.locator('.mjs-task input[type="checkbox"]')
+                total = boxes.count()
+                assert total > 0, "La guía no contiene la progresión preparada"
+                first = boxes.first
+                first.check()
+                assert page.locator(".mjs-progress-count").inner_text() == f"1 de {total} pasos"
+                page.reload(wait_until="load")
+                assert boxes.first.is_checked(), "No persiste el avance"
+                boxes.first.uncheck()
+                page.reload(wait_until="load")
+                assert not boxes.first.is_checked(), "No persiste el reinicio de la etapa"
+                assert page.locator(".mjs-progress-count").inner_text() == f"0 de {total} pasos"
                 details = page.locator("article details")
-                assert details.count() >= 2 and all(not details.nth(i).evaluate("el => el.open") for i in range(details.count()))
+                assert details.count() > 0, "Faltan las ayudas desplegables de la guía"
+                assert all(not details.nth(i).evaluate("el => el.open") for i in range(details.count()))
                 details.first.locator("summary").click()
                 assert details.first.evaluate("el => el.open")
-                box = page.locator("#b1-p1")
-                box.check()
-                assert "1 de 11" in page.locator(".mjs-progress-count").inner_text()
-                page.reload(wait_until="load")
-                assert page.locator("#b1-p1").is_checked(), "No persiste el avance"
-                page.locator("#b1-p1").uncheck()
-                page.screenshot(path=str(captures / "codelab-desktop.png"), full_page=True)
-                page.set_viewport_size({"width": 390, "height": 844})
-                page.reload(wait_until="load")
-                assert page.locator("h1").is_visible()
-                assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 2"), "Desbordamiento móvil"
-                assert cards.first.is_visible() and cards.first.bounding_box()["width"] <= 390
-                assert all(card.locator(".mjs-code-resource__format").evaluate("el => getComputedStyle(el).whiteSpace === 'nowrap'") for card in cards.all())
-                page.screenshot(path=str(captures / "codelab-mobile.png"), full_page=True)
-                page.goto(base + "ficheros/rutas/", wait_until="load")
-                assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 2"), "Figura desborda en móvil"
-                page.screenshot(path=str(captures / "rutas-mobile.png"), full_page=True)
-                page.set_viewport_size({"width": 1366, "height": 768})
-                page.locator('.md-header__option label:visible').click()
-                assert page.locator('body').get_attribute('data-md-color-scheme') == 'slate'
-                page.screenshot(path=str(captures / "rutas-dark.png"), full_page=True)
+                download = page.locator('article a[download]').first
+                download.focus()
+                page.keyboard.press("Tab")
+                page.keyboard.press("Shift+Tab")
+                assert download.evaluate("el => el.matches(':focus-visible') && getComputedStyle(el).outlineStyle !== 'none'")
                 for width in (1366, 390):
                     page.set_viewport_size({"width": width, "height": 844})
-                    page.goto(base + "ficheros/guiada-directorios/", wait_until="load")
-                    for scheme in ("slate", "default"):
-                        if page.locator("body").get_attribute("data-md-color-scheme") != scheme:
-                            page.locator('.md-header__option label:visible').click()
-                        assert page.locator("body").get_attribute("data-md-color-scheme") == scheme
-                        assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 2")
-                        assert all(card.is_visible() for card in cards.all())
-                        assert page.locator("figure.mjs-figure img").evaluate("img => img.complete && img.naturalWidth > 0")
-                        page.screenshot(path=str(captures / f"codelab-{width}-{scheme}.png"), full_page=True)
+                    for scheme in ("default", "slate"):
+                        for path in ("ficheros/rutas/", "ficheros/proyecto/"):
+                            page.goto(base + path, wait_until="load")
+                            if page.locator("body").get_attribute("data-md-color-scheme") != scheme:
+                                page.locator('.md-header__option label:visible').click()
+                            assert page.locator("body").get_attribute("data-md-color-scheme") == scheme
+                            assert page.evaluate("document.documentElement.scrollWidth <= innerWidth + 2")
+                            page.screenshot(path=str(captures / f"ficheros-{path.split('/')[1]}-{width}-{scheme}.png"), full_page=True)
+                            page.screenshot(path=str(captures / f"ficheros-{path.split('/')[1]}-{width}-{scheme}-viewport.png"))
                 assert not errors, "Errores JavaScript: " + "; ".join(errors)
                 print("OK: navegación, estilos, recursos y PDF verificados.", flush=True)
             finally:

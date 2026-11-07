@@ -12,7 +12,7 @@ Comprueba también **Settings → Build, Execution, Deployment → Build Tools �
 
 ## Importar el proyecto
 
-1. Descarga o clona el repositorio y descomprime el ZIP si corresponde. Identifica **la carpeta concreta del proyecto** que contiene `pom.xml`, por ejemplo `proyectos/ficheros/codelab-inicial`.
+1. Descarga o clona el repositorio y descomprime el ZIP si corresponde. Identifica **la carpeta concreta del proyecto** que contiene `pom.xml`, por ejemplo `proyectos/ficheros/guiado-inicial`.
 2. En IntelliJ, elige **File → Open** y selecciona esa carpeta. Confirma la apertura y espera a que Maven importe el `pom.xml` y sincronice las dependencias. La ventana Maven permite recargar el proyecto si la sincronización falla.
 3. En **File → Project Structure → Project**, selecciona el **JDK 25**. Si no aparece, añade el JDK instalado. Comprueba también que Maven en el IDE utilice ese JDK.
 

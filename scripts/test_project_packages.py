@@ -1,4 +1,4 @@
-"""Comprueba contenido y compilación real de ambos ZIP en carpetas limpias."""
+"""Comprueba contenido y compilación real de todos los ZIP vigentes en carpetas limpias."""
 from __future__ import annotations
 
 import os
@@ -78,15 +78,6 @@ def check(name: str) -> None:
                 check_postman_urls(collection["item"])
                 check_postman_scripts(collection)
                 assert b"sha256:db3c73bd50998abdfe17c80755597fc9a0601dedef1dfb7812dbc4133fc63a08" in archive.read("compose.yaml")
-            if name.startswith("inventario-directorios-"):
-                source = archive.read("src/main/java/es/mjsplayground/acda/ficheros/codelab/InventarioCodelab.java").decode()
-            if name == "inventario-directorios-inicial.zip":
-                assert "TODO 5" in source and "TODO 9" in source
-                assert "Files.walkFileTree(" not in source and "ExportadorCsv.guardar(informe, filas);" not in source
-                assert "src/test/java/es/mjsplayground/acda/ficheros/codelab/InventarioCodelabTest.java" not in names
-            elif name == "inventario-directorios-solucion.zip":
-                assert "TODO" not in source and "Files.walkFileTree(" in source
-                assert "src/test/java/es/mjsplayground/acda/ficheros/codelab/InventarioCodelabTest.java" in names
             archive.extractall(root)
         assert (root / "pom.xml").is_file() and (root / ".mvn/wrapper/maven-wrapper.properties").is_file()
         command = ["cmd", "/c", "mvnw.cmd", "test", "--batch-mode"] if os.name == "nt" else ["sh", "mvnw", "test", "--batch-mode"]

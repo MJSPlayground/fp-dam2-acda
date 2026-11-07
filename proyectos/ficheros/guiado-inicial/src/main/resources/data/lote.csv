@@ -1,0 +1,7 @@
+codigo,nombre,unidades,precio
+P01,Teclado,2,24.90
+P04,Cable,3,5.90
+P02,Nombre distinto,1,12.95
+DUP,Uno,1,1.00
+DUP,Dos,1,1.00
+BAD,Stock negativo,-1,1.00

@@ -1,0 +1,18 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 444" role="img" aria-labelledby="title desc">
+<title id="title">Rutas y archivos del inventario</title>
+<desc id="desc">La carpeta de trabajo contiene entrada con un catálogo CSV de lectura y salida con exportaciones y una copia binaria. El programa localiza los archivos mediante rutas.</desc>
+<rect width="400" height="444" rx="18" fill="#f1f5fb"/>
+<g font-family="sans-serif" fill="#172b4d">
+<rect x="22" y="18" width="356" height="58" rx="10" fill="#174c76"/>
+<text x="200" y="54" text-anchor="middle" font-size="22" fill="white">Carpeta de trabajo</text>
+<path d="M200 76V96H32V280H56M32 122H56" fill="none" stroke="#174c76" stroke-width="3"/>
+<rect x="56" y="104" width="322" height="128" rx="12" fill="white" stroke="#174c76" stroke-width="2"/>
+<text x="217" y="137" text-anchor="middle" font-size="22" font-weight="bold">entrada/</text>
+<text x="217" y="174" text-anchor="middle" font-size="20">catalogo.csv</text>
+<text x="217" y="208" text-anchor="middle" font-size="18">Datos que vamos a leer</text>
+<rect x="56" y="260" width="322" height="166" rx="12" fill="white" stroke="#174c76" stroke-width="2"/>
+<text x="217" y="293" text-anchor="middle" font-size="22" font-weight="bold">salida/</text>
+<text x="217" y="329" text-anchor="middle" font-size="20">exportacion.json</text>
+<text x="217" y="359" text-anchor="middle" font-size="20">copia.bin</text>
+<text x="217" y="399" text-anchor="middle" font-size="18">Archivos generados</text>
+</g></svg>

@@ -10,6 +10,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DESTINATION = ROOT / "site/descargas/codigo"
 PROJECTS = {
+    "inventario-guiado-inicial.zip": ROOT / "proyectos/ficheros/guiado-inicial",
+    "inventario-guiado-solucion.zip": ROOT / "proyectos/ficheros/guiado-solucion",
+    "inventario-final-inicial.zip": ROOT / "proyectos/ficheros/final-inicial",
+    "inventario-final-solucion.zip": ROOT / "proyectos/ficheros/final-solucion",
     "jugadores-guiado-inicial.zip": ROOT / "proyectos/mongodb/guiado-inicial",
     "jugadores-guiado-solucion.zip": ROOT / "proyectos/mongodb/guiado-solucion",
     "jugadores-final-inicial.zip": ROOT / "proyectos/mongodb/final-inicial",
@@ -22,8 +26,6 @@ PROJECTS = {
     "almacen-final-solucion.zip": ROOT / "proyectos/jdbc/final-solucion",
     "almacen-guiado-inicial.zip": ROOT / "proyectos/jdbc/guiado-inicial",
     "almacen-guiado-solucion.zip": ROOT / "proyectos/jdbc/guiado-solucion",
-    "inventario-directorios-inicial.zip": ROOT / "proyectos/ficheros/codelab-inicial",
-    "inventario-directorios-solucion.zip": ROOT / "proyectos/ficheros/codelab-solucion",
 }
 REQUIRED = {"pom.xml", "README.md", "mvnw", "mvnw.cmd", ".mvn/wrapper/maven-wrapper.properties", ".mvn/wrapper/maven-wrapper.jar"}
 EXCLUDED_DIRS = {"target", ".idea", ".m2-cache", ".venv", ".git", "trabajo-codelab", "qa-captures", "__pycache__", "node_modules", ".firebase", ".cache"}
@@ -66,6 +68,8 @@ def main() -> None:
     parser.add_argument("--check", action="store_true", help="Comprueba ZIP existentes sin generarlos")
     args = parser.parse_args()
     if args.check:
+        published = {path.name for path in DESTINATION.glob("*.zip")}
+        assert published == set(PROJECTS), f"Descargas distintas del manifiesto vigente: {published ^ set(PROJECTS)}"
         for name, project in PROJECTS.items():
             target = DESTINATION / name
             if not target.is_file():
@@ -79,9 +83,6 @@ def main() -> None:
                 assert names == set(current), f"ZIP desactualizado (archivos distintos): {name}"
                 for member, source_file in current.items():
                     assert archive.read(member) == source_file.read_bytes(), f"ZIP desactualizado: {name} → {member}"
-                if name == "inventario-directorios-inicial.zip":
-                    source = archive.read("src/main/java/es/mjsplayground/acda/ficheros/codelab/InventarioCodelab.java").decode("utf-8")
-                    assert "TODO 5" in source and "Files.walkFileTree(" not in source
             print(f"OK {name}: {target.stat().st_size} bytes")
     else:
         for name, project in PROJECTS.items():
