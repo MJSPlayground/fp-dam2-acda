@@ -2,13 +2,26 @@
 from __future__ import annotations
 
 import os
+import json
 import subprocess
 import sys
 import tempfile
 import zipfile
 from pathlib import Path
+from urllib.parse import parse_qsl, urlparse
 
 from package_projects import DESTINATION, EXCLUDED_DIRS, PROJECTS, REQUIRED
+
+
+def check_postman_urls(items):
+    """Postman ignores raw query text when a structured URL omits query[]."""
+    for item in items:
+        url = item.get("request", {}).get("url")
+        if isinstance(url, dict):
+            expected = set(key for key, _ in parse_qsl(urlparse(url.get("raw", "")).query))
+            actual = {parameter["key"] for parameter in url.get("query", []) if not parameter.get("disabled")}
+            assert expected <= actual, f"Parámetros Postman omitidos en {item['name']}: {expected - actual}"
+        check_postman_urls(item.get("item", []))
 
 
 def check(name: str) -> None:
@@ -23,6 +36,15 @@ def check(name: str) -> None:
             assert any(n.startswith("src/main/java/") and n.endswith(".java") for n in names)
             assert all(not (set(Path(item).parts) & EXCLUDED_DIRS) for item in names)
             assert all(not item.endswith((".zip", ".log", ".tmp", ".class")) for item in names)
+            if name.startswith("reservas-"):
+                assert {"firebase.json", "postman/reservas.postman_collection.json"} <= names
+                collection = json.loads(archive.read("postman/reservas.postman_collection.json"))
+                assert collection["info"]["schema"].endswith("/v2.1.0/collection.json")
+                assert collection["item"], "Colección Postman vacía"
+                check_postman_urls(collection["item"])
+                emulator = json.loads(archive.read("firebase.json"))
+                assert emulator["emulators"]["firestore"]["port"] == 8085
+                assert not any(b"-----BEGIN PRIVATE KEY-----" in archive.read(item) for item in names)
             if name.startswith("inventario-directorios-"):
                 source = archive.read("src/main/java/es/mjsplayground/acda/ficheros/codelab/InventarioCodelab.java").decode()
             if name == "inventario-directorios-inicial.zip":

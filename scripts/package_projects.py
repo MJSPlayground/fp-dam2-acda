@@ -10,6 +10,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DESTINATION = ROOT / "site/descargas/codigo"
 PROJECTS = {
+    "reservas-guiado-inicial.zip": ROOT / "proyectos/firestore/guiado-inicial",
+    "reservas-guiado-solucion.zip": ROOT / "proyectos/firestore/guiado-solucion",
+    "reservas-final-inicial.zip": ROOT / "proyectos/firestore/final-inicial",
+    "reservas-final-solucion.zip": ROOT / "proyectos/firestore/final-solucion",
     "almacen-final-inicial.zip": ROOT / "proyectos/jdbc/final-inicial",
     "almacen-final-solucion.zip": ROOT / "proyectos/jdbc/final-solucion",
     "almacen-guiado-inicial.zip": ROOT / "proyectos/jdbc/guiado-inicial",
@@ -18,7 +22,7 @@ PROJECTS = {
     "inventario-directorios-solucion.zip": ROOT / "proyectos/ficheros/codelab-solucion",
 }
 REQUIRED = {"pom.xml", "README.md", "mvnw", "mvnw.cmd", ".mvn/wrapper/maven-wrapper.properties", ".mvn/wrapper/maven-wrapper.jar"}
-EXCLUDED_DIRS = {"target", ".idea", ".m2-cache", ".venv", ".git", "trabajo-codelab", "qa-captures", "__pycache__"}
+EXCLUDED_DIRS = {"target", ".idea", ".m2-cache", ".venv", ".git", "trabajo-codelab", "qa-captures", "__pycache__", "node_modules", ".firebase", ".cache"}
 EXCLUDED_SUFFIXES = {".zip", ".log", ".tmp", ".bak", ".swp", ".pyc", ".iml", ".class", ".db", ".sqlite"}
 
 
@@ -58,7 +62,7 @@ def main() -> None:
     parser.add_argument("--check", action="store_true", help="Comprueba ZIP existentes sin generarlos")
     args = parser.parse_args()
     if args.check:
-        for name in PROJECTS:
+        for name, project in PROJECTS.items():
             target = DESTINATION / name
             if not target.is_file():
                 raise FileNotFoundError(target)
@@ -67,6 +71,10 @@ def main() -> None:
                 assert not archive.testzip(), f"ZIP corrupto: {name}"
                 assert REQUIRED <= names and any(n.startswith("src/main/java/") for n in names), name
                 assert all(included(Path(n)) for n in names), name
+                current = {p.relative_to(project).as_posix(): p for p in project.rglob("*") if p.is_file() and included(p.relative_to(project))}
+                assert names == set(current), f"ZIP desactualizado (archivos distintos): {name}"
+                for member, source_file in current.items():
+                    assert archive.read(member) == source_file.read_bytes(), f"ZIP desactualizado: {name} → {member}"
                 if name == "inventario-directorios-inicial.zip":
                     source = archive.read("src/main/java/es/mjsplayground/acda/ficheros/codelab/InventarioCodelab.java").decode("utf-8")
                     assert "TODO 5" in source and "Files.walkFileTree(" not in source

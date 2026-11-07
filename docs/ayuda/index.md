@@ -14,4 +14,6 @@ Se usarán Docker y Docker Compose para los servicios que requieran servidor, ad
 
 Para investigar fallos, lee los mensajes de error, utiliza el depurador y consulta los registros. Las credenciales y cuentas de servicio deben mantenerse fuera del repositorio y configurarse mediante los mecanismos indicados en cada proyecto. Las guías detalladas de pruebas, Postman y OpenAPI se publicarán con los contenidos que las utilizan.
 
+La guía de [depuración, registros y pruebas](diagnostico.md) explica cómo seguir una excepción, observar variables y distinguir pruebas superadas de pruebas omitidas.
+
 Vuelve a la [portada de Acceso a Datos](../index.md).

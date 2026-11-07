@@ -7,7 +7,7 @@ Web pública de aprendizaje de Acceso a Datos de MJS Playground. [CONTENIDOS_ACD
 ## Requisitos y desarrollo local
 
 - Python 3.11 o posterior y Chromium para Playwright.
-- Para los proyectos Java de `proyectos/ficheros/`: JDK 25 y Maven Wrapper incluido.
+- Para los proyectos Java de `proyectos/`: JDK 25 y Maven Wrapper incluido. Cada proyecto documenta sus servicios y opciones de ejecución en su README.
 
 En Windows, desde la raíz:
 
@@ -16,6 +16,8 @@ py -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe -m playwright install chromium --only-shell
 .\.venv\Scripts\python.exe scripts\export_pdfs.py
+.\.venv\Scripts\python.exe scripts\package_projects.py
+.\.venv\Scripts\python.exe scripts\package_projects.py --check
 .\.venv\Scripts\python.exe scripts\check_site_ui.py
 .\.venv\Scripts\python.exe scripts\check_links.py
 .\.venv\Scripts\zensical.exe serve
@@ -28,6 +30,8 @@ Abre http://127.0.0.1:8000/fp-dam2-acda/. Los PDF se generan en `docs/descargas/
 `docs/` contiene la portada, una carpeta por tema (`ficheros`, `hibernate`, `spring`, `jdbc`, `firestore`, `mongodb`) y `ayuda/`. Al desarrollar contenidos, los bloques y páginas se añadirán dentro de su tema siguiendo el índice aprobado y se registrarán en `zensical.toml`. Rutas, paquetes Java y PDF usarán identificadores temáticos estables.
 
 Los proyectos del tema histórico de ficheros están en `proyectos/ficheros/` y serán adaptados al nuevo alcance cuando corresponda. No se incluyen evaluaciones reservadas, datos del alumnado ni credenciales.
+
+Los proyectos publicados de cada tema se organizan en `guiado-inicial`, `guiado-solucion`, `final-inicial` y `final-solucion`. El [registro de desarrollo](ESTADO-DESARROLLO.md) identifica los temas disponibles, commits, pruebas reales y límites pendientes. Los ZIP individuales se generan en `site/descargas/codigo/`; para probarlos desde carpetas limpias, ejecuta `scripts/test_project_packages.py` con el Python del entorno.
 
 `scripts/export_pdfs.py` genera los PDF de cada sección y el temario completo. `scripts/check_site_ui.py` comprueba navegación, recursos y descargas con Chromium. Cada push a `main` puede validar y publicar el sitio en GitHub Pages. **El docente ha autorizado el rediseño directamente en `main`**, con commits y pushes frecuentes por hitos completos, validación previa y comprobación del despliegue. La revisión pedagógica se realizará sobre la web publicada antes de difundirla al alumnado. El workflow también admite ejecución manual.
 

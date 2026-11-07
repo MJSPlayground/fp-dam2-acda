@@ -17,9 +17,14 @@ nav = [
     "jdbc/conexiones.md", "jdbc/consultas.md", "jdbc/repositorios.md", "jdbc/transacciones.md",
     "jdbc/proyecto.md", "jdbc/practica-final.md", "jdbc/repaso.md", "jdbc/ampliacion.md",
   ] },
-  { "Firestore" = [{ "Firestore" = "firestore/index.md" }] },
+  { "Firestore" = [
+    { "Firestore" = "firestore/index.md" },
+    "firestore/documentos.md", "firestore/configuracion.md", "firestore/persistencia.md",
+    "firestore/consultas.md", "firestore/rest.md", "firestore/proyecto.md",
+    "firestore/practica-final.md", "firestore/repaso.md", "firestore/ampliacion.md",
+  ] },
   { "MongoDB" = [{ "MongoDB" = "mongodb/index.md" }] },
-  { "Ayuda" = ["ayuda/index.md", "ayuda/proyectos-maven.md"] },
+  { "Ayuda" = ["ayuda/index.md", "ayuda/proyectos-maven.md", "ayuda/diagnostico.md"] },
 ]
 
 [project.extra]

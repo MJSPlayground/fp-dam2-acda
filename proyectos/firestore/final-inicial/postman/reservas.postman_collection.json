@@ -1,0 +1,897 @@
+{
+  "info": {
+    "name": "Reservas · final-inicial",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Ejecuta carpetas en orden sobre emulador demo. Los TODO del inicial devuelven501 hasta completarse. Las pruebas de la solución requieren backend y emulador arrancados. El error500 se prueba apagando emulador y usando GET reservas; volver a arrancar después. No introduzcas credenciales. No ejecutar sobre datos reales."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8080"
+    },
+    {
+      "key": "sufijo",
+      "value": ""
+    },
+    {
+      "key": "fecha",
+      "value": ""
+    },
+    {
+      "key": "reservaId",
+      "value": ""
+    },
+    {
+      "key": "primeraId",
+      "value": ""
+    },
+    {
+      "key": "segundaId",
+      "value": ""
+    },
+    {
+      "key": "cursor",
+      "value": ""
+    },
+    {
+      "key": "idsEsperados",
+      "value": "[]"
+    },
+    {
+      "key": "primeraPaginaId",
+      "value": ""
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if(!pm.collectionVariables.get(\"sufijo\")){pm.collectionVariables.set(\"sufijo\",String(Date.now()));pm.collectionVariables.set(\"fecha\",\"2090-\"+String(1+Math.floor(Math.random()*12)).padStart(2,\"0\")+\"-\"+String(1+Math.floor(Math.random()*28)).padStart(2,\"0\"));}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "1 · CRUD y errores (guiado)",
+      "item": [
+        {
+          "name": "Espacios preparados",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/espacios"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear reserva",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"espacio\": \"SALA-A\", \"fecha\": \"{{fecha}}\", \"inicio\": 9, \"fin\": 10, \"responsable\": \"postman-{{sufijo}}\", \"asistentes\": 2, \"equipo\": [\"Proyector\"], \"detalles\": {\"notas\": \"Prueba Postman\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\",()=>pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"reservaId\",pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Leer reserva",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas/{{reservaId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar igualdad y rango",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas?espacio=SALA-A&fecha={{fecha}}&minAsistentes=2"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Filtro aplicado\",()=>{const filas=pm.response.json();pm.expect(filas.length).to.be.greaterThan(0);filas.forEach(r=>{pm.expect(r.espacio).to.eql(\"SALA-A\");pm.expect(r.fecha).to.eql(pm.collectionVariables.get(\"fecha\"));pm.expect(r.asistentes).to.be.at.least(2);});});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Mínimo de asistentes inválido 400",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/reservas?minAsistentes=0"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Query inválida rechazada\",()=>pm.response.to.have.status(400));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(400);pm.expect(e.mensaje).to.be.a(\"string\");pm.expect(e.ruta).to.eql(\"/api/reservas\");pm.expect(e.instante).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Modificar reserva",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas/{{reservaId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"espacio\": \"SALA-A\", \"fecha\": \"{{fecha}}\", \"inicio\": 9, \"fin\": 10, \"responsable\": \"postman-{{sufijo}}\", \"asistentes\": 3, \"equipo\": [\"Proyector\"], \"detalles\": {\"notas\": \"Prueba Postman\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Fecha imposible 400",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"espacio\": \"SALA-A\", \"fecha\": \"2030-02-30\", \"inicio\": 9, \"fin\": 10, \"responsable\": \"postman-{{sufijo}}\", \"asistentes\": 2, \"equipo\": [\"Proyector\"], \"detalles\": {\"notas\": \"Prueba Postman\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");pm.expect(e.ruta).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Capacidad excedida 400",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"espacio\": \"SALA-A\", \"fecha\": \"{{fecha}}\", \"inicio\": 9, \"fin\": 10, \"responsable\": \"postman-{{sufijo}}\", \"asistentes\": 13, \"equipo\": [\"Proyector\"], \"detalles\": {\"notas\": \"Prueba Postman\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");pm.expect(e.ruta).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Falta responsable 400",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"espacio\": \"SALA-A\", \"fecha\": \"{{fecha}}\", \"inicio\": 9, \"fin\": 10, \"responsable\": \"\", \"asistentes\": 2, \"equipo\": [\"Proyector\"], \"detalles\": {\"notas\": \"Prueba Postman\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");pm.expect(e.ruta).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "No existe 404",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas/no-existe-postman"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");pm.expect(e.ruta).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Eliminar reserva",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas/{{reservaId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\",()=>pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Leer eliminada 404",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas/{{reservaId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");pm.expect(e.ruta).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2 · Ampliación del sistema (final)",
+      "item": [
+        {
+          "name": "Crear primera franja",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"espacio\": \"SALA-A\", \"fecha\": \"{{fecha}}\", \"inicio\": 8, \"fin\": 9, \"responsable\": \"postman-{{sufijo}}\", \"asistentes\": 2, \"equipo\": [\"Proyector\"], \"detalles\": {\"notas\": \"Prueba Postman\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\",()=>pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"primeraId\",pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Conflicto parcial 409",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"espacio\": \"SALA-A\", \"fecha\": \"{{fecha}}\", \"inicio\": 8, \"fin\": 10, \"responsable\": \"otro-{{sufijo}}\", \"asistentes\": 2, \"equipo\": [\"Proyector\"], \"detalles\": {\"notas\": \"Prueba Postman\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 409\",()=>pm.response.to.have.status(409));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");pm.expect(e.ruta).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Franja adyacente permitida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"espacio\": \"SALA-A\", \"fecha\": \"{{fecha}}\", \"inicio\": 9, \"fin\": 10, \"responsable\": \"postman-{{sufijo}}\", \"asistentes\": 2, \"equipo\": [\"Proyector\"], \"detalles\": {\"notas\": \"Prueba Postman\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\",()=>pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"segundaId\",pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cupo diario 409",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"espacio\": \"SALA-B\", \"fecha\": \"{{fecha}}\", \"inicio\": 10, \"fin\": 11, \"responsable\": \"postman-{{sufijo}}\", \"asistentes\": 2, \"equipo\": [\"Proyector\"], \"detalles\": {\"notas\": \"Prueba Postman\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 409\",()=>pm.response.to.have.status(409));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");pm.expect(e.ruta).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Disponibilidad ocupada",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/disponibilidad?espacio=SALA-A&fecha={{fecha}}&inicio=8&fin=9"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Ocupado\",()=>pm.expect(pm.response.json().disponible).to.eql(false));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cancelar primera",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas/{{primeraId}}/cancelacion",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"motivo\": \"Cambio de agenda\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cancelar de nuevo idempotente",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas/{{primeraId}}/cancelacion",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"motivo\": \"Otro motivo\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Conserva motivo original\",()=>pm.expect(pm.response.json().motivoCancelacion).to.eql(\"Cambio de agenda\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "No editar cancelada 409",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas/{{primeraId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"espacio\": \"SALA-A\", \"fecha\": \"{{fecha}}\", \"inicio\": 8, \"fin\": 9, \"responsable\": \"postman-{{sufijo}}\", \"asistentes\": 2, \"equipo\": [\"Proyector\"], \"detalles\": {\"notas\": \"Prueba Postman\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 409\",()=>pm.response.to.have.status(409));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");pm.expect(e.ruta).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cancelar sin motivo400",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas/{{segundaId}}/cancelacion",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"motivo\": \"\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");pm.expect(e.ruta).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Disponibilidad liberada",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/disponibilidad?espacio=SALA-A&fecha={{fecha}}&inicio=8&fin=9"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Disponible\",()=>pm.expect(pm.response.json().disponible).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Filtrar canceladas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas?fecha={{fecha}}&estado=CANCELADA"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Solo canceladas del día\",()=>pm.response.json().forEach(r=>{pm.expect(r.estado).to.eql(\"CANCELADA\");pm.expect(r.fecha).to.eql(pm.collectionVariables.get(\"fecha\"));}));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listado para comprobar páginas",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/reservas"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Listado completo disponible\",()=>pm.response.to.have.status(200));",
+                  "const ids=pm.response.json().map(r=>r.id).sort();",
+                  "pm.test(\"Al menos dos reservas para paginar\",()=>pm.expect(ids.length).to.be.at.least(2));",
+                  "pm.collectionVariables.set(\"idsEsperados\",JSON.stringify(ids));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Primera página",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas/pagina?limite=1"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+                  "const p=pm.response.json(),ids=JSON.parse(pm.collectionVariables.get(\"idsEsperados\"));",
+                  "pm.test(\"Primera página respeta límite y orden\",()=>{pm.expect(p.elementos).to.have.lengthOf(1);pm.expect(p.elementos[0].id).to.eql(ids[0]);pm.expect(p.siguienteCursor).to.eql(ids[0]);});",
+                  "pm.collectionVariables.set(\"cursor\",p.siguienteCursor);",
+                  "pm.collectionVariables.set(\"primeraPaginaId\",p.elementos[0].id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Página siguiente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas/pagina?limite=1&cursor={{cursor}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+                  "const p=pm.response.json(),ids=JSON.parse(pm.collectionVariables.get(\"idsEsperados\"));",
+                  "pm.test(\"Segunda página continúa sin repetir\",()=>{pm.expect(p.elementos).to.have.lengthOf(1);pm.expect(p.elementos[0].id).to.eql(ids[1]);pm.expect(p.elementos[0].id).not.to.eql(pm.collectionVariables.get(\"primeraPaginaId\"));pm.expect(p.elementos[0].id > pm.collectionVariables.get(\"primeraPaginaId\")).to.be.true;pm.expect(p.siguienteCursor).to.eql(ids.length>2?ids[1]:null);});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Límite inválido400",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas/pagina?limite=0"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+                  "pm.test(\"Error estructurado\",()=>{const e=pm.response.json();pm.expect(e.estado).to.eql(pm.response.code);pm.expect(e.mensaje).to.be.a(\"string\");pm.expect(e.ruta).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Limpiar primera",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas/{{primeraId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\",()=>pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Limpiar segunda",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas/{{segundaId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\",()=>pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

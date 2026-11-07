@@ -6,6 +6,16 @@ Este archivo recoge **capturas auténticas, GIF y otros recursos visuales** que 
 
 ## Solicitudes concretas al docente
 
+### [Opcional · Pendiente] Firestore: dos configuraciones Run y colección Postman
+
+- **Páginas:** `docs/firestore/proyecto.md`, «Arranque desde IntelliJ» e «Importar la colección Postman».
+- **Objetivo:** reconocer que el emulador y la aplicación son dos procesos distintos; importar la colección preparada sin crear peticiones manualmente.
+- **Pasos:** abrir `reservas-guiado-solucion.zip` como Maven, ejecutar `config.Emulador.main` y mantenerlo activo en 8085; ejecutar `ReservasApplication.main` y abrir localhost:8080. Importar `postman/reservas.postman_collection.json` y mostrar una petición CRUD con su respuesta JSON. No mostrar credenciales ni una consola cloud privada.
+- **Herramientas:** IntelliJ IDEA y Postman; registrar las versiones exactas de aula.
+- **Destinos:** `docs/assets/capturas/firestore/intellij-emulador-aplicacion.webp` y `docs/assets/capturas/firestore/postman-reserva.webp`.
+- **Alt/pies:** «Configuraciones separadas de emulador y aplicación de reservas en IntelliJ»; «Colección preparada de reservas y respuesta de creación en Postman».
+- **Estado:** pendiente de captura dentro de las herramientas del aula; instrucciones textuales y colección importable disponibles. La validación automatizada utiliza el emulador real, Chromium y Newman, sin simular capturas de estas herramientas.
+
 ### [Opcional · Pendiente] JDBC: importar y arrancar desde IntelliJ
 
 - **Página y posición:** `docs/jdbc/proyecto.md`, «Preparar el proyecto».

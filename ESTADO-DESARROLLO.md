@@ -4,7 +4,7 @@
 
 Encargo integral autorizado en main. Orden obligatorio: JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring.
 
-**JDBC: publicado y preparado para revisión docente. Firestore: en desarrollo. Los otros cuatro temas siguen pendientes.**
+**JDBC: publicado y preparado para revisión docente. Firestore: validación local completa, publicación en comprobación. Los otros cuatro temas siguen pendientes.**
 
 ## Avances confirmados
 
@@ -44,6 +44,26 @@ Entorno: Windows, Temurin 25.0.4.1, Python 3.13.7; herramientas web mediante `.v
 
 Desarrollar Cloud Firestore completo (reservas, web preparada, API REST y colección Postman desde el primer hito), sin avanzar a MongoDB hasta pasar su puerta de calidad. Mantener commits y push directos en main según autorización vigente, sin pedir nueva aprobación entre temas.
 
-## Firestore en curso
+## Firestore: entrega técnica y comprobaciones
 
-Producción coordinada de cuatro proyectos con Firebase Admin SDK, emulador sin claves, web/REST/Postman; teoría completa y adaptación de QA/descargas. Docker instalado pero motor no disponible; no se asume persistencia verificada hasta ejecutar emulador real. No hay aún un hito Firestore listo para publicar.
+- Diez páginas conforme al índice: documentos, configuración, persistencia, consultas, REST, guía, práctica final, repaso5 y Ampliación5. Interfaz web preparada y cuatro proyectos en `proyectos/firestore/`.
+- Spring Boot 3.5.7, Firebase Admin 9.7.0 y Java 25 comprobados contra emulador oficial 1.22.0 (CLI 15.35.0), proyecto demo sin claves. Launcher `config.Emulador.main` verifica SHA256 oficial y evita instalar Maven global.
+- Final: cancelación idempotente, conflictos parciales de horario, cupo diario, consultas paginadas; infraestructura de coordinación resuelta, reglas en servicio. Starter final conserva CRUD guiado resuelto y no incluye soluciones de requisitos nuevos.
+- Fuentes Java formateadas. Cuatro `package` correctos. Default: guiado-solución9 pruebas más1 integración omitida; final-solución9 más3 omitidas; starters1 cada uno.
+- Suite con `qa.emulador=true`: 10 pruebas guiado y 12 final, sin omitidas; dos solicitudes simultáneas incompatibles admiten exactamente una y devuelven409 en la otra. Script CI exacto `scripts/test_firestore_emulator.sh` ejecutado con Git `sh`, correcto.
+- Arranque real de starters: guiado catálogo espacios200 y persistencia pendiente501; final conserva listado200/alta201/borrado204 y deja nuevas funciones en501.
+- `scripts/check_firestore_app.py` sobre guiado8080 y final8081: CRUD, formularios, cancelación/errores, JSON inválido y conservación exacta de lista con coma/salto de línea y mapa con varias claves al editar. Móvil390/escritorio1366, claro/oscuro; capturas reales inspeccionadas.
+- `npx --yes newman@6.2.3 run proyectos/firestore/guiado-solucion/postman/reservas.postman_collection.json --reporters cli --timeout-request 15000`:12 peticiones/19 aserciones correctas. Colección final:29 peticiones/48 aserciones correctas, incluidos filtros reales, min0, páginas/cursor, cupo, conflictos y cancelación. Todas las descargas incluyen colecciónv2.1 preparada.
+- HTTP real:400 JSON decimal rechazado,404 recurso/ruta,405 con Allow conservado,415 y errores estructurados. Corregida pérdida de filtros en URL Postman y añadido control para evitar regresión.
+- `scripts/check_firestore_ui.py`:9 páginas en cuatro combinaciones de tamaño/tema y4ZIP/Postman correctos. `scripts/check_jdbc_ui.py` sigue correcto. Enlaces53 páginas/161 destinos correctos.
+- PDF Firestore27 páginas, global59 y Ayuda6; muestras reales renderizadas de teoría, código, tablas, guía y seguridad inspeccionadas. Descarga con filename explícito corregida.
+- Auditoría didáctica independiente: corregidos TODO inexistente, listado del starter final, soluciones nuevas filtradas, HTTP405, tipos decimales y edición destructiva de mapas/listas. Sin defectos materiales residuales en última ronda de lectura.
+- Ayuda ampliada: JDK25, configuración Run/autoimportación/atajos, depuración, logging y pruebas; fuentes oficiales enlazadas y captura IDE pendiente registrada.
+
+Fallo técnico real comprobado: emulador detenido → HTTP 500 estructurado en 0,34 s, sin lista vacía ni stack trace; `config.Emulador.main` verificó SHA256 y arrancó el proceso Java en 8085, recuperándose la API. Editor JSON y calendario oscuro comprobados de nuevo. `package_projects.py --check` compara ahora nombres y bytes contra las fuentes para detectar ZIP obsoletos.
+
+Última ronda limpia terminada: `test_project_packages.py` correcto para los diez ZIP exactos, cada uno extraído y probado con su Wrapper; checkers global/JDBC/Firestore/enlaces correctos. UI final también comprobada: ocupado → cancelar con motivo → libre, filtros de estado/fecha/responsable y botones de paginación.
+
+**Pendiente:** comprobar Actions y Pages del hito Firestore. IAM, Firebase Authentication, consola, índices cloud y ejemplos de Ampliación remotos NO se han ejecutado contra un proyecto real ni con credenciales. No declarar esas comprobaciones realizadas.
+
+**Siguiente tema:** MongoDB, únicamente después de confirmar el hito Firestore publicado. Docker Desktop ya responde (servidor29.9.2); no se han creado todavía contenedores Mongo/MySQL para esos temas.
