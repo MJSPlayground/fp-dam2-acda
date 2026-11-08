@@ -1,4 +1,4 @@
-﻿# Ampliación
+# Ampliación
 
 Aquí observamos cómo se conecta el backend con la web, cómo se comprueba su comportamiento y cómo se ejecuta fuera de IntelliJ. Las plantillas y controladores siguen entregados: estudiar su funcionamiento no convierte el frontend en una tarea de la práctica.
 

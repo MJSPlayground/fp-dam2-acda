@@ -65,3 +65,11 @@ Las filas de stock se bloquean en orden de ID y conservan @Version. Los servicio
 El histórico guarda instantáneas de ISBN, título, unidades y precio, subtotal/descuento/total y fechaUTC: no depende de que el libro siga existiendo o conserve el precio. Es append-only en este alcance, sin editar/eliminar pedidos ni añadir devoluciones. No se añaden usuarios de negocio, pagos ni una gestión comercial completa.
 
 Rutas preparadas: GET /operaciones y /pedidos; POST /operaciones/reponer, /operaciones/presupuesto y /operaciones/confirmar. La selección conserva cantidades/clave ante errores. Actualizar versiones y limpiar selección vuelve a leer los datos actuales. Confirmar solicita un diálogo aparte; Cancelar no escribe.
+
+## Comprobaciones optativas por nivel
+
+Abre `AprendizajeFinalTest` en IntelliJ y crea una configuración JUnit. En VM options indica `-Daprendizaje.nivel=base`, `aplicacion` o `reto` tras resolver ese nivel. `todos` ejecuta el conjunto completo. Por defecto se omiten; una prueba omitida no demuestra que un requisito funcione. Los datos y mecanismos de fallo están preparados y no resuelven las operaciones del alumno.
+
+Alternativa técnica: `.\mvnw.cmd -Daprendizaje.nivel=reto -Dtest=AprendizajeFinalTest test`. La solución contiene la misma suite para contrastar la cobertura.
+
+Las pruebas de aprendizaje Spring necesitan MySQL: utilizan por defecto root/qa_root_local en 3309, crean un esquema nuevo `qa_spring_UUID` y eliminan exclusivamente ese esquema. Si utilizas otra instancia, configura `QA_MYSQL_ADMIN_URL`, `QA_MYSQL_ADMIN_USER` y `QA_MYSQL_ADMIN_PASSWORD` en Environment variables de la configuración JUnit. No uses `spring_guiado` o `spring_final` como base de pruebas. El nivel reto prepara una clave duplicada tras escrituras de stock y dos solicitudes concurrentes; la suite coordina los hilos.

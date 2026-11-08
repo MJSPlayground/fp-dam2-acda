@@ -1,4 +1,4 @@
-﻿# Servicios, reglas y colaboración
+# Servicios, reglas y colaboración
 
 Un formulario correcto desde el punto de vista del navegador todavía puede pedir algo que el negocio no permite. Un stock negativo es un ejemplo. Las reglas deben aplicarse en el **servicio**, de forma que todos los puntos de entrada reciban el mismo comportamiento.
 
@@ -10,7 +10,7 @@ En el catálogo, el controlador web preparado recibe la entrada, invoca un caso 
 
 ![El controlador invoca CatalogoService, que colabora con EditorialService y ReglasCatalogo y utiliza repositorios para acceder a MySQL](figuras/componentes.svg)
 
-<figcaption>Colaboración de componentes del catálogo. Elaboración propia; las flechas representan dependencias.</figcaption>
+<figcaption>Colaboración del catálogo: azul preparado, naranja con TODO. Las flechas representan dependencias; la leyenda también identifica los estados sin depender solo del color. Elaboración propia.</figcaption>
 </figure>
 
 No hay un servicio por cada línea de código. Separar `EditorialService` tiene sentido porque encapsula decisiones sobre editoriales que otros casos de uso necesitan. Un coordinador depende de colaboradores con responsabilidades claras; estos no deben volver a llamar al coordinador y crear un ciclo.
@@ -30,6 +30,10 @@ Las comprobaciones se complementan. Desactivar JavaScript no debe permitir un st
 Antes de guardar, el servicio carga los datos necesarios y normaliza los textos según su contrato. No debe corregir silenciosamente una cantidad imposible. Para importes usamos `BigDecimal`, como en [las validaciones de Ficheros](../ficheros/arquitectura.md#comprobar-importes-con-bigdecimal); `compareTo` compara el valor y la escala establece las cifras decimales admitidas.
 
 Cuando un cálculo genera más decimales de los admitidos, hay que elegir un criterio de redondeo. `setScale(2, RoundingMode.HALF_UP)` conserva dos decimales y aproxima al valor más cercano; en un empate redondea alejándose de cero. Para los importes positivos del catálogo equivale a resolver el empate hacia arriba. Por ejemplo, `new BigDecimal("3.475").setScale(2, RoundingMode.HALF_UP)` produce `3.48`. El valor de `BigDecimal` es inmutable: el método devuelve otro objeto. Consulta [`RoundingMode`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/math/RoundingMode.html). Este criterio se aplica a cálculos; una entrada con demasiados decimales puede rechazarse por la regla de precio en lugar de corregirse silenciosamente.
+
+Para componer importes, `multiply` multiplica y `add` suma, devolviendo nuevos `BigDecimal`. Una tarifa independiente de 8,20 € por tres unidades se representa como `new BigDecimal("8.20").multiply(BigDecimal.valueOf(3))` y da `24.60`. Para comparar un acumulado con un umbral utiliza `compareTo`, sin convertir a `double`; decide el redondeo en el punto indicado por el negocio, no en cada suma sin necesidad. Las operaciones están en la [API de BigDecimal](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/math/BigDecimal.html).
+
+Una lista de líneas puede exigir identificadores distintos. Un `Set<Long>` permite reconocer repeticiones: `add` devuelve `false` cuando ese identificador ya pertenecía al conjunto. Esa herramienta no guarda pedidos ni coordina escrituras; esas responsabilidades siguen en los repositorios y en la transacción del servicio.
 
 ## Solicitudes y resultados inmutables
 

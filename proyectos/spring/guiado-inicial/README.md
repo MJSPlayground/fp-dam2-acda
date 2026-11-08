@@ -53,3 +53,11 @@ Spring Boot3.5.16 gestiona sus versiones compatibles de Hibernate, Spring Data y
 ## Alcance de esta variante
 
 Etapa1: examina entidades, Boot, DI por constructor, @Bean Clock y propiedades preparados. Etapa2: LibroRepository tiene dos apoyos default con TODO; sustitúyelos por firmas de consultas derivadas que implementa Spring Data, conservando el contrato del frontend. EditorialRepository está resuelto para que funcionen los selectores. Etapa3: implementa ReglasCatalogo.validar y CatalogoService.guardar con reglas, colaboración EditorialService/repositorio y evento, dentro de la transacción. Etapa4: completa CatalogoService.demo como operación coordinada que solo prepara una base vacía. Etapa5: examina el listener AFTER_COMMIT y las implementaciones del Notificador, preparados; no hay un TODO ficticio de infraestructura. El listado muestra un mensaje de etapa pendiente hasta completar las consultas; no simula persistencia ni guardados. Las pruebas iniciales de componentes ya pasan, pero no prueban funciones que aún debes programar.
+
+## Comprobaciones optativas por fase
+
+Abre `AprendizajeGuiadoTest` en IntelliJ y crea una configuración JUnit para esa clase. En VM options indica `-Daprendizaje.fase=2`, `3`, `4` o `5` al completar esa etapa. Por defecto se omiten; no necesitas escribir fixtures ni mecanismos de fallo. No alteran los datos de tu aplicación.
+
+Alternativa técnica: `.\mvnw.cmd -Daprendizaje.fase=2 -Dtest=AprendizajeGuiadoTest test`. Para comprobar todas las fases resueltas: `-Daprendizaje.fase=todas`. La solución incluye la misma suite; las aserciones no contienen la implementación de los TODO.
+
+Las pruebas de aprendizaje Spring necesitan MySQL: utilizan por defecto root/qa_root_local en 3309, crean un esquema nuevo `qa_spring_UUID` y eliminan exclusivamente ese esquema. Si utilizas otra instancia, configura `QA_MYSQL_ADMIN_URL`, `QA_MYSQL_ADMIN_USER` y `QA_MYSQL_ADMIN_PASSWORD` en Environment variables de la configuración JUnit. No uses `spring_guiado` o `spring_final` como base de pruebas. La fase 4 trae preparado un trigger temporal que falla tras escribir editoriales.

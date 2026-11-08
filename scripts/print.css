@@ -183,7 +183,7 @@ details > summary::-webkit-details-marker { display: none; }
 .mjs-step { border-left: 2mm solid var(--mjs-primary); padding-left: 4mm; margin: 5mm 0; }
 .print-chapter h3.mjs-step-heading { border-left: 1.5mm solid var(--mjs-primary); padding: 2mm 3mm; background: #eef4f8; }
 .mjs-figure { text-align: center; margin: 4mm auto; }
-.mjs-figure img { max-width: 100%; height: auto; border-radius: 2mm; }
+.mjs-figure img { max-width: 100%; width: auto; height: auto; max-height: 130mm; object-fit: contain; border-radius: 2mm; }
 .mjs-figure figcaption { font-size: 8pt; color: #52677a; }
 .mjs-resources a:not(.mjs-code-resource) { display: inline !important; margin-right: 4mm; }
 .md-button { display: inline !important; padding: 0 !important; margin-right: 4mm; border: 0 !important; color: #075b89 !important; text-decoration: underline !important; background: none !important; }

@@ -1,6 +1,6 @@
-﻿# Prácticas de repaso
+# Prácticas de repaso
 
-Este espacio reunirá cinco proyectos independientes para consolidar el acceso a bases de datos relacionales. Sus enunciados, interfaces, proyectos iniciales y soluciones se incorporarán cuando estén desarrollados y comprobados.
+Cinco propuestas de repaso del tema.
 
 ## Ficha 1
 

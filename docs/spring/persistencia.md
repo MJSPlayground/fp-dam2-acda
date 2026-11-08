@@ -1,4 +1,4 @@
-﻿# Repositorios con Spring Data JPA
+# Repositorios con Spring Data JPA
 
 En [Hibernate](../hibernate/persistencia.md) escribimos repositorios que recibían una sesión y realizaban operaciones ORM. Spring Data JPA permite declarar gran parte de ese contrato mediante una interfaz. JPA sigue definiendo el modelo de persistencia y Hibernate sigue siendo el proveedor utilizado por el proyecto. **Spring Data no sustituye la base de datos ni elimina las transacciones.**
 
@@ -10,7 +10,7 @@ Este fragmento reducido muestra un repositorio. Su ubicación es el paquete `mod
 
 ```java
 public interface LibroRepository extends JpaRepository<Libro, Long> {
-    List<Libro> findByTituloContainingIgnoreCaseOrderByTituloAsc(String texto);
+    List<Libro> findByTituloContainingIgnoreCaseOrderByTituloAscIdAsc(String texto);
 }
 ```
 
@@ -30,7 +30,7 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
 
 ```java
 Libro libro = libros.findById(id)
-    .orElseThrow(() -> new ReglaNegocioException("El libro ya no existe"));
+    .orElseThrow(() -> new ReglaCatalogoException("El libro ya no existe"));
 ```
 
 Si encuentra el libro, continúa. Si otro usuario lo eliminó, la operación termina con un mensaje comprensible. La excepción técnica de una caída de MySQL es distinta: no debemos transformarla en «libro inexistente» ni devolver una lista vacía.
@@ -45,7 +45,7 @@ Spring interpreta los nombres de métodos utilizando **propiedades Java**, no no
 - `Titulo` señala la propiedad `titulo`.
 - `Containing` busca el texto dentro del título.
 - `IgnoreCase` ignora diferencias de mayúsculas.
-- `OrderByTituloAsc` solicita orden ascendente.
+- `OrderByTituloAscIdAsc` ordena por título y después por identificador, para resolver empates de forma estable.
 
 Con «program» se obtienen títulos que contienen ese texto, según la consulta generada. El parámetro es un valor, no una parte de SQL que concatenamos. Las consultas derivadas `Containing` escapan los comodines reconocidos por `LIKE`; escribir `%` en el formulario no debe convertirse en una instrucción libre.
 

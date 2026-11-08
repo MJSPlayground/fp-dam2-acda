@@ -1,4 +1,4 @@
-﻿# Repositorios, servicios y errores
+# Repositorios, servicios y errores
 
 Ya sabemos [ejecutar SQL y convertir filas](consultas.md). Si colocáramos esas instrucciones dentro de cada botón, repetiríamos conexiones y consultas y mezclaríamos la persistencia con las reglas de venta. Separar responsabilidades permite probar cada decisión sin depender de la ventana.
 
@@ -63,6 +63,12 @@ El repositorio no decide si ofrecer un descuento es válido ni calcula el import
 
 Unidades y límites también son parte del contrato. El importe de una línea es precio por cantidad; para detectar desbordamiento de enteros podemos usar `Math.multiplyExact(precioCentimos, cantidad)`. Un valor que no cabe debe rechazarse con un mensaje comprensible; dejarlo desbordar puede convertir un importe positivo en negativo.
 
+## Sumas exactas y condiciones entre varias líneas
+
+`Math.multiplyExact(long,int)` calcula un importe y [`Math.addExact(long,long)`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Math.html#addExact(long,long)) acumula importes; si el resultado no cabe, lanzan `ArithmeticException` en lugar de desbordar silenciosamente. Hay versiones de `addExact` para `int`: son útiles al sumar existencias. Por ejemplo, `Math.addExact(Integer.MAX_VALUE,1)` falla; no produce una cantidad negativa válida. El servicio convierte ese caso en un rechazo de negocio y conserva el estado previo.
+
+Para reconocer identificadores repetidos, Java ofrece [`Set`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Set.html): `ids.add(id)` devuelve `false` si ya estaba presente. Un `HashSet<Long>` no ordena las líneas; solo permite comprobar pertenencia. Son herramientas de Java ordinario que puedes combinar con los bucles, condiciones y transacciones ya explicados; ninguna necesita un pool, lotes JDBC ni APIs de Ampliación.
+
 ## Decimales, redondeo y céntimos
 
 Guardamos dinero como `long` en céntimos, pero una entrada o un cálculo puede contener decimales. [`BigDecimal`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/math/BigDecimal.html) permite representarlos sin las aproximaciones binarias de `double`. Se construye desde texto, por ejemplo `new BigDecimal("3.275")`; convertir primero ese texto a `double` introduciría una aproximación innecesaria. Los objetos son inmutables: cada operación devuelve otro valor.
@@ -77,6 +83,8 @@ BigDecimal euros = BigDecimal.valueOf(centimos, 2);
 ```
 
 `cobrable` vale `3.28`, `centimos` vale `328` y `euros` vuelve a representar `3.28`. `movePointRight(2)` cambia euros a céntimos. `longValueExact()` rechaza fracciones pendientes o valores que no caben; `longValue()` podría truncarlos. Para comparar valores numéricos utiliza `compareTo`: `new BigDecimal("3.0").compareTo(new BigDecimal("3.00"))` devuelve cero aunque sus escalas sean distintas.
+
+`movePointLeft(2)` convierte un porcentaje como 12,5 en su proporción decimal 0,125. `add` suma y `multiply` multiplica sin cambiar los objetos originales. Como ejemplo independiente, una tasa de 2,5 % aplicada a una tarifa de 8,00 € produce `new BigDecimal("8.00").multiply(new BigDecimal("0.025"))`, es decir 0,20000 €, que puede expresarse como 0,20 € con la escala elegida. `stripTrailingZeros()` elimina ceros decimales redundantes para comprobar cuántas cifras significativas tras el decimal se han escrito; no cambia el valor.
 
 La política de redondeo pertenece al caso de uso. Para un importe escrito con demasiados decimales, puede corresponder rechazar la entrada en lugar de redondearla; para un resultado calculado puede exigirse un redondeo concreto. `HALF_UP` no significa redondear siempre hacia el valor positivo: `-3.275` con dos decimales da `-3.28`. En el almacén los precios se validan como positivos.
 

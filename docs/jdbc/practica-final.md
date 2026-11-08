@@ -41,11 +41,23 @@ El proveedor puede entregar varios productos a la vez. La encargada prepara las 
 
 Con los datos iniciales, recibir 2 teclados a 10,00 € y un monitor a 100,00 € cuesta 120,00 €. Con presupuesto de 120,00 € quedan 12 teclados y 6 monitores, con dos justificantes. Con 119,99 €, no cambia ningún producto ni aparece ningún justificante. Repite con una segunda línea que identifique un producto inexistente: tampoco debe persistir la primera.
 
+## Pruebas preparadas por nivel
+
+No necesitas crear desde cero una avería de disco ni un experimento de atomicidad. El starter incluye `AprendizajeFinalTest`: abre la clase en IntelliJ, crea su configuración JUnit y elige **VM options** `-Daprendizaje.nivel=base`, `aplicacion` o `reto` al completar cada nivel. Sin seleccionar nivel se omiten las pruebas. Cada caso prepara su propio archivo SQLite temporal.
+
+- **Base:** filtros literales, nombre con tilde, redondeo, límites y conservación de campos.
+- **Aplicación:** recepción individual y fallo preparado después de escribir el justificante; stock e historial deben volver al estado previo.
+- **Reto avanzado:** presupuesto exacto, segunda línea inexistente y fallo técnico en la segunda escritura; comprueba todos los productos y justificantes, no solo la excepción.
+
+El mecanismo de fallo instala un trigger únicamente en esa base temporal. Está incluido como apoyo de prueba: no es una API que debas aprender para resolver la práctica ni se añade al código del almacén. La solución ejecuta la misma suite con sus operaciones completas.
+
+Para resolver los requisitos bastan consultas parametrizadas, resultados, repositorios, colecciones Java, cálculos exactos y transacciones del tema. [Servicios e importes](repositorios.md) explica sumas, redondeo y detección de repeticiones. No se exige `JOIN`, lotes ni un pool: el historial puede obtener sus datos con las lecturas que ya conoces, conservando las responsabilidades por capas.
+
 ## Comprobar los resultados
 
-Prueba las funciones anteriores desde **Operaciones** y vuelve a **Catálogo y ventas** para comprobar las existencias actualizadas. Conserva las funciones del guiado: alta, edición, eliminación permitida y venta atómica. Añade pruebas de servicio que distingan una operación completa de una operación parcialmente guardada, incluyendo un fallo técnico después de la primera escritura. Los avisos de la interfaz no sustituyen las validaciones del servicio.
+Prueba las funciones anteriores desde **Operaciones** y vuelve a **Catálogo y ventas** para comprobar las existencias actualizadas. Conserva las funciones del guiado: alta, edición, eliminación permitida y venta atómica. Ejecuta las pruebas de servicio preparadas, que distinguen una operación completa de una operación parcialmente guardada, incluyendo un fallo técnico después de la primera escritura. Los avisos de la interfaz no sustituyen las validaciones del servicio.
 
-Los `TODO` de la ampliación están señalados en el backend. La interfaz y la infraestructura de arranque están preparadas. Mientras una función no se implementa, el starter muestra un aviso y no simula que se haya guardado nada.
+Los `TODO` de la práctica final están señalados en el backend. La interfaz y la infraestructura de arranque están preparadas. Mientras una función no se implementa, el starter muestra un aviso y no simula que se haya guardado nada.
 
 ## Solución completa
 

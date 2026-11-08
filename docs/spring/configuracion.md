@@ -1,4 +1,4 @@
-﻿# Spring Boot y configuración
+# Spring Boot y configuración
 
 **Spring Framework** proporciona el contenedor, la inyección de dependencias, las transacciones y otras herramientas. **Spring Boot** prepara una aplicación basada en ese ecosistema: selecciona dependencias compatibles, aplica configuración según las bibliotecas y propiedades disponibles y permite iniciar un servidor web integrado. Boot utiliza Spring; no reemplaza sus conceptos.
 
@@ -23,7 +23,7 @@ public class CatalogoApplication {
 
 `@SpringBootApplication` agrupa configuración, búsqueda de componentes y autoconfiguración. `run` crea el contexto y arranca el servidor. La aplicación permanece ejecutándose para atender al navegador; cerrar la pestaña no detiene el servidor.
 
-La **autoconfiguración** toma decisiones condicionadas por el entorno. Con JPA, un controlador MySQL y las propiedades de conexión, Boot puede preparar el acceso a datos y la gestión de transacciones. No inventa la contraseña ni las reglas del catálogo. Si declaramos determinada configuración propia, algunas decisiones automáticas dejan de aplicarse. El informe de condiciones con `debug=true` ayuda a saber por qué una configuración se activó; no es necesario leerlo entero para empezar.
+La **autoconfiguración** toma decisiones condicionadas por el entorno. Con JPA, un driver JDBC de MySQL y las propiedades de conexión, Boot puede preparar el acceso a datos y la gestión de transacciones. No inventa la contraseña ni las reglas del catálogo. Si declaramos determinada configuración propia, algunas decisiones automáticas dejan de aplicarse. El informe de condiciones con `debug=true` ayuda a saber por qué una configuración se activó; no es necesario leerlo entero para empezar.
 
 ## Abrir y ejecutar
 
@@ -62,6 +62,10 @@ Desde IntelliJ, un argumento de programa como este activa un perfil:
 También puede usarse la variable `SPRING_PROFILES_ACTIVE`. En el proyecto, `practica` cambia el máximo de stock a 50; `diagnostico` aumenta el detalle del logging. El perfil `silencioso` sustituye la notificación y `seguro` activa usuarios y permisos. Un componente con `@Profile("silencioso")` solo se registra con ese perfil activo. Conviene comprobar los perfiles anunciados al arrancar antes de interpretar una prueba. Consulta [Profiles](https://docs.spring.io/spring-boot/3.5/reference/features/profiles.html).
 
 No cambies `ddl-auto` a `create` para resolver un fallo de conexión: ese ajuste puede recrear las tablas y perder datos. Usa el esquema y las instrucciones del README. La configuración de pruebas debe señalar a una base distinta de la aplicación.
+
+## Qué necesitas preparar y qué solo observar
+
+Para el primer listado basta con arrancar MySQL y `CatalogoApplication`; no programes configuración de seguridad, perfiles, relojes ni eventos. El proyecto ya registra esos componentes. El perfil `practica` permite experimentar cambiando un valor; `silencioso` permite observar una sustitución. Su implementación se lee después del primer CRUD y no bloquea las consultas iniciales.
 
 ## Diagnóstico de arranque
 

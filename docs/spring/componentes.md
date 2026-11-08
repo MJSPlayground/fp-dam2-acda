@@ -1,6 +1,10 @@
-﻿# Componentes e inyección de dependencias
+# Componentes e inyección de dependencias
 
 Una aplicación de catálogo necesita buscar libros, comprobar precios y guardar cambios. Podemos separar esas tareas en clases, como hicimos con [repositorios y servicios](../ficheros/arquitectura.md). El siguiente problema es **construir esas clases y conectarlas** sin repetir la misma preparación en cada pantalla.
+
+## Un primer recorrido pequeño
+
+Para orientarte, piensa solo en una búsqueda: el controlador preparado recibe el texto, `CatalogoService.listar` coordina la consulta y `LibroRepository` declara la búsqueda. No tienes que construir a mano toda la aplicación. Los ejemplos siguientes aíslan la idea de contrato e inyección; el mapa y las clases a modificar están en [el primer recorrido del guiado](proyecto.md#primer-recorrido-solo-una-consulta).
 
 ## Qué es un componente
 

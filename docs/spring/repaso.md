@@ -1,6 +1,6 @@
-﻿# Prácticas de repaso
+# Prácticas de repaso
 
-Estas propuestas se desarrollarán como proyectos opcionales del tema. Por ahora no incluyen enunciados, código inicial ni soluciones.
+Cinco propuestas de repaso del tema.
 
 ## Catálogo de componentes
 

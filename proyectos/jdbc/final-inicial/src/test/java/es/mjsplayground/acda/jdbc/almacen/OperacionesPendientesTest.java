@@ -14,14 +14,12 @@ class OperacionesPendientesTest {
   @TempDir Path temporal;
 
   @Test
-  void starterConservaGuiadoSinResolverFinal() throws Exception {
+  void starterConservaGuiadoAlPrepararFinal() throws Exception {
     Database db = new Database("jdbc:sqlite:" + temporal.resolve("test.db"));
     db.preparar();
     var s = new OperacionesService(db);
     s.preparar();
-    assertThrows(ReglaNegocioException.class, () -> s.buscar("", 10));
-    assertThrows(ReglaNegocioException.class, () -> s.revisarPrecio(1, BigDecimal.TEN));
-    assertThrows(ReglaNegocioException.class, () -> s.recibirUna(new LineaRecepcion(1, 2, 100)));
+    // Verifica el arranque sin exigir que las funciones sigan pendientes tras resolverlas.
     assertEquals(
         10,
         new AlmacenService(db)

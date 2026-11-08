@@ -1,4 +1,4 @@
-﻿# Instrucciones SQL y resultados
+# Instrucciones SQL y resultados
 
 Después de [abrir una conexión](conexiones.md), necesitamos enviar órdenes al motor. Una consulta devuelve filas; una modificación devuelve principalmente cuántas filas ha afectado. Distinguir esos resultados evita interpretar una ejecución sin errores como una modificación efectiva.
 
@@ -33,6 +33,22 @@ El esquema usa sintaxis SQLite. `NOT NULL` impide valores ausentes y `CHECK` lim
 | `execute` | No se conoce de antemano el tipo de resultado | Indica si el primer resultado es un conjunto de filas |
 
 No construyas SQL concatenando valores procedentes de formularios. Incluso un nombre con apóstrofo puede romper la consulta, y un texto manipulado puede alterar su significado. Para esos datos utilizamos parámetros.
+
+## Primera lectura: una columna antes del mapeo
+
+Antes de añadir parámetros o construir productos, observamos una sola columna. `executeQuery` devuelve un `ResultSet`: un cursor situado antes de la primera fila. `next()` avanza a la siguiente fila y dice si existe; `getString("nombre")` lee esa columna de la fila actual. El siguiente fragmento usa SQL fijo, una conexión `conexion` ya abierta y el tratamiento de `SQLException` explicado al principio:
+
+```java
+try (Statement sentencia = conexion.createStatement();
+     ResultSet filas = sentencia.executeQuery("SELECT nombre FROM producto ORDER BY id")) {
+    while (filas.next()) {
+        String nombre = filas.getString("nombre");
+        // Inspecciona nombre con un breakpoint; cambia en cada iteración.
+    }
+}
+```
+
+Con los datos iniciales se leen Teclado, Ratón y Monitor, en ese orden. Si no hay filas, el cuerpo no se ejecuta. Leer antes del primer `next()` es un error; crear un objeto fuera del bucle y reutilizarlo no representa una fila nueva. Primero entendemos este recorrido; después añadimos parámetros y convertimos todas las columnas a un producto.
 
 ## PreparedStatement: SQL y datos separados
 

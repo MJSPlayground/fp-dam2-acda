@@ -51,3 +51,11 @@ Spring Boot3.5.16 gestiona sus versiones compatibles de Hibernate, Spring Data y
 ## Alcance de esta variante
 
 Solución completa del guiado: CRUD y consultas derivadas, validación y coordinación de servicios, eventos tras commit y perfiles. Los tests de integración comprueban el recorrido MVC, CSRF activo por defecto, perfil seguro real y ausencia de semilla repetida.
+
+## Comprobaciones optativas por fase
+
+Abre `AprendizajeGuiadoTest` en IntelliJ y crea una configuración JUnit para esa clase. En VM options indica `-Daprendizaje.fase=2`, `3`, `4` o `5` al completar esa etapa. Por defecto se omiten; no necesitas escribir fixtures ni mecanismos de fallo. No alteran los datos de tu aplicación.
+
+Alternativa técnica: `.\mvnw.cmd -Daprendizaje.fase=2 -Dtest=AprendizajeGuiadoTest test`. Para comprobar todas las fases resueltas: `-Daprendizaje.fase=todas`. La solución incluye la misma suite; las aserciones no contienen la implementación de los TODO.
+
+Las pruebas de aprendizaje Spring necesitan MySQL: utilizan por defecto root/qa_root_local en 3309, crean un esquema nuevo `qa_spring_UUID` y eliminan exclusivamente ese esquema. Si utilizas otra instancia, configura `QA_MYSQL_ADMIN_URL`, `QA_MYSQL_ADMIN_USER` y `QA_MYSQL_ADMIN_PASSWORD` en Environment variables de la configuración JUnit. No uses `spring_guiado` o `spring_final` como base de pruebas. La fase 4 trae preparado un trigger temporal que falla tras escribir editoriales.

@@ -19,3 +19,9 @@ Solución de los tres niveles. Las pruebas incluyen presupuesto exacto, duplicad
 Validación técnica secundaria: `.\mvnw.cmd clean test`. Con sesión gráfica, `.\mvnw.cmd -Dqa.ui=true -Dtest=OperacionesUiTest test` abre y prueba la interfaz de operaciones y genera `target/qa/operaciones.png`. Las pruebas de servicio usan bases temporales; la prueba UI requiere pantalla y se omite por defecto en CI. No se ha comprobado el arranque dentro de IntelliJ en esta sesión.
 
 Versiones fijadas en POM: JavaFX 25.0.2, SQLite JDBC 3.53.4.0, SLF4J 2.0.17, Log4j2 2.25.3. Se conserva Maven Wrapper del guiado.
+
+## Comprobaciones optativas por nivel
+
+Abre `AprendizajeFinalTest` en IntelliJ y crea una configuración JUnit. En VM options indica `-Daprendizaje.nivel=base`, `aplicacion` o `reto` tras resolver ese nivel. `todos` ejecuta el conjunto completo. Por defecto se omiten; una prueba omitida no demuestra que un requisito funcione. Los datos y mecanismos de fallo están preparados y no resuelven las operaciones del alumno.
+
+Alternativa técnica: `.\mvnw.cmd -Daprendizaje.nivel=reto -Dtest=AprendizajeFinalTest test`. La solución contiene la misma suite para contrastar la cobertura.

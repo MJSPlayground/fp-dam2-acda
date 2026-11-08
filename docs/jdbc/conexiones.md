@@ -1,4 +1,4 @@
-﻿# Conectores y conexiones
+# Conectores y conexiones
 
 Una aplicación de almacén necesita conservar sus productos aunque se cierre la ventana. Una base relacional organiza esa información en tablas; Java debe enviarle consultas y convertir las filas recibidas en objetos. **JDBC** es la API que utilizaremos para realizar ese intercambio.
 
@@ -83,7 +83,7 @@ Esta conexión requiere un usuario con los permisos necesarios sobre esa base. N
 
 La excepción debe conservarse para poder distinguir esos casos. No conviertas todos los fallos en una lista vacía: una consulta correcta sin productos y una base inaccesible son situaciones diferentes.
 
-Continúa con [instrucciones SQL y resultados](consultas.md).
+Al cerrar esta página debes poder localizar qué URL abre el almacén, explicar quién cierra la conexión y distinguir un archivo SQLite de una sesión MySQL. Todavía no necesitas escribir el CRUD ni una transacción. Continúa con [instrucciones SQL y resultados](consultas.md).
 
 ## Etapa del proyecto: reconocer la conexión preparada
 

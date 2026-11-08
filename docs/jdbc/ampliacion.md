@@ -1,4 +1,4 @@
-﻿# Ampliación
+# Ampliación
 
 Estas explicaciones profundizan en la [persistencia JDBC](consultas.md) y las [transacciones](transacciones.md). Los fragmentos son demostraciones con su contexto indicado; no añaden nuevas funcionalidades obligatorias al proyecto guiado.
 

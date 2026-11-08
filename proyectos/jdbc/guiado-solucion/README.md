@@ -15,3 +15,9 @@ La interfaz se entrega preparada: el alumnado trabaja en configuración, reposit
 ## Verificación de la interfaz
 
 Con sesión gráfica disponible, ejecuta `.\mvnw.cmd -Dqa.ui=true test`. La prueba de JavaFX abre una ventana temporal, crea y edita un producto, comprueba cancelación y precio inválido, y redimensiona. Guarda una captura real en `target/qa/almacen.png` (no se distribuye en ZIP). Sin esta propiedad, la prueba gráfica se omite explícitamente para permitir CI sin pantalla; las ocho pruebas de servicio continúan ejecutándose. No sustituye la comprobación manual desde IntelliJ.
+
+## Comprobaciones optativas por fase
+
+Abre `AprendizajeGuiadoTest` en IntelliJ y crea una configuración JUnit para esa clase. En VM options indica `-Daprendizaje.fase=2`, `3`, `4` o `5` al completar esa etapa. Por defecto se omiten; no necesitas escribir fixtures ni mecanismos de fallo. No alteran los datos de tu aplicación.
+
+Alternativa técnica: `.\mvnw.cmd -Daprendizaje.fase=2 -Dtest=AprendizajeGuiadoTest test`. Para comprobar todas las fases resueltas: `-Daprendizaje.fase=todas`. La solución incluye la misma suite; las aserciones no contienen la implementación de los TODO.

@@ -12,7 +12,7 @@ class AlmacenServiceTest {
   @TempDir Path temporal;
 
   @Test
-  void infraestructuraEjecutableYTodoExplicito() throws Exception {
+  void infraestructuraEjecutable() throws Exception {
     Database db = new Database("jdbc:sqlite:" + temporal.resolve("prueba.db"));
     db.preparar();
     try (var c = db.abrir();
@@ -21,6 +21,6 @@ class AlmacenServiceTest {
       assertTrue(r.next());
       assertEquals(3, r.getInt(1));
     }
-    assertThrows(UnsupportedOperationException.class, () -> new AlmacenService(db).listar());
+    // No exigir que siga pendiente: esta prueba debe pasar tambien al completar las etapas.
   }
 }

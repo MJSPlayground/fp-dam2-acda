@@ -1,4 +1,4 @@
-﻿# Transacciones y conflictos
+# Transacciones y conflictos
 
 Guardar dos cambios relacionados requiere decidir qué debe ocurrir si el segundo falla. Si un caso de uso actualiza existencias y registra una operación, no puede dejar solo la mitad confirmada. Una **transacción** agrupa los cambios que deben confirmarse o deshacerse juntos. La base de datos aporta esa garantía; Spring coordina su inicio y su final alrededor del servicio.
 
@@ -18,9 +18,9 @@ class OperacionCatalogo {
     @Transactional
     public void cambiarTitulo(Long id, String nuevoTitulo) {
         Libro libro = libros.findById(id)
-            .orElseThrow(() -> new ReglaNegocioException("Libro inexistente"));
+            .orElseThrow(() -> new ReglaCatalogoException("Libro inexistente"));
         if (nuevoTitulo == null || nuevoTitulo.isBlank()) {
-            throw new ReglaNegocioException("El título es obligatorio");
+            throw new ReglaCatalogoException("El título es obligatorio");
         }
         libro.setTitulo(nuevoTitulo.strip());
     }

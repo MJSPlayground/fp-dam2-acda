@@ -19,6 +19,14 @@ Nuevo encargo: corregir los seis temas existentes desde la perspectiva del alumn
 - Informe AUDITORIA-FICHEROS-HIBERNATE.md incluye estimaciones por etapa/nivel; root separa esfuerzo guiado+explicación del esfuerzo final adicional. No se promete completar todos los niveles en7h/9h ni se reduce el reto para forzar un horario.
 - Pendiente tras push: Actions y comprobación pública de ambos temas. Resto de correcciones permanece local, sin publicar parcialmente.
 
+### Publicación Ficheros/Hibernate y validación Spring/JDBC
+
+- 724dcac: Actions42456348233 build/deploy SUCCESS. Pages real: portada+21páginas de ambos temas,8ZIP,PDF30/30/global158, salida0. Comprobados además los ocho ZIP públicos contienen las nuevas FasesGuiadoTest/FasesFinalTest, no solo wrapper.
+- Spring/JDBC:19páginas y cada requisito final auditados. Guías con tres fragmentos Java parciales cada una, casos de arranque/consulta previos al guardado y mapa Spring preparado/leer/completar. No cambia frontend, arquitectura ni dependencias.
+- Nuevos oráculos ejecutados en soluciones: Spring5+10 y JDBC10+11, sin fallos. Root ejecutó scripts completos Spring/MySQL (incluye pruebas históricas de seguridad) y JDBC; además3pruebas JavaFX JDBC y navegador real de4JAR Spring en8092–8095. Procesos/esquemas UUID propios cerrados.
+- Snapshot del hito:8ZIP afectados desde carpetas limpias;24ZIP integridad/bytes; sitio general, Spring/JDBC móvil/escritorio claro/oscuro y65páginas/1303enlaces/969fragmentos/494entradas búsqueda correctos. PDFSpring28/JDBC28/global162. Muestras de guía y diagrama renderizadas; corregida figura alta que dejaba una página casi vacía mediante límite de altura de impresión, sin cambiar web ni contenido.
+- AUDITORIA-SPRING-JDBC.md separa rangos de guiado+explicación de esfuerzo final adicional; no supone finalizar tresniveles en6h/11h. Pendiente tras push: Actions/Pages del hito y cierre Firestore/Mongo.
+
 ## Encargo y punto actual
 
 Encargo integral autorizado en main. Orden obligatorio: JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring.

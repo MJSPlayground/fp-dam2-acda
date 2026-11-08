@@ -1,4 +1,4 @@
-﻿# Práctica final: reglas y servicios del catálogo
+# Práctica final: reglas y servicios del catálogo
 
 El catálogo necesita atender solicitudes de compra sin perder el control de existencias. El cliente quiere conocer el importe antes de confirmar y evitar que un fallo deje algunos libros descontados sin registrar el pedido. La web incorpora las pantallas de estas funciones; desarrolla únicamente su comportamiento de backend.
 
@@ -38,6 +38,20 @@ El pedido conserva una instantánea de sus líneas e importes, para que una modi
 
 Comprueba un pedido con varios libros y una repetición de clave. Provoca también un conflicto o fallo que aparezca cuando ya se han iniciado cambios y vuelve a consultar desde una operación independiente: no basta con que se muestre un error, deben conservarse todos los stocks anteriores y no existir un pedido parcial. Los avisos de éxito se emitirán únicamente tras la confirmación efectiva.
 
+## Cómo comprobar cada nivel con datos aislados
+
+Utiliza las operaciones y el CRUD ya resuelto desde la web. Para los casos que necesitan un fallo intermedio o dos ejecuciones simultáneas, el starter incluye `AprendizajeFinalTest`: no tienes que programar el mecanismo de fallo ni modificar el frontend. En IntelliJ crea una configuración JUnit de esa clase y añade en **VM options** `-Daprendizaje.nivel=base`, `aplicacion` o `reto`. MySQL debe estar disponible; la prueba crea su propio esquema temporal, sin usar tu catálogo.
+
+| Nivel | Qué observa la prueba preparada |
+| --- | --- |
+| Base | Reposición que alcanza 50 bajo el perfil de práctica y rechazo de una versión antigua o del exceso posterior. |
+| Aplicación | Presupuesto, descuento y ausencia de cambios persistidos. |
+| Reto avanzado | Repetición exacta de clave tras escribir stock: rollback completo; dos confirmaciones concurrentes: una sola operación efectiva; historial consultable. |
+
+Los datos se reconstruyen para cada caso: no encadenes expectativas que partan de estados distintos. Las suites están desactivadas por defecto y se activan cuando has completado el nivel. Una prueba omitida o una compilación correcta no demuestran el requisito. Sus aserciones expresan resultados del cliente y no contienen la implementación de las operaciones.
+
+Los modelos, la consulta de bloqueo, el reloj y el observador de eventos ya están preparados. Los conceptos que necesitas están en [repositorios](persistencia.md), [servicios e importes](servicios.md) y [transacciones/versiones](transacciones.md). El reto combina esos conocimientos; no exige configurar mensajería, seguridad ni APIs de Ampliación.
+
 ## Entrega funcional y comprobación
 
 Recorre las pantallas con datos correctos e incorrectos, utiliza los perfiles preparados y ejecuta las pruebas desde IntelliJ según el README. Conserva el CRUD y las búsquedas del guiado. No sustituyas una excepción por una lista vacía o un mensaje de éxito: el cliente necesita distinguir un rechazo de negocio de un fallo técnico.
@@ -46,4 +60,4 @@ La [teoría de servicios](servicios.md) explica la colaboración entre component
 
 [Descargar solución completa](/fp-dam2-acda/descargas/codigo/catalogo-final-solucion.zip){ .md-button download="catalogo-final-solucion.zip" }
 
-La solución es independiente del starter y comprende los tres niveles. Su README identifica el arranque y las pruebas disponibles. Utilízala para contrastar una vez hayas intentado resolver cada caso.
+La solución comprende los tres niveles y su README identifica el arranque y las pruebas.

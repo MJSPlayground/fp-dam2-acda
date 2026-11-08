@@ -1,4 +1,4 @@
-﻿# Transacciones y ventas atómicas
+# Transacciones y ventas atómicas
 
 Una venta reduce las existencias y añade una entrada al historial. Si la primera escritura funciona y la segunda falla, el almacén no puede quedarse con menos unidades y sin justificante. Necesitamos tratar ambas como **una sola operación**.
 
@@ -92,7 +92,7 @@ Comprobar solo que se lanzó una excepción no demuestra atomicidad. Es necesari
 1. Anotar stock e historial de un producto conocido.
 2. Ejecutar una venta válida. El stock debe disminuir y el historial crecer en una entrada con el importe correcto.
 3. Intentar vender más unidades de las disponibles. Ambos estados deben permanecer iguales.
-4. Provocar en una prueba aislada un fallo en la inserción del historial después del descuento; por ejemplo, una restricción que rechace esa venta en una base temporal.
+4. Ejecutar la fase `5` de `AprendizajeGuiadoTest`, ya incluida en el starter. `falloSegundaEscrituraRevierteDescuentoYConservaCausa` sustituye únicamente el registro de la venta por una avería preparada; tu descuento real ya se habrá ejecutado. No tienes que construir esa sustitución ni cambiar tu base habitual.
 5. Consultar de nuevo con otra conexión. El descuento de la operación fallida debe haberse revertido.
 
 La cuarta comprobación distingue una transacción efectiva de una simple validación previa. La prueba debe provocar el fallo técnico en un entorno temporal, sin alterar la base que usa la aplicación ni dejar mecanismos de fallo en el frontend.
@@ -113,4 +113,4 @@ El **TODO 4** está en `JdbcProductoRepository.descontar` y `JdbcVentaRepository
 
 El **TODO 5** está en `AlmacenService.vender`: valida la cantidad, abre una conexión, desactiva `autoCommit`, consulta el producto, calcula el total, llama a ambos repositorios y resuelve la transacción. Los fallos de negocio también deben recorrer la reversión cuando ya hay una transacción iniciada.
 
-Con una base de prueba recién inicializada, vender dos teclados debe dejar ocho unidades y registrar un total de 51,80 €. En otra comprobación independiente que comience con diez teclados, intentar vender once debe dejar diez y ningún registro nuevo. No encadenes ambas expectativas sobre el mismo estado sin tener en cuenta la primera venta. La solución incluye una prueba que provoca un fallo al registrar para verificar la reversión del descuento.
+Con una base de prueba recién inicializada, vender dos teclados debe dejar ocho unidades y registrar un total de 51,80 €. En otra comprobación independiente que comience con diez teclados, intentar vender once debe dejar diez y ningún registro nuevo. No encadenes ambas expectativas sobre el mismo estado sin tener en cuenta la primera venta. El starter y la solución incluyen esa prueba optativa: consulta su activación por fase en [el guiado](proyecto.md#pruebas-preparadas-por-fase).

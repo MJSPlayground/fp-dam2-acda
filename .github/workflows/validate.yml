@@ -82,8 +82,8 @@ jobs:
           (cd proyectos/spring/guiado-solucion && sh mvnw test --batch-mode)
           (cd proyectos/spring/final-inicial && sh mvnw test --batch-mode)
           (cd proyectos/spring/final-solucion && sh mvnw test --batch-mode)
-      - name: Probar comprobaciones de aprendizaje de Ficheros
-        run: sh scripts/test_learning_local.sh ficheros
+      - name: Probar comprobaciones de aprendizaje de Ficheros y JDBC
+        run: sh scripts/test_learning_local.sh ficheros jdbc
       - name: Probar relaciones y transacciones con MySQL real
         env:
           QA_MYSQL_ADMIN_URL: jdbc:mysql://127.0.0.1:3308/mysql?serverTimezone=UTC
