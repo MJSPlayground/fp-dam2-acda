@@ -1,10 +1,10 @@
 # Conexiones a bases de datos relacionales (JDBC)
 
-!!! info "Disponible para revisión docente"
-
-    Incluye teoría, proyecto guiado, práctica final y cuatro proyectos descargables. Las comprobaciones técnicas no sustituyen la revisión pedagógica del docente.
-
 JDBC permite controlar directamente las conexiones y las instrucciones SQL desde Java. Aprenderás a implementar repositorios propios, recuperar resultados y mantener operaciones consistentes.
+
+## Antes de empezar
+
+Revisa tablas, claves y consultas SQL sencillas. Descarga el [almacén inicial](proyecto.md) y prepara [Maven e IntelliJ](../ayuda/proyectos-maven.md). La base principal es un archivo SQLite: puedes empezar sin Docker ni MySQL. El ejemplo MySQL sirve para comparar una base de servidor.
 
 ## Recorrido
 
@@ -17,6 +17,6 @@ El [proyecto guiado de almacén y ventas](proyecto.md) avanza con estas páginas
 
 Después encontrarás una sola [práctica final de operaciones de almacén](practica-final.md), con niveles Base, Aplicación y Reto avanzado; [cinco fichas de repaso en preparación](repaso.md); y [Ampliación](ampliacion.md) sobre metadatos, JOIN, procedimientos, pool, lotes, índices y concurrencia.
 
-En [Ayuda y herramientas](../ayuda/index.md) encontrarás la preparación general de Java y bases de datos. Los bloques se desarrollarán progresivamente.
+En [Ayuda y herramientas](../ayuda/index.md) encontrarás la preparación general de Java y bases de datos.
 
 Continúa con [Bases de datos documentales con Cloud Firestore](../firestore/index.md).

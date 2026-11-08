@@ -1,10 +1,10 @@
-﻿# Bases de datos NoSQL con MongoDB
-
-!!! info "Disponible para revisión docente"
-
-    Incluye teoría, proyecto guiado, práctica final y cuatro descargas. Los proyectos se han validado con MongoDB real en Docker; la revisión pedagógica final corresponde al docente.
+# Bases de datos NoSQL con MongoDB
 
 MongoDB permite persistir documentos BSON y consultarlos desde Java. Reutilizaremos Spring y REST para concentrarnos en el modelo de equipos, jugadores embebidos, repositorios y actualizaciones seguras.
+
+## Antes de empezar
+
+Necesitas la [arquitectura Spring](../spring/index.md) y las [peticiones y respuestas REST](../firestore/rest.md). Descarga el [proyecto inicial de equipos](proyecto.md) y utiliza el servidor Docker preparado. Empieza por el modelo BSON y comprueba después la conexión; no necesitas Aggregation Pipeline para resolver el guiado ni la práctica final.
 
 ## Recorrido
 

@@ -1,10 +1,10 @@
-﻿# Manejo de ficheros y directorios
-
-!!! info "Disponible para revisión docente"
-
-    Incluye teoría, proyecto guiado, práctica final y cuatro proyectos descargables. El material histórico permanece como referencia fuera de la publicación y no define el nuevo recorrido.
+# Manejo de ficheros y directorios
 
 Aprenderás a localizar archivos y conservar información con texto, CSV, JSON y serialización Java. Construiremos un inventario local de productos sobre una interfaz JavaFX ya preparada, sin servidores adicionales.
+
+## Antes de empezar
+
+Necesitas Java básico: clases, colecciones, bucles y excepciones. Prepara [Maven y el JDK en IntelliJ](../ayuda/proyectos-maven.md) y descarga el [inventario inicial](proyecto.md#preparar-y-ejecutar) antes de estudiar las rutas. No necesitas un servidor de base de datos.
 
 ## Recorrido
 
@@ -18,4 +18,4 @@ El [proyecto guiado de inventario](proyecto.md) incorpora etapas a esta teoría.
 
 Después, una sola [práctica final](practica-final.md) añade exportación de selecciones, conciliación, previsualización y recuperación con niveles Base, Aplicación y Reto avanzado. Encontrarás [cinco fichas de repaso en preparación](repaso.md) y [Ampliación](ampliacion.md) sobre XML, streaming, observación de cambios y escritura fiable.
 
-Utiliza [preparación Maven y Run](../ayuda/proyectos-maven.md) para importar el proyecto y [diagnóstico y pruebas](../ayuda/diagnostico.md) para trabajar con autonomía. Las operaciones públicas de aprendizaje y sus soluciones no constituyen tareas de entrega.
+Utiliza [preparación Maven y Run](../ayuda/proyectos-maven.md) para importar el proyecto y [diagnóstico y pruebas](../ayuda/diagnostico.md) para trabajar con autonomía. Abre las soluciones en otra carpeta para contrastarlas sin sobrescribir tu trabajo.

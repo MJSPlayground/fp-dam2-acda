@@ -23,7 +23,7 @@ Aprende a guardar, consultar y transformar información desde aplicaciones Java:
 
 ## Temas
 
-El recorrido sigue el [índice aprobado](https://github.com/MJSPlayground/fp-dam2-acda/blob/main/CONTENIDOS_ACDA.md). Los seis temas disponen de teoría, proyectos guiados y prácticas finales con soluciones públicas para revisión docente. Las prácticas de repaso permanecen en preparación.
+Sigue el recorrido de Ficheros a MongoDB. En cada tema, estudia la teoría y avanza con un único proyecto guiado; después aplica lo aprendido en su práctica final. Las interfaces están preparadas y las soluciones públicas permiten contrastar tu trabajo. Las fichas de repaso están en preparación.
 
 <div class="grid cards" markdown>
 

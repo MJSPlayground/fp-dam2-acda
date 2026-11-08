@@ -1,12 +1,12 @@
-﻿# Acceso a datos mediante componentes Spring
-
-!!! info "Disponible para revisión docente"
-
-    Incluye teoría, proyecto guiado, práctica final y soluciones públicas verificadas. La revisión pedagógica final corresponde al docente.
+# Acceso a datos mediante componentes Spring
 
 Ya sabemos separar persistencia y reglas y hemos utilizado [Hibernate](../hibernate/index.md) para relacionar objetos con tablas. Ahora aprenderemos a construir y conectar esos componentes con Spring Boot, a declarar repositorios Spring Data JPA y a coordinar casos de uso mediante servicios transaccionales.
 
 El proyecto **Servicios para el catálogo** conserva las ideas de libros y editoriales y añade stock. La aplicación dispone de interfaz web terminada: el trabajo del alumnado se centra en el backend. No es necesario conocer JDBC ni construir páginas HTML para seguir el recorrido.
+
+## Antes de empezar
+
+Parte del [catálogo Hibernate](../hibernate/index.md): entidades, repositorios y transacciones. Descarga el [proyecto inicial](proyecto.md#preparar-y-ejecutar) y localiza en la guía qué clases están preparadas antes de modificar código. Empieza por componentes e inyección; las vistas web, seguridad y soporte de arranque se entregan preparados.
 
 ## Recorrido
 

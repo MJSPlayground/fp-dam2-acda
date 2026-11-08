@@ -1,4 +1,4 @@
-﻿# Abrir y ejecutar proyectos Maven en IntelliJ IDEA
+# Abrir y ejecutar proyectos Maven en IntelliJ IDEA
 
 Los proyectos descargables contienen `pom.xml`, `mvnw`, `mvnw.cmd` y `.mvn/wrapper/`. Necesitas un **JDK 25** instalado. Para realizar las prácticas, trabaja desde IntelliJ IDEA.
 
@@ -32,9 +32,13 @@ En los proyectos **JavaFX**, ejecuta el `Launcher` indicado por la guía. Esa cl
 
 En los proyectos **web**, la clase principal inicia un servidor: mantén su proceso activo y abre en el navegador la dirección del README. Cerrar una pestaña no detiene el servidor. Cuando el proyecto utiliza Thymeleaf, el servidor procesa las plantillas antes de enviarlas al navegador; la aplicación se usa desde su URL, con la interfaz ya entregada. Si otra configuración ocupa el puerto, identifica cuál está ejecutándose y detén la que corresponda antes de arrancar otra variante.
 
-## Comprobación técnica opcional
+## Maven Wrapper: las mismas pruebas sin instalar Maven
 
-Maven Wrapper permite al docente ejecutar pruebas desde la carpeta del `pom.xml`: `.\mvnw.cmd test` en Windows o `./mvnw test` en Linux/macOS. No es un paso necesario para completar la práctica. `target/` contiene resultados de compilación y no se distribuye.
+El **Wrapper** descarga y utiliza la versión de Maven indicada por el proyecto, aunque no tengas Maven instalado globalmente. Las bibliotecas y las versiones se resuelven desde `pom.xml`; no tienes que añadir JAR a mano.
+
+Puedes ejecutar las pruebas desde IntelliJ o, si prefieres la terminal, desde la carpeta del `pom.xml`: `.\mvnw.cmd test` en Windows o `./mvnw test` en Linux/macOS. Son dos formas de lanzar el mismo trabajo, no dos pasos obligatorios. `target/` contiene las clases compiladas, informes de pruebas y paquetes generados.
+
+Las pruebas que necesitan una interfaz gráfica o un servidor pueden aparecer omitidas cuando ese entorno no está preparado. Sigue la sección de pruebas del README: indica qué clase ejecutar y qué propiedad habilita cada grupo. Una prueba omitida todavía no ha comprobado tu código; vuelve a ejecutarla con los requisitos indicados.
 
 ## Importar clases y mantener el editor
 

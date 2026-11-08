@@ -1,5 +1,15 @@
 # Estado del desarrollo
 
+## Auditoría pedagógica en curso — 2026-11-08
+
+Nuevo encargo: corregir los seis temas existentes desde la perspectiva del alumno, sin regenerarlos ni cambiar alcance. Orden conceptual de revisión: Ficheros → Hibernate → Spring → JDBC → Firestore → MongoDB.
+
+- Primer hito: portadas y Ayuda sin referencias de aprobación interna, prerrequisitos y recorrido explícitos. Validado en copia aislada de HEAD con solo este hito: export7PDF+global150p;24ZIP integridad/bytes; UIgeneral y seisportadas móvil oscuro;65páginas/1210enlaces/893fragmentos/468búsqueda. Muestras reales de portada/AyudaPDF inspeccionadas. No cambió código Java en este hito; sus fuentes base son las previamente comprobadas, sin atribuir una nueva compilación local.
+- Revisión por páginas/requisitos finales y pruebas optativas de aprendizaje en curso, con propiedad de archivos separada entre agentes.
+- Guardia contextual `check_student_voice.py` preparada: distingue referencias internas de commit transaccional, historial de negocio, autoría y enlaces útiles a código. Se integrará en CI al completar la limpieza de todas las páginas.
+- Guía manual y estimaciones internas por etapa/nivel pendientes. Las evidencias técnicas del encargo anterior se conservan abajo como histórico; no equivalen al cierre de esta auditoría.
+- Siguiente paso: publicar primer hito validado, corregir y verificar cada tema y completar GUIA-REVISION-MANUAL.md fuera de docs.
+
 ## Encargo y punto actual
 
 Encargo integral autorizado en main. Orden obligatorio: JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring.

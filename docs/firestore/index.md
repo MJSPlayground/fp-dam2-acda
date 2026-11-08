@@ -1,10 +1,12 @@
-﻿# Bases de datos documentales con Cloud Firestore
-
-!!! info "Disponible para revisión docente"
-
-    Incluye teoría, proyecto guiado, práctica final y cuatro descargas. La validación local utiliza el emulador oficial; las credenciales, IAM e índices del servicio cloud requieren una comprobación separada en el proyecto del aula.
+# Bases de datos documentales con Cloud Firestore
 
 Cloud Firestore almacena documentos agrupados en colecciones. Construiremos una API de reservas de espacios con Spring Boot y un frontend ya preparado, manteniendo repositorios y servicios separados.
+
+Para trabajar en local, inicia el **emulador oficial preparado**: no necesitas una cuenta cloud ni claves privadas. Sus datos pertenecen al proceso local y no a una base remota. Sigue [el arranque y la conservación de datos](configuracion.md) y mantén separados el emulador y la aplicación Java.
+
+## Antes de empezar
+
+Recupera los [servicios y la inyección de Spring](../spring/componentes.md). Descarga las [reservas iniciales y su colección Postman](proyecto.md) antes de estudiar el modelo documental. HTTP y los controladores REST se explican en este tema; no se presupone que ya sepas construir una API.
 
 ## Recorrido
 

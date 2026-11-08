@@ -1,14 +1,14 @@
 # Ayuda y herramientas
 
-Esta sección reúne las referencias transversales necesarias para trabajar con los temas. Su contenido crecerá a medida que se publiquen las prácticas.
+Consulta estas guías cuando necesites preparar el entorno, ejecutar un proyecto o investigar un error. Desde cada tema encontrarás enlaces al apartado que necesitas.
 
 ## Entorno Java y proyectos
 
-Los proyectos Java tendrán **Java 25** como objetivo inicial. Instala el JDK, abre en IntelliJ IDEA la carpeta concreta que contiene `pom.xml`, espera la sincronización Maven y selecciona ese JDK. Ejecuta las clases `main` con el botón verde **Run**. La [guía de proyectos Maven e IntelliJ](proyectos-maven.md) explica la importación, la localización de resultados y el diagnóstico inicial. Maven Wrapper queda disponible para comprobaciones técnicas opcionales.
+Los proyectos utilizan **Java 25**. Instala el JDK, abre en IntelliJ IDEA la carpeta concreta que contiene `pom.xml`, espera la sincronización Maven y selecciona ese JDK. Ejecuta las clases `main` con el botón verde **Run**. La [guía de proyectos Maven e IntelliJ](proyectos-maven.md) explica la importación, la localización de resultados y el diagnóstico inicial. Maven Wrapper queda disponible para comprobaciones técnicas opcionales.
 
 ## Contenedores y bases de datos
 
-Se usarán Docker y Docker Compose para los servicios que requieran servidor, además de herramientas como MySQL Workbench y MongoDB Compass. Comprueba el puerto configurado en cada proyecto antes de conectarte. Los ejemplos concretos de cada base se incorporarán junto a sus temas.
+Utiliza Docker y Docker Compose para los servicios que requieran servidor, además de herramientas como MySQL Workbench y MongoDB Compass. Comprueba el puerto configurado en cada proyecto antes de conectarte. Cada tema indica su servidor, puerto y base concretos.
 
 Consulta [contenedores y clientes de base de datos](contenedores.md) para distinguir imagen, servidor y cliente, entender los puertos y diagnosticar la conexión.
 

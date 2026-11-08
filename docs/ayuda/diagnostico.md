@@ -22,7 +22,7 @@ En una venta, comprueba que el descuento y el historial utilizan la misma conexi
 
 ## Leer los registros
 
-Nuestros proyectos usan **SLF4J** como API de logging y **Log4j2** como implementación. La configuración preparada está en `src/main/resources/log4j2.xml`. No necesitas reemplazarla para completar un TODO.
+Nuestros proyectos usan **SLF4J** como API de logging y **Log4j2** como implementación. En los proyectos JavaFX, la configuración preparada está en `src/main/resources/log4j2.xml`; en los proyectos Spring Boot se ajusta mediante `application.properties` y los perfiles indicados en su README. No necesitas reemplazar ese soporte para completar un TODO.
 
 Los niveles separan detalle técnico (`DEBUG`), acontecimientos normales (`INFO`), situaciones que merecen atención (`WARN`) y fallos (`ERROR`). Por ejemplo, una venta confirmada puede registrarse en INFO; una consulta que falla debe conservar la excepción como causa en el registro técnico. No incluyas contraseñas, tokens ni claves privadas.
 

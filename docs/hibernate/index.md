@@ -1,10 +1,10 @@
-﻿# Herramientas ORM y JPA con Hibernate
-
-!!! info "Disponible para revisión docente"
-
-    Incluye teoría, proyecto guiado, práctica final y soluciones públicas verificadas. La revisión pedagógica final corresponde al docente.
+# Herramientas ORM y JPA con Hibernate
 
 Aprenderás a relacionar objetos Java con tablas y asociaciones, persistir entidades y mantener operaciones coherentes mediante sesiones y transacciones. El proyecto es un catálogo de biblioteca con interfaz JavaFX preparada.
+
+## Antes de empezar
+
+Reutiliza las [capas y los errores de Ficheros](../ficheros/arquitectura.md) y repasa tablas, claves primarias y foráneas. Descarga el [catálogo inicial](proyecto.md#preparar-y-ejecutar); la configuración de MySQL está preparada. Empieza por arquitectura y continúa con el arranque. No necesitas Spring ni JDBC.
 
 ## Recorrido
 
