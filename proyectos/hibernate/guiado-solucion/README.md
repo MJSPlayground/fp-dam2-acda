@@ -45,3 +45,9 @@ Versiones comprobadas en POM: Java25, Hibernate ORM7.4.15.Final, Jakarta Persist
 ## Alcance de esta variante
 
 Solución completa del catálogo guiado con las tres cardinalidades ordinarias, CRUD de catálogos y libros, detalle opcional, consultas y transacciones. Las pruebas verifican ambos lados de las relaciones, cascadas/orphan, autores compartidos, límites, errores, persistencia al reiniciar y conflictos entre sesiones.
+
+## Pruebas optativas de aprendizaje por fases
+
+El proyecto entrega `FasesGuiadoTest` en `src/test/java`. Abre la clase en IntelliJ, crea una configuración JUnit y selecciona en **VM options** `-Dfase=mapeos`. Valores disponibles: uno-muchos, muchos-muchos, uno-uno, mapeos, catalogos, repositorio, consultas, servicio, rollback. El valor `completo` activa todas las fases de esta clase. Añade también `-Dqa.mysql=true` para las fases con MySQL (todas salvo las comprobaciones de mapeos). El apoyo crea y elimina solo un esquema UUID propio; requiere una cuenta de desarrollo con CREATE/DROP DATABASE, nunca credenciales de producción. La conexión administrativa por defecto es `jdbc:mysql://127.0.0.1:3308/mysql?sslMode=DISABLED&allowPublicKeyRetrieval=true&serverTimezone=UTC`, root/qa_root_local. Puedes sobreescribirla mediante `QA_MYSQL_ADMIN_URL`, `QA_MYSQL_ADMIN_USER` y `QA_MYSQL_ADMIN_PASSWORD` en Environment variables de Run.
+
+Alternativa con Wrapper: `.\mvnw.cmd '-Dtest=FasesGuiadoTest' '-Dfase=completo'  '-Dqa.mysql=true' test`. En Unix utiliza `./mvnw`. Sin `fase`, estos casos se omiten; esa omisión no verifica los TODO. En el starter se espera que fallen las fases cuyos métodos siguen pendientes. Los mismos oráculos están en la solución para contrastar los resultados, sin incluir sus algoritmos en el starter.

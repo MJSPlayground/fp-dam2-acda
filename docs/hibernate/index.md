@@ -20,3 +20,5 @@ El [proyecto guiado](proyecto.md) evoluciona con estas explicaciones sobre una s
 Después encontrarás una sola [práctica final de ampliación del catálogo](practica-final.md), con niveles Base, Aplicación y Reto avanzado; [cinco fichas de repaso en preparación](repaso.md); y [Ampliación](ampliacion.md) sobre consultas y rendimiento.
 
 Reutiliza las capas y el logging introducidos en [Ficheros](../ficheros/arquitectura.md), así como [preparación Maven](../ayuda/proyectos-maven.md), [contenedores](../ayuda/contenedores.md) y [diagnóstico](../ayuda/diagnostico.md). No se necesita conocer JDBC o Spring para seguir este tema.
+
+Las [comprobaciones por etapas](proyecto.md#pruebas-preparadas-para-avanzar) del starter permiten contrastar cada avance sin completar todo el proyecto primero. Activa solo la fase que estés trabajando y conserva los casos pendientes para las siguientes etapas.

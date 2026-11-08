@@ -63,6 +63,13 @@ public class BibliotecaService {
       throw new BibliotecaException("Escribe un nombre de 1 a " + max + " caracteres.");
   }
 
+  /** Apoyo preparado: una edición no debe sobrescribir cambios posteriores al formulario. */
+  protected void comprobarVersion(Libro libro, Long version) {
+    if (version == null || version != libro.getVersion()) {
+      throw new BibliotecaException("El libro cambió: actualiza antes de editar.");
+    }
+  }
+
   protected Libro requerido(Session s, long id) {
     Libro l = libros.buscar(s, id);
     if (l == null) throw new BibliotecaException("Libro no encontrado.");

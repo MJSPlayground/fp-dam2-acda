@@ -1,4 +1,4 @@
-﻿# Ampliación del catálogo
+# Ampliación del catálogo
 
 La biblioteca mantiene editoriales, autores, libros y detalles. Ahora necesita registrar nuevas ediciones con menos trabajo, trasladar parte de un catálogo y reunir editoriales sin perder sus relaciones.
 
@@ -68,6 +68,14 @@ Las pruebas transaccionales deben provocar también un fallo técnico después d
 Los joins, estadísticas de rendimiento y SQL nativo de [Ampliación](ampliacion.md) pueden servir de consulta, pero no se exige implementar técnicas adicionales para completar estos niveles. Las reglas se resuelven con las entidades, repositorios, servicios y transacciones ya enseñados.
 
 ## Solución completa
+
+### Pruebas disponibles desde el starter
+
+En IntelliJ ejecuta la clase `FasesFinalTest`, situada en `src/test/java/es/mjsplayground/acda/hibernate/biblioteca`, con **VM options** `-Dqa.mysql=true -Dfase=base`. Cambia la fase por `aplicacion` o `reto`; `completo` activa las tres. El README explica las variables de conexión si tu MySQL no usa el puerto de desarrollo. `ApoyoFasesMysql` crea datos conocidos en un esquema UUID exclusivo y lo elimina al terminar; no vacía la biblioteca de trabajo. Los algoritmos nuevos siguen pendientes en el starter.
+
+Base comprueba que la edición nueva tiene otra identidad de detalle y conserva autores y ficha original. Aplicación contrasta un traslado inválido con otro que transforma 29,90 € en 26,91 €. Reto prepara automáticamente una tercera editorial con el nombre solicitado: la restricción de unicidad fuerza un fallo real al final de la operación. La comprobación vuelve a consultar en otra sesión y exige editorial de origen y libro intactos; después contrasta una fusión válida. No tienes que provocar una caída del servidor ni inventar datos para reproducir el fallo.
+
+Comando opcional: `./mvnw -Dtest=FasesFinalTest -Dqa.mysql=true -Dfase=reto test` (Windows: `mvnw.cmd`). Completa además los casos del enunciado: libro sin detalle, IDs repetidos, límite de descuento, filtros y cancelaciones. Que una prueba se omita por falta del flag o de la fase no significa que el nivel esté verificado.
 
 [Descargar solución de los tres niveles](/fp-dam2-acda/descargas/codigo/biblioteca-final-solucion.zip){ .md-button download="biblioteca-final-solucion.zip" }
 

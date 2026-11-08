@@ -1,4 +1,4 @@
-﻿# Repositorios, servicios, errores y logging
+# Repositorios, servicios, errores y logging
 
 La interfaz preparada permite abrir un formulario o elegir un archivo, pero no debería decidir cómo leer CSV ni cuándo aceptar un stock. Separar esas responsabilidades ayuda a entender el programa y a comprobar sus reglas sin depender de la ventana.
 
@@ -130,10 +130,16 @@ El proyecto incluye dependencias y `src/main/resources/log4j2.xml`; no tienes qu
 
 El `pom.xml` declara las bibliotecas usadas por el proyecto, entre ellas Commons CSV, Jackson y logging. IntelliJ importa el proyecto Maven y descarga esas dependencias. El código no encuentra `ObjectMapper` porque se copie su `.java`, sino porque está disponible la biblioteca correspondiente.
 
-Maven Wrapper permite reproducir compilación y tests sin exigir Maven global. El recorrido del alumnado utiliza Run y la ventana Maven de IntelliJ; los comandos de QA aparecen como alternativa en el README. La [guía de proyectos Maven](../ayuda/proyectos-maven.md) explica esa preparación.
+Maven Wrapper permite reproducir compilación y tests sin exigir Maven global. El recorrido del alumnado utiliza Run y la ventana Maven de IntelliJ; los comandos para ejecutar pruebas aparecen como alternativa en el README. La [guía de proyectos Maven](../ayuda/proyectos-maven.md) explica esa preparación.
 
 ## Comprobar capas, no solo compilación
 
 Una prueba de servicio puede intentar un duplicado y comprobar que la lista no cambió. Otra puede inyectar un repositorio que falla y comprobar que el estado anterior permanece y la causa se conserva. Una prueba real de repositorio comprueba archivos, codificación y formatos; una de UI observa formularios, mensajes y selección.
 
 La [guía del proyecto](proyecto.md) relaciona esos niveles con los TODO. No se considera validada una carga porque el código compila ni una interfaz porque sus servicios pasen tests.
+
+## Un orden de implementación que permite comprobar cada capa
+
+No completes a la vez todos los repositorios y el servicio. En el guiado, primero verifica `ArchivosRepository.listar`; después prueba el lector y escritor CSV por separado; luego incorpora alta/edición y carga completa en el servicio. JSON y binario reutilizan ese caso de uso una vez comprobados sus repositorios. Las fases `rutas`, `csv-lectura`, `csv-escritura`, `crud` y `carga` están preparadas en [la guía](proyecto.md#comprobaciones-optativas-por-fase).
+
+Para depurar, coloca un punto de interrupción antes de sustituir la lista actual. Si la conversión falla, el flujo no debe llegar allí; si el stock es negativo, debe detenerse durante la validación del candidato. Un resultado vacío válido no se distingue de un fallo si se captura cualquier excepción y se devuelve `List.of()`: conserva la causa y deja que el servicio comunique el rechazo.

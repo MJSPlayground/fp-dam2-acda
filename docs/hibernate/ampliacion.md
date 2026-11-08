@@ -1,4 +1,4 @@
-﻿# Ampliación
+# Ampliación
 
 El recorrido ordinario utiliza entidades, transacciones y HQL sencillo. Aquí profundizamos en consultas sobre relaciones y en la observación de lo que ejecuta Hibernate, con demostraciones incluidas en la solución del mismo proyecto.
 
@@ -123,4 +123,4 @@ Los métodos `fromTransaction` utilizados por esas clases son ayudantes del prov
 
 [Ver ConsultasDemo](https://github.com/MJSPlayground/fp-dam2-acda/blob/main/proyectos/hibernate/guiado-solucion/src/main/java/es/mjsplayground/acda/hibernate/biblioteca/demo/ConsultasDemo.java) · [Ver las pruebas reales de la demostración](https://github.com/MJSPlayground/fp-dam2-acda/blob/main/proyectos/hibernate/guiado-solucion/src/test/java/es/mjsplayground/acda/hibernate/biblioteca/AmpliacionTest.java)
 
-Las pruebas utilizan un esquema QA temporal propio y MySQL real. Las opciones de ejecución técnica y variables están en el README; no deben apuntar a una base de trabajo importante.
+Las pruebas utilizan un esquema temporal propio y MySQL real. Las opciones de ejecución técnica y variables están en el README; no deben apuntar a una base de trabajo importante.

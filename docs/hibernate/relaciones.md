@@ -1,4 +1,4 @@
-﻿# Relaciones y ciclo de vida
+# Relaciones y ciclo de vida
 
 El catálogo utiliza las tres cardinalidades del tema. No son tres formas de escribir la misma anotación: cada una expresa cuántos objetos pueden relacionarse y cómo se conserva esa asociación.
 
@@ -81,6 +81,20 @@ Si la sesión ya está cerrada, acceder a una asociación pendiente puede produc
 El servicio prepara `LibroDatos` dentro de la transacción, recuperando los datos que necesita la UI. La [Ampliación de rendimiento](ampliacion.md) muestra cómo detectar consultas repetidas y utilizar `JOIN FETCH` cuando corresponda.
 
 ## Errores frecuentes y comprobaciones
+
+### Seguir identidades concretas
+
+Con los datos preparados del guiado, consulta las relaciones **en una sesión nueva después de guardar**:
+
+| Operación | Resultado que debe observarse |
+| --- | --- |
+| Listar Horizonte | Contiene `Java y datos`; Norte contiene `Historias locales` |
+| Retirar Luz de `Java y datos`, conservando Alex | El libro tiene un vínculo menos en `libro_autor`; Luz continúa en `autor` |
+| Consultar a Alex | Sigue vinculado a ambos libros; no hay dos filas distintas para la misma identidad |
+| Retirar el detalle Español/320 de `Java y datos` | Desaparece esa fila de `detalle`; el libro y sus autores permanecen |
+| Eliminar un libro nuevo de prueba con detalle | Desaparecen libro, detalle y vínculos; editorial y autores permanecen |
+
+Antes de cada operación anota los IDs que muestra Workbench. Compara `libro`, `editorial`, `autor`, `detalle` y `libro_autor`; los nombres son útiles para leer, pero las claves expresan la identidad. Los datos del test `ApoyoFasesMysql` se reconstruyen en una base temporal, de modo que estas comprobaciones no exigen borrar tu biblioteca.
 
 | Error | Qué revisar |
 | --- | --- |

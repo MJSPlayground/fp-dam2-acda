@@ -1,4 +1,4 @@
-﻿# Sesiones, estados, CRUD y transacciones
+# Sesiones, estados, CRUD y transacciones
 
 El mapeo describe cómo relacionar entidades y tablas. Para realizar una operación necesitamos un contexto que gestione esas entidades y una transacción que delimite sus cambios.
 
@@ -109,3 +109,11 @@ Una edición rechazada debe conservar los datos anteriores. Un ISBN duplicado se
 Completa los TODO del repositorio y del servicio previstos en [la guía](proyecto.md). Comprueba altas, consultas, modificaciones y borrados permitidos. Intenta también modificar una clave inexistente y violar una restricción.
 
 Para comprobar rollback, observa el estado de la base con una sesión nueva después del fallo. Que una excepción se haya lanzado no demuestra por sí solo que se revirtieran todas las modificaciones. Continúa con [relaciones y ciclo de vida](relaciones.md).
+
+## Aplicar la transacción preparada sin escribir otra infraestructura
+
+En `model/repository/LibroRepository.java`, `buscar` recibe la sesión y puede utilizar `s.find(Libro.class, id)`; `insertar` recibe una entidad nueva y utiliza `s.persist(libro)`; `eliminar` recibe una entidad recuperada en esa misma sesión y utiliza `s.remove(libro)`. Completa y contrasta esas operaciones antes de combinar alta y relaciones en `BibliotecaService.guardarLibro`.
+
+El método preparado `transaccion(Function<Session, T>)` recibe una tarea: la lambda `s -> { ...; return resultado; }` contiene el trabajo del caso de uso y recibe la sesión abierta. El tipo `T` es el resultado que devuelve esa tarea, por ejemplo el ID creado; no debes añadir un `commit` a cada repositorio. El helper confirma si termina y revierte si falla, preservando causas.
+
+La fase `rollback` de [las pruebas del guiado](proyecto.md#pruebas-preparadas-para-avanzar) ya inyecta un error después de una inserción sincronizada con `flush`. Observa el conteo dentro de la transacción y compáralo con el de una sesión nueva posterior al rechazo. Este contraste explica por qué `flush` no equivale a `commit`.

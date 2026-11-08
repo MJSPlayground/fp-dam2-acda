@@ -1,4 +1,4 @@
-﻿# Proyecto guiado: catálogo de biblioteca
+# Proyecto guiado: catálogo de biblioteca
 
 La biblioteca necesita mantener editoriales, autores, libros y sus detalles de publicación. El proyecto integra las tres cardinalidades en una sola aplicación JavaFX, con controles y formularios preparados. El alumnado completa mapeos, repositorios y servicio.
 
@@ -46,6 +46,20 @@ Sustituye esas marcas por:
 
 No añadas borrado en cascada a autores o editoriales compartidos. En Workbench observa las claves y la tabla de unión cuando el proveedor prepare el esquema; que existan campos en Java no demuestra que sus asociaciones estén mapeadas.
 
+El primer lado propietario se declara sobre el atributo real de `Libro.java`:
+
+```java
+@ManyToOne(optional = false, fetch = FetchType.LAZY)
+@JoinColumn(name = "editorial_id", nullable = false)
+private Editorial editorial;
+```
+
+La entrada conceptual es una editorial existente; la salida persistida es su clave en `libro.editorial_id`. Ahora completa el lado inverso en `Editorial.libros`: ¿qué nombre de atributo debe indicar `mappedBy`? Consulta [1:N](relaciones.md) antes de seguir con M:N y 1:1. No sustituyas el atributo por otro ID Java independiente.
+
+Hazlo en tres pasos en `src/main/java/es/mjsplayground/acda/hibernate/biblioteca/model/entity`: primero `Libro.editorial` y `Editorial.libros`; después `Libro.autores` y `Autor.libros`; por último `Libro.detalle`. En cada pareja identifica el atributo que escribe la clave o la tabla de unión antes de añadir anotaciones. `mappedBy` contiene el **nombre del atributo Java propietario**, no el de una columna SQL. Compara tus anotaciones con [las relaciones](relaciones.md), sin añadir cascadas por ensayo y error.
+
+Las fases `uno-muchos`, `muchos-muchos` y `uno-uno` comprueban cada paso sin necesitar MySQL; `mapeos` reúne las cinco asociaciones. Después, la fase `catalogos` prepara datos reales en un esquema temporal; si falla por una asociación mal construida, corrígela antes de pasar al repositorio.
+
 ## Etapa 2. CRUD y consultas de repositorio
 
 Lee [sesiones y transacciones](persistencia.md) y [HQL básico](consultas.md). Completa el **TODO 2** de `LibroRepository`: listar, buscar, insertar y eliminar, además de las consultas de editoriales y autores de `CatalogoRepository`.
@@ -53,6 +67,27 @@ Lee [sesiones y transacciones](persistencia.md) y [HQL básico](consultas.md). C
 Utiliza la sesión recibida y consultas tipadas con parámetros. El listado admite texto de título y editorial opcional, y ordena por título e ID. La consulta habla de propiedades Java; no uses `editorial_id` como si fuera una propiedad HQL.
 
 Las operaciones preparadas del servicio permiten mantener editoriales y autores. Comprueba altas y consultas de estos catálogos antes de registrar libros. Un nombre repetido debe rechazarse con un mensaje comprensible; un fallo de conexión no debe mostrarse como una lista vacía.
+
+Dentro de `LibroRepository.buscar`, la API recibe la sesión del servicio y el ID solicitado:
+
+```java
+Libro encontrado = s.find(Libro.class, id);
+// Decide qué debe devolver buscar cuando no existe esa identidad.
+```
+
+`find` devuelve la entidad gestionada o `null`; no necesita construir un libro vacío. Para el listado, comienza contrastando una consulta tipada sin filtros:
+
+```java
+List<Libro> encontrados = s.createSelectionQuery(
+    "from Libro l order by l.titulo, l.id", Libro.class).getResultList();
+// Añade los filtros parametrizados explicados en consultas.md.
+```
+
+No concatentes el texto introducido por la persona en ese HQL. El primer fragmento busca una identidad y el segundo devuelve una lista: esa diferencia permite probar CRUD antes de combinar filtros.
+
+Divide el TODO en tres hitos dentro de `model/repository`: **catálogos**, completando `CatalogoRepository.editoriales/autores` (fase `catalogos`); **CRUD de libro**, completando `LibroRepository.buscar/insertar/eliminar` (fase `repositorio`); y **listado HQL**, completando `LibroRepository.listar` (fase `consultas`). `s.find(Libro.class, id)` busca una identidad; `s.persist(libro)` incorpora un objeto nuevo a esa sesión. Ninguno reemplaza la transacción del servicio. En una edición, recuperar y modificar una entidad gestionada permite que Hibernate detecte sus cambios.
+
+Con los datos del test, listar sin filtro devuelve dos libros; `Java` con Horizonte devuelve uno; `Java` con Norte devuelve cero. Prueba primero un filtro y después combina ambos. Si sale cero siempre, inspecciona parámetros y propiedades antes de cambiar el servicio.
 
 ## Etapa 3. Crear y editar libros
 
@@ -73,6 +108,19 @@ En una base vacía, la demostración crea Horizonte, Norte, Alex Ríos y Luz Veg
 
 Prueba **Nuevo → Guardar**, **Editar → Cancelar** y edición confirmada. Cambiar el precio no debe borrar autores ni detalle. La UI devuelve la versión que abrió y el servicio rechaza una edición si el libro ya cambió.
 
+En `model/service/BibliotecaService.java`, aborda `guardarLibro` en este orden: valida `LibroSolicitud` con el apoyo preparado; entra en `transaccion`; recupera editorial y autores existentes; distingue alta (`id == null`) de edición; asigna los valores y prepara el detalle; llama a `flush` y devuelve la identidad. Antes de editar, utiliza `comprobarVersion`, ya preparado: no tienes que construir un mecanismo de concurrencia. En `datosDemo`, utiliza la misma sesión para los datos relacionados y respeta la condición de catálogos vacíos. Comprueba la fase `servicio` antes de añadir más operaciones.
+
+En la rama de edición, estas llamadas pertenecen al **interior de la misma tarea transaccional**:
+
+```java
+Libro actual = requerido(s, id);
+comprobarVersion(actual, version); // Apoyo entregado para el formulario abierto.
+actual.setTitulo(r.titulo().strip());
+// Completa los demás valores y asociaciones sin crear otra identidad de libro.
+```
+
+`r` es la solicitud ya validada y `s` la sesión recibida por la lambda. El setter cambia una entidad gestionada; Hibernate sincroniza sus cambios dentro de la transacción. El detalle y los autores requieren sus decisiones de ciclo de vida, explicadas en [relaciones](relaciones.md); no basta copiar todos los campos indiscriminadamente.
+
 ??? tip "Pista: primero recuperar las identidades relacionadas"
 
     Elegir una editorial o autor existente no equivale a crear otro objeto con su nombre. Recupera esas entidades en la sesión del caso de uso y asigna las relaciones desde su lado propietario. El detalle nuevo tiene otro ciclo de vida y puede persistirse con la cascada del libro.
@@ -91,7 +139,15 @@ Busca por título, por editorial y con filtros combinados. Un apóstrofo no debe
 
 Intenta ISBN repetido, precio inválido, autor inexistente y detalle incompleto. Ningún rechazo debe dejar cambios parciales. El log conserva la causa técnica y la UI mantiene los datos necesarios para corregir.
 
-La solución contiene pruebas de relaciones, versión y rollback. Se ejecutan sobre un esquema QA aislado, sin vaciar tu catálogo. Si una prueba no conecta con MySQL porque no activaste su entorno, esa omisión no demuestra que la persistencia haya pasado. Consulta [diagnóstico y pruebas](../ayuda/diagnostico.md) y el README para las opciones técnicas.
+La solución contiene pruebas de relaciones, versión y rollback. Se ejecutan sobre un esquema de pruebas aislado, sin vaciar tu catálogo. Si una prueba no conecta con MySQL porque no activaste su entorno, esa omisión no demuestra que la persistencia haya pasado. Consulta [diagnóstico y pruebas](../ayuda/diagnostico.md) y el README para las opciones técnicas.
+
+### Pruebas preparadas para avanzar
+
+El starter entrega `src/test/java/es/mjsplayground/acda/hibernate/biblioteca/FasesGuiadoTest.java` y `ApoyoFasesMysql.java`. En una configuración JUnit de IntelliJ selecciona la primera clase y añade **VM options** `-Dfase=mapeos`. Para `catalogos`, `repositorio`, `consultas`, `servicio` o `rollback`, añade también `-Dqa.mysql=true` y utiliza el servidor local de desarrollo. El README explica las variables si usas otro puerto. `-Dfase=completo` selecciona todas. Los tests crean y eliminan solo su esquema UUID, nunca el catálogo de la aplicación.
+
+La fase `rollback` **ya incorpora el fallo**: un repositorio de prueba ejecuta `flush`, comprueba que se ha insertado el tercer libro dentro de la transacción y lanza una excepción. El test espera la causa original y abre una operación nueva para comprobar que libros y detalles recuperan sus cantidades previas. No necesitas cortar MySQL, alterar credenciales ni escribir infraestructura de errores.
+
+Comando opcional: `./mvnw -Dtest=FasesGuiadoTest -Dfase=rollback -Dqa.mysql=true test` (Windows: `mvnw.cmd`). Un test omitido no acredita una fase; un fallo antes de completar su TODO te indica qué comportamiento falta.
 
 ## Registro del recorrido
 

@@ -1,4 +1,4 @@
-﻿# MySQL, Maven y configuración de Hibernate
+# MySQL, Maven y configuración de Hibernate
 
 El proyecto necesita una aplicación Java y un servidor MySQL. La interfaz JavaFX no inicia una base embebida: al guardar se comunica con el servidor local mediante Hibernate y el driver preparado.
 
@@ -12,7 +12,7 @@ Las nociones de imagen, contenedor y volumen están en [contenedores y herramien
 
 ## Datos preparados sin sobrescribir el trabajo
 
-La configuración incluye acceso local de desarrollo con usuario `acda` y contraseña `acda_local`. Es una configuración docente local; no se reutiliza como identidad de un servidor publicado.
+Para el desarrollo local, el proyecto utiliza el usuario `acda` y la contraseña `acda_local`. No reutilices esas credenciales en un servidor publicado.
 
 La aplicación permite cargar datos de demostración de forma explícita y solo cuando el catálogo está vacío. No vuelve a sembrar libros ni editoriales al reiniciar. Una tabla sin datos y una operación pendiente del starter son situaciones distintas: lee el mensaje antes de concluir que falta la conexión.
 

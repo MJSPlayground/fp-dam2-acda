@@ -1,4 +1,4 @@
-﻿# Binarios, acceso aleatorio y serialización
+# Binarios, acceso aleatorio y serialización
 
 Un archivo de texto codifica caracteres. Un binario utiliza bytes según un contrato que conocen quien escribe y quien lee. La extensión `.bin` no explica ese contrato ni hace que cualquier contenido pueda recuperarse como un objeto Java.
 
@@ -117,3 +117,9 @@ El filtro comprueba la estructura de objetos, no las reglas del almacén: un pro
 Completa el **TODO 3** de `BinProductoRepository` utilizando el ayudante seguro. Guarda un catálogo propio, modifica el estado en memoria y vuelve a cargarlo; deben recuperarse todos los campos originales.
 
 Comprueba archivo truncado, tipo raíz incorrecto, clases no permitidas y catálogo semánticamente inválido. En todos esos fallos el estado actual debe mantenerse. La [arquitectura y gestión de errores](arquitectura.md) une estas operaciones con CSV, JSON y la interfaz.
+
+## Del objeto individual a la copia completa
+
+Localiza `model/entity/Instantanea.java` y `config/FiltroSerializacion.java`: ambos están preparados. En `model/repository/BinProductoRepository.java`, completa primero `guardar` creando la instantánea con el array de productos y escribiéndola con `writeObject`. Después aborda `leer`: abre el flujo **con el filtro ya instalado**, lee la raíz, comprueba su tipo y el contenido esperado y recupera los productos. No desactives el filtro para conseguir que un archivo pase.
+
+La fase `bin` de `FasesGuiadoTest` escribe una copia propia, compara todos los campos y después prepara un archivo corrupto de tres bytes. Pasa de esta comprobación aislada a recuperar desde la UI; el servicio valida el conjunto antes de cambiar memoria. La demostración de `RandomAccessFile` permite observar un registro de tamaño fijo; no hay que convertir el inventario en un gestor de posiciones binarias.

@@ -109,6 +109,13 @@ def article_markup(source):
     if article is None:
         raise ValueError(f"Zensical no ha generado un artículo reconocible en: {path}")
 
+    # El encabezado de la sección ya presenta el tema. Repetir aquí el h1 de
+    # su portada creaba dos títulos consecutivos en la primera página de lectura.
+    if Path(source).name == "index.md":
+        heading = article.find("h1")
+        if heading is not None:
+            heading.decompose()
+
     # En una impresión continua, las pestañas se imprimen todas y con su etiqueta.
     for tabs in article.select(".tabbed-set"):
         labels = [label.get_text(" ", strip=True) for label in tabs.select(".tabbed-labels label")]

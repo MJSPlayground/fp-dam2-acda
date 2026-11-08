@@ -1,4 +1,4 @@
-﻿# JSON y objetos Java con Jackson
+# JSON y objetos Java con Jackson
 
 CSV representa filas con columnas. JSON permite expresar objetos, listas y valores con estructura explícita. Lo utilizaremos para intercambiar el mismo catálogo de productos, manteniendo sus reglas de negocio.
 
@@ -104,3 +104,9 @@ Distingue tres problemas: no se puede abrir el archivo, su JSON está mal formad
 Completa el **TODO 2** de `JsonProductoRepository` y compara el recorrido con CSV. Prueba raíz de tipo incorrecto, unidades fraccionarias, un campo obligatorio ausente, código repetido e importe fuera de rango. En el guiado cualquier carga inválida debe conservar el catálogo anterior.
 
 Continúa con [binarios y serialización](binarios.md).
+
+## Comprobar una operación cada vez
+
+En `model/repository/JsonProductoRepository.java`, comienza por `leer(Path)`: abre el lector, utiliza el mapper preparado para obtener `Producto[]` y devuelve su lista. Después completa `guardar` escribiendo la lista mediante el mismo mapper y la infraestructura de escritura entregada. No necesitas `JsonNode` para este catálogo.
+
+Antes del recorrido gráfico, ejecuta la fase `json` de `FasesGuiadoTest` según [la guía](proyecto.md#comprobaciones-optativas-por-fase). El test contrasta el producto completo, incluido un nombre con salto, y rechaza unidades fuera del rango de `int`. Después usa el servicio y verifica que el mismo error mantiene los datos anteriores: leer bien y aceptar un catálogo son responsabilidades distintas.

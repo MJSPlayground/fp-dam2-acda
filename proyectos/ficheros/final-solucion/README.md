@@ -51,3 +51,11 @@ Reto: la previsualización devuelve PlanConciliacion inmutable con versionBase, 
 Recuperar valida un BIN entero antes de sustituir el catálogo. Usa el BIN seleccionado o, si no hay un BIN seleccionado, la última copia creada. La carpeta recuperación no aparece en listado simple: escribe esa ubicación y pulsa Usar carpeta para explorar copias antiguas, o pulsa Recuperar sin seleccionar un BIN para usar la última copia creada. Exportar incidencias genera `incidencias.csv` con encabezados fila,codigo,motivo, correctamente entrecomillado. La numeración de fila comienza en 1 para los datos, excluyendo encabezados CSV.
 
 Para el lote de ejemplo CSV y el catálogo inicial, P01 pasa de 10 a 12 unidades/precio 24,90; se añade P04 y quedan cuatro incidencias (nombre distinto de P02, dos apariciones DUP y BAD negativo). La previsualización no aplica esos cambios hasta confirmar. El JSON de ejemplo permite observar una fila numérica fuera de rango sin truncarla.
+
+## Pruebas optativas de aprendizaje por fases
+
+El proyecto entrega `FasesFinalTest` en `src/test/java`. Abre la clase en IntelliJ, crea una configuración JUnit y selecciona en **VM options** `-Dfase=base`. Valores disponibles: base, aplicacion, reto. El valor `completo` activa todas las fases de esta clase. Todos los archivos de estas pruebas se crean en directorios temporales propios.
+
+Alternativa con Wrapper: `.\mvnw.cmd '-Dtest=FasesFinalTest' '-Dfase=completo' test`. En Unix utiliza `./mvnw`. Sin `fase`, estos casos se omiten; esa omisión no verifica los TODO. En el starter se espera que fallen las fases cuyos métodos siguen pendientes. Los mismos oráculos están en la solución para contrastar los resultados, sin incluir sus algoritmos en el starter.
+
+Los casos del Reto proporcionan las condiciones de fallo, conservación y recuperación/rollback: no hace falta cortar el servidor, cambiar permisos ni crear infraestructura de ensayo. Consulta la práctica final para distinguir estos lotes pequeños de los datos de demostración de la interfaz.

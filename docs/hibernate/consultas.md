@@ -1,4 +1,4 @@
-﻿# Consultas HQL y JPQL básicas
+# Consultas HQL y JPQL básicas
 
 Recuperar un libro por ID no responde todas las preguntas de la pantalla. Para buscar títulos o seleccionar una editorial utilizamos consultas sobre las entidades mapeadas.
 
@@ -66,3 +66,9 @@ No se corrige un fallo de inicialización abriendo sesiones desde una celda Java
 Completa el listado de `LibroRepository` y comprueba búsqueda vacía, título parcial, editorial y combinación de filtros. Un valor con apóstrofo no debe romper la consulta. Una entrada que no coincide devuelve una lista vacía, mientras un fallo del servidor se comunica como error técnico.
 
 Vuelve al [proyecto guiado](proyecto.md) para contrastar el recorrido completo y sus relaciones.
+
+## Llevar la consulta al repositorio, paso a paso
+
+Completa `model/repository/LibroRepository.listar(Session s, String titulo, Long editorialId)` después de comprobar búsqueda por ID, alta y borrado. Primero obtén todos los libros ordenados; luego añade el parámetro de título; por último combina la editorial opcional. Recupera `Libro`, no columnas sueltas: el servicio transforma posteriormente esas entidades en `LibroDatos` mientras la sesión sigue abierta.
+
+La fase `consultas` de `FasesGuiadoTest` prepara dos libros: `Java y datos` en Horizonte y `Historias locales` en Norte. Espera 2 sin filtros, 1 con `Java` y Horizonte y 0 con `Java` y Norte. El texto `' or 1=1 --` debe tratarse como dato, con resultado vacío. Compara cada resultado antes de seguir; [la guía](proyecto.md#pruebas-preparadas-para-avanzar) explica cómo ejecutar ese caso con MySQL sin modificar la biblioteca de trabajo.

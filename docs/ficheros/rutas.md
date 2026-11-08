@@ -1,4 +1,4 @@
-﻿# Ficheros, directorios y rutas
+# Ficheros, directorios y rutas
 
 Un programa puede tener productos en memoria mientras está abierto. Para recuperarlos después necesita guardarlos en algún almacenamiento. En este tema utilizamos archivos: cada uno conserva bytes en un sistema de ficheros, organizado mediante directorios.
 
@@ -10,6 +10,28 @@ Un directorio agrupa entradas que pueden ser otros directorios o archivos. El no
 </figure>
 
 ## Representar una ruta con Path
+
+Antes de programar, abre el `pom.xml` del starter como proyecto Maven y espera a que IntelliJ resuelva sus dependencias. Maven reúne bibliotecas y ejecuta compilación y pruebas; no guarda el inventario. El Wrapper incluido permite utilizar la misma versión de Maven sin instalarla por separado. [Preparación de proyectos](../ayuda/proyectos-maven.md) explica JDK, importación y Run.
+
+Localiza ahora `model/entity/Producto.java`, `model/repository/ArchivosRepository.java` y `model/service/InventarioService.java`, bajo `src/main/java/es/mjsplayground/acda/ficheros/inventario`. La entidad representa un producto; el repositorio accede a los archivos; el servicio valida y coordina lo que pide la interfaz. La UI está preparada. Esta separación permite aprender primero una operación pequeña sin escribir ventanas ni completar todos los formatos.
+
+El registro técnico también está preparado: `LoggerFactory.getLogger(...)` obtiene un logger SLF4J y `src/main/resources/log4j2.xml` configura Log4j2. Por ejemplo, `log.error("No se pudo leer el catálogo", causa)` conserva la excepción para diagnosticarla. No conviertas una lectura fallida en una lista vacía ni uses `System.out.println` como sustituto del registro. Volveremos a la propagación de errores en [arquitectura](arquitectura.md).
+
+En `InventarioService`, el campo ya entregado es:
+
+```java
+protected static final Logger log =
+    LoggerFactory.getLogger(InventarioService.class);
+```
+
+Los imports `org.slf4j.Logger` y `org.slf4j.LoggerFactory` identifican la API. Dentro de los métodos del servicio puedes observar llamadas como estas:
+
+```java
+log.info("Catálogo guardado: {} productos en {}", productos.size(), archivo);
+log.error("No se pudo leer el catálogo", causa);
+```
+
+`INFO` informa de una operación terminada; los `{}` reciben los valores sin concatenarlos. `ERROR` registra un fallo y recibe como último argumento la excepción `causa`, conservando su traza. `archivo` es la ruta de la operación y `causa` la excepción capturada. El logger no guarda productos ni muestra un aviso en la ventana: esas responsabilidades siguen separadas.
 
 [`Path`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Path.html) representa una ubicación. No contiene los datos del archivo ni lo crea por sí solo. `Path.of` permite construirlo a partir de partes; `resolve` añade una ruta a otra.
 

@@ -1,4 +1,4 @@
-﻿# Ampliación
+# Ampliación
 
 Estas explicaciones profundizan en formatos, procesamiento y conservación de datos. Las demostraciones se incluyen en el proyecto solución, dentro de `demo.AmpliacionDemo`; no añaden otra práctica ni exigen cambiar el frontend.
 

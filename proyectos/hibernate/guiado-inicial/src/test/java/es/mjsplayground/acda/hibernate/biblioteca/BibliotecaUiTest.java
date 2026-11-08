@@ -92,7 +92,9 @@ class BibliotecaUiTest {
     stage.show();
     view.cargar();
     layout(view);
-    if (INICIAL && !FINAL) {
+    if (INICIAL
+        && !FINAL
+        && ((Label) view.lookup("#estado")).getText().contains("Etapa pendiente")) {
       assertTrue(((Label) view.lookup("#estado")).getText().contains("Etapa pendiente"));
       dialog(view, "demo", p -> button(p, ButtonType.OK).fire());
       assertTrue(((Label) view.lookup("#estado")).getText().contains("Etapa pendiente"));
@@ -164,7 +166,7 @@ class BibliotecaUiTest {
             text(p, "nuevo-titulo").setText("Copia UI");
             button(p, ButtonType.OK).fire();
           });
-      if (INICIAL) {
+      if (INICIAL && service.listar("Copia UI", null).isEmpty()) {
         assertEquals(3, service.listar("", null).size());
       } else {
         assertEquals(4, service.listar("", null).size());

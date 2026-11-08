@@ -1,4 +1,4 @@
-﻿# Arquitectura, ORM y Jakarta Persistence
+# Arquitectura, ORM y Jakarta Persistence
 
 En [Ficheros](../ficheros/arquitectura.md) separamos la lectura técnica de un archivo, las reglas del inventario y la interfaz. Mantendremos esas responsabilidades al trabajar con una base relacional: ahora los objetos Java se relacionan con tablas, claves y filas.
 
@@ -10,9 +10,9 @@ En Java, un libro puede tener una propiedad `Editorial editorial` y una colecci�
 
 ```text
 Java                         Base relacional
-Libro.editorial          →   libros.editorial_id → editoriales.id
+Libro.editorial          →   libro.editorial_id → editorial.id
 Libro.autores            →   libro_autor(libro_id, autor_id)
-Libro.detalle            →   libros.detalle_id → detalles.id
+Libro.detalle            →   libro.detalle_id → detalle.id
 ```
 
 El **desfase objeto-relacional** aparece al traducir identidad, tipos, asociaciones y ciclos de vida entre ambos modelos. Un objeto recién creado no tiene por qué disponer aún de un identificador de base; dos referencias Java distintas pueden representar la misma fila en momentos diferentes.

@@ -1,6 +1,6 @@
-﻿# Prácticas de repaso
+# Prácticas de repaso
 
-Este espacio reunirá cinco proyectos independientes para consolidar el mapeo y las operaciones ORM. Se publicarán sus enunciados, interfaces, proyectos iniciales y soluciones cuando estén desarrollados y comprobados.
+Estas cinco fichas todavía no incluyen actividades ni descargas. Mientras tanto, puedes consolidar el recorrido con el [proyecto guiado](proyecto.md) y la [práctica final](practica-final.md).
 
 ## Ficha 1
 

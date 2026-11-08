@@ -1,4 +1,4 @@
-﻿# Texto, CSV y codificación
+# Texto, CSV y codificación
 
 Un archivo contiene bytes. Para interpretar texto debemos acordar una **codificación**, que relaciona esos bytes con caracteres. Utilizaremos UTF-8 para conservar letras acentuadas y otros caracteres de los nombres del catálogo.
 
@@ -115,3 +115,9 @@ El resultado contiene cuatro columnas, no cinco. Al exportar la lista completa s
 Completa el **TODO 2** de lectura y escritura CSV. Prueba el recorrido guardar → cargar y compara todos los campos. Incluye un nombre con coma y comillas, unidades cero y una fila inválida al final de un archivo.
 
 Comprueba también encabezado ausente, número no entero, precio inválido y código duplicado. En todos los errores de carga del guiado debe conservarse el catálogo anterior. Continúa con [JSON y Jackson](json.md).
+
+## Del registro leído al catálogo aceptado
+
+Trabaja primero con `CsvProductoRepository.leer`, sin depender del formulario: la fase `csv-lectura` de `FasesGuiadoTest` entrega una fila cuyo nombre contiene coma, comillas y un salto. Espera un solo producto con el texto íntegro. Después implementa `guardar` y ejecuta `csv-escritura`; el test comprueba el archivo con Commons CSV, independientemente de tu lector.
+
+Solo después conecta la lectura con `InventarioService.cargar`. La cadena `-1` es un entero que el repositorio puede convertir, pero no un stock admisible: el servicio debe rechazarlo sin sustituir el catálogo anterior. La fase `carga` proporciona una fila correcta seguida de otra inválida para comprobar que no se importó parcialmente. [La etapa 2 del guiado](proyecto.md#etapa-2-primer-recorrido-completo-con-csv) divide lectura, escritura, mantenimiento y carga en hitos separados.

@@ -8,7 +8,16 @@ Nuevo encargo: corregir los seis temas existentes desde la perspectiva del alumn
 - Revisión por páginas/requisitos finales y pruebas optativas de aprendizaje en curso, con propiedad de archivos separada entre agentes.
 - Guardia contextual `check_student_voice.py` preparada: distingue referencias internas de commit transaccional, historial de negocio, autoría y enlaces útiles a código. Se integrará en CI al completar la limpieza de todas las páginas.
 - Guía manual y estimaciones internas por etapa/nivel pendientes. Las evidencias técnicas del encargo anterior se conservan abajo como histórico; no equivalen al cierre de esta auditoría.
-- Siguiente paso: publicar primer hito validado, corregir y verificar cada tema y completar GUIA-REVISION-MANUAL.md fuera de docs.
+- Primer hito fe735f3: Actions42455190111 build/deploy SUCCESS; comprobación pública portada+64páginas/24ZIP/8PDF salida0. Siguiente paso: validar/publicar las correcciones Ficheros/Hibernate, después Spring/JDBC y Firestore/Mongo; completar GUIA-REVISION-MANUAL.md fuera de docs.
+
+### Hito de corrección Ficheros/Hibernate — validación local
+
+- Revisión de21páginas y cada requisito final; subpasos de CSV/CRUD/carga y tres relaciones ORM, cuatro fragmentos Java orientativos por guía, apoyos de versión preparados, logging al principio y pruebas optativas en ambos starters. No cambia frontend ni dependencias.
+- Oráculos en soluciones:7+3 Ficheros,8+3 Hibernate con MySQL8.4.13. Root ejecutó además test_learning_local.sh ficheros y test_hibernate_real.sh (salida0; UI omitida en este último modo). El agente probó UI real de cuatro starters y las mismas pruebas sobre cuatro copias temporales con backend resuelto;8salidas0, sin exigir conservar TODO.
+- Snapshot aislado de este hito:8ZIP afectados extraídos/compilados/probados con Wrapper,24ZIP comparados con fuentes, sitio general y ambos temas móvil/escritorio claro/oscuro,65páginas/1260enlaces/931fragmentos/480entradas búsqueda. PDF Ficheros30/Hibernate30/global158; muestras reales renderizadas e inspeccionadas.
+- Corregido título duplicado en PDF de portadas de sección: Ayuda aparece una vez en la página3, observado antes dos veces; no modifica títulos web ni autoría.
+- Informe AUDITORIA-FICHEROS-HIBERNATE.md incluye estimaciones por etapa/nivel; root separa esfuerzo guiado+explicación del esfuerzo final adicional. No se promete completar todos los niveles en7h/9h ni se reduce el reto para forzar un horario.
+- Pendiente tras push: Actions y comprobación pública de ambos temas. Resto de correcciones permanece local, sin publicar parcialmente.
 
 ## Encargo y punto actual
 

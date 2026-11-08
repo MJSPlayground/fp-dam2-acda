@@ -1,4 +1,4 @@
-﻿# Entidades y mapeo
+# Entidades y mapeo
 
 Una entidad relaciona un objeto Java con una fila que tiene identidad persistente. No todas las clases del programa son entidades: un formulario o un resultado de consulta puede utilizar otros objetos sin crear una tabla para cada uno.
 
@@ -90,3 +90,9 @@ El proyecto guiado usa anotaciones; esta demostración no obliga a implementar e
 Examina las entidades: campos, constructores, columnas, identidad y versión están preparados. El **TODO 1** marca asociaciones temporalmente excluidas con `@Transient`; sustituye esa anotación por los mapeos 1:N, M:N y 1:1 explicados en la página de relaciones. La interfaz ya conoce los campos y no debe reemplazarse para adaptar un mapeo incorrecto.
 
 Comprueba que crear dos filas con el mismo ISBN se rechaza, que un nombre vacío no llega al almacenamiento y que el constructor permite recuperar una entidad. Las [sesiones y transacciones](persistencia.md) mostrarán cuándo se realizan esas operaciones.
+
+### Comprobación antes de programar el CRUD
+
+Identifica en `model/entity/Libro.java` el constructor sin argumentos que necesita el proveedor, el constructor que usa tu servicio y el atributo `id` que asigna la base. No sustituyas una entidad existente por un objeto nuevo del mismo título. Conserva `@Version`, sus accesores y el apoyo `BibliotecaService.comprobarVersion`: están preparados para que puedas editar sin diseñar concurrencia propia.
+
+Completa las asociaciones por parejas siguiendo [las tres comprobaciones de relaciones](relaciones.md#seguir-identidades-concretas). Ejecuta primero la fase `mapeos`, que inspecciona las anotaciones sin servidor, y después `catalogos` con MySQL. Una clase que compila con `@Transient` todavía no demuestra que sus asociaciones se guarden.

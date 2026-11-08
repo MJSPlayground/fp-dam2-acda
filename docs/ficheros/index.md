@@ -19,3 +19,5 @@ El [proyecto guiado de inventario](proyecto.md) incorpora etapas a esta teoría.
 Después, una sola [práctica final](practica-final.md) añade exportación de selecciones, conciliación, previsualización y recuperación con niveles Base, Aplicación y Reto avanzado. Encontrarás [cinco fichas de repaso en preparación](repaso.md) y [Ampliación](ampliacion.md) sobre XML, streaming, observación de cambios y escritura fiable.
 
 Utiliza [preparación Maven y Run](../ayuda/proyectos-maven.md) para importar el proyecto y [diagnóstico y pruebas](../ayuda/diagnostico.md) para trabajar con autonomía. Abre las soluciones en otra carpeta para contrastarlas sin sobrescribir tu trabajo.
+
+Las [comprobaciones por etapas](proyecto.md#comprobaciones-optativas-por-fase) del starter permiten contrastar cada avance sin completar todo el proyecto primero. Activa solo la fase que estés trabajando y conserva los casos pendientes para las siguientes etapas.

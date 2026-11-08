@@ -4,6 +4,6 @@ set -eu
 for project in guiado-solucion final-solucion; do
   (
     cd "proyectos/hibernate/$project"
-    sh mvnw -Dqa.mysql=true test --batch-mode
+    sh mvnw -Dqa.mysql=true -Dfase=completo test --batch-mode
   )
 done

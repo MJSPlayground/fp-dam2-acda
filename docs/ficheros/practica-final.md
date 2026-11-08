@@ -1,4 +1,4 @@
-﻿# Nuevas funciones del inventario
+# Nuevas funciones del inventario
 
 La tienda ya puede mantener su catálogo y cargarlo o guardarlo en CSV, JSON y binario. Ahora necesita entregar selecciones a otras personas, conciliar novedades de proveedores y conservar una recuperación antes de aplicar cambios.
 
@@ -78,6 +78,14 @@ Comprueba también la causa de los errores técnicos, las actualizaciones de la 
 El starter contiene TODO de las funciones nuevas, sin sus algoritmos resueltos. El protocolo de escritura protegida y el filtro de deserialización son infraestructura entregada; no hay que desarrollar un nuevo frontend ni un sistema de acceso aleatorio para resolver la práctica.
 
 ## Solución completa
+
+### Pruebas disponibles desde el starter
+
+`FasesFinalTest`, en `src/test/java/es/mjsplayground/acda/ficheros/inventario`, contiene casos optativos de cada nivel. En una configuración JUnit de IntelliJ añade **VM options** `-Dfase=base`, `-Dfase=aplicacion` o `-Dfase=reto`. Ejecuta la clase; las otras fases quedan omitidas. El Wrapper ofrece la misma comprobación: `./mvnw -Dtest=FasesFinalTest -Dfase=reto test` (Windows: `mvnw.cmd`). Los casos fallarán hasta implementar los requisitos correspondientes; no contienen la conciliación ni la aplicación resueltas.
+
+El caso de Aplicación utiliza un lote pequeño propio con dos apariciones de `DUP`: espera cuatro productos y dos incidencias, conservando el catálogo antes de aplicar. Es una comprobación distinta del lote público de cuatro incidencias descrito arriba. El Reto prepara una propuesta, aplica, lee la copia con un repositorio independiente y recupera; después comprueba una propuesta obsoleta. Finalmente inyecta un repositorio que falla al escribir la copia. Ese fallo está proporcionado: comprueba causa, memoria intacta y ausencia de una copia vacía abandonada, sin cambiar permisos del sistema ni tocar archivos tuyos.
+
+Estas pruebas son puntos de apoyo; completa también las comprobaciones del enunciado, especialmente exportación de incidencias, límites de suma, duplicados mezclados con filas inválidas y cancelaciones en la interfaz.
 
 [Descargar solución de los tres niveles](/fp-dam2-acda/descargas/codigo/inventario-final-solucion.zip){ .md-button download="inventario-final-solucion.zip" }
 

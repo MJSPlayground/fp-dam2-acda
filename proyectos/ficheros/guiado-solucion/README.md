@@ -37,3 +37,9 @@ POM: Java 25, JavaFX 25.0.2, Commons CSV 1.14.1, Jackson 2.20.0, SLF4J 2.0.17/Lo
 ## Alcance de esta variante
 
 Solución guiada completa: listado simple, CSV/JSON/binarios propios, validaciones de catálogo, CRUD y errores. Las demos adicionales están en el paquete demo de esta solución; el contenido teórico distingue su itinerario de Ampliación.
+
+## Pruebas optativas de aprendizaje por fases
+
+El proyecto entrega `FasesGuiadoTest` en `src/test/java`. Abre la clase en IntelliJ, crea una configuración JUnit y selecciona en **VM options** `-Dfase=rutas`. Valores disponibles: rutas, csv-lectura, csv-escritura, crud, carga, json, bin. El valor `completo` activa todas las fases de esta clase. Todos los archivos de estas pruebas se crean en directorios temporales propios.
+
+Alternativa con Wrapper: `.\mvnw.cmd '-Dtest=FasesGuiadoTest' '-Dfase=completo' test`. En Unix utiliza `./mvnw`. Sin `fase`, estos casos se omiten; esa omisión no verifica los TODO. En el starter se espera que fallen las fases cuyos métodos siguen pendientes. Los mismos oráculos están en la solución para contrastar los resultados, sin incluir sus algoritmos en el starter.
