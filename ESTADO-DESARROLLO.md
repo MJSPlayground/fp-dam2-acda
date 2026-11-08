@@ -1,13 +1,13 @@
 # Estado del desarrollo
 
-## Auditoría pedagógica en curso — 2026-11-08
+## Auditoría pedagógica corregida y publicada — 2026-11-08
 
 Nuevo encargo: corregir los seis temas existentes desde la perspectiva del alumno, sin regenerarlos ni cambiar alcance. Orden conceptual de revisión: Ficheros → Hibernate → Spring → JDBC → Firestore → MongoDB.
 
 - Primer hito: portadas y Ayuda sin referencias de aprobación interna, prerrequisitos y recorrido explícitos. Validado en copia aislada de HEAD con solo este hito: export7PDF+global150p;24ZIP integridad/bytes; UIgeneral y seisportadas móvil oscuro;65páginas/1210enlaces/893fragmentos/468búsqueda. Muestras reales de portada/AyudaPDF inspeccionadas. No cambió código Java en este hito; sus fuentes base son las previamente comprobadas, sin atribuir una nueva compilación local.
-- Revisión por páginas/requisitos finales y pruebas optativas de aprendizaje en curso, con propiedad de archivos separada entre agentes.
-- Guardia contextual `check_student_voice.py` preparada: distingue referencias internas de commit transaccional, historial de negocio, autoría y enlaces útiles a código. Se integrará en CI al completar la limpieza de todas las páginas.
-- Guía manual y estimaciones internas por etapa/nivel pendientes. Las evidencias técnicas del encargo anterior se conservan abajo como histórico; no equivalen al cierre de esta auditoría.
+- Revisión de65páginas y cada requisito final completada, con correcciones dirigidas y pruebas optativas de aprendizaje verificadas en soluciones. Informes internos: AUDITORIA-FICHEROS-HIBERNATE.md, AUDITORIA-SPRING-JDBC.md y AUDITORIA-FIRESTORE-MONGODB.md.
+- Guardia contextual `check_student_voice.py` integrada en CI: fuentes, componentes, navegación, HTML y PDF; distingue referencias internas de commit transaccional, historial de negocio, autoría y enlaces útiles a código. Pruebas discriminantes correctas.
+- GUIA-REVISION-MANUAL.md disponible fuera de docs, con seis recorridos,24ZIP,arranques,datos,restablecimiento seguro,casos y límites humanos. Estimaciones internas por etapa/nivel en los tres informes, no medidas con alumnado ni publicadas como tiempos de práctica. Las evidencias del encargo anterior se conservan como histórico.
 - Primer hito fe735f3: Actions42455190111 build/deploy SUCCESS; comprobación pública portada+64páginas/24ZIP/8PDF salida0. Siguiente paso: validar/publicar las correcciones Ficheros/Hibernate, después Spring/JDBC y Firestore/Mongo; completar GUIA-REVISION-MANUAL.md fuera de docs.
 
 ### Hito de corrección Ficheros/Hibernate — validación local
@@ -37,6 +37,24 @@ Nuevo encargo: corregir los seis temas existentes desde la perspectiva del alumn
 - PDF finales locales:29Ficheros/29Hibernate/28Spring/28JDBC/31Firestore/26Mongo/8Ayuda/global169. Corregido código inline largo que provocaba auto-reducción global a8,89pt; tras permitir quiebre de línea, cuerpo predominante10pt en Firestore y global. Todas57páginas de contenido aparecen por su título en el global, además de portadas de sección. Muestras de guía/diagramas renderizadas e inspeccionadas.
 - GUIA-REVISION-MANUAL.md completa fuera de docs: seis recorridos,24ZIP,main/config/datos/resetseguro/casos/resultados/límites. Informes internos por parejas registran esfuerzo por etapa/nivel sin prometer toda final en clase. Límite explícito:30+1jornadas y alguna frontera máxima revisadas en código, sin nueva ejecución específica; no se declaranPASS.
 - Próximo paso: push último hito, comprobar Actions y Pages integral, registrar cierre y sincronización de main. No hay material evaluable reservado ni treinta proyectos de repaso.
+
+### Cierre público de la auditoría — 2026-11-08
+
+Todos los hitos pendientes de publicación indicados anteriormente quedan cerrados. Se han corregido los seis temas existentes, sin regenerar el temario, crear nuevas prácticas ni reducir la exigencia aprobada. La revisión pedagógica humana posterior sigue correspondiendo al propietario y se facilita con la guía manual.
+
+- Hitos main: fe735f3 (portadas/Ayuda),724dcac (Ficheros/Hibernate),1de6d6b (Spring/JDBC),b1080b6 (Firestore/Mongo,guardias y guía manual). Commits/push normales, sin ramas/PR/force push ni cambios en estándares o skills.
+- Último workflow [42458109526](https://github.com/MJSPlayground/fp-dam2-acda/actions/runs/42458109526): build SUCCESS y deploy SUCCESS. Ejecuta pruebas Java, todas las comprobaciones de aprendizaje de soluciones, MySQL/Mongo reales, emulador Firestore, guardia de texto público, PDF,24ZIP desde limpio y controles web/enlaces.
+- Comando real posdespliegue `.venv/Scripts/python.exe scripts/check_published_site.py`, salida0: portada+64páginas de navegación,24ZIP íntegros con pruebas de aprendizaje incluidas y8PDF reales. Inspección adicional publicada de portada+6temas sin lenguaje interno y PDF global con letra predominante10pt.
+- PDF públicos: Ficheros30,Hibernate29,Spring28,JDBC28,Firestore31,Mongo25,Ayuda8 y global169. La paginación individual difiere ligeramente de Windows en Ficheros/Mongo; el contenido y los recursos se comprobaron, sin atribuir los recuentos locales a producción.
+- Validación local final:65páginas/1345enlaces/1009fragmentos/507entradas de búsqueda vigentes;24ZIP fuente/bytes y24compilaciones/pruebas limpias. Guardia74fuentes+HTML+PDF correcta. Sitio y descargas locales también regenerados desde main; no se dejan recursos ignorados antiguos para una revisión local.
+- Pruebas de aprendizaje nuevas ejecutadas en soluciones: Ficheros7+3,Hibernate8+3,Spring5+10,JDBC10+11,Firestore6+3,Mongo4+6 (76casos). Starters ordinarios omiten las fases futuras; no se confunde omisión con prueba superada. Pruebas UI ya no exigen mantener un TODO sin resolver.
+- Correcciones funcionales: helper MongoTemplate completo en starter; coordinación/reglas como trabajo del alumno; getLong Firestore que truncaba un double corregido por comprobación estricta con ensayo rojo→verde; versión Hibernate como apoyo preparado. No se cambian dependencias, arquitectura ni frontend.
+- Guías ampliadas sólo donde faltaba acompañamiento: ejemplos parciales reales, archivo/método, subpaso, pista y resultado; mapas/capas/logging iniciales. Retos conservados y requisitos finales auditados. Cinco fichas En preparación por tema, sin desarrollar treinta proyectos opcionales ni material reservado.
+- Recursos propios de QA detenidos: cuatro JAR Spring, esquemas propios eliminados con guardia de nombre, MySQLcompartido acda-auditoria-mysql-20261108 y servidores/procesos Firestore/Mongo del agente. Servicios ajenos sin cambios. AI Workspace limpio y de solo lectura.
+
+Límites honestos: no Run manual dentro de IntelliJ, Workbench/Compass/Postman gráfico ni IAM/credenciales cloud reales. UI y servidores sí ejecutados por los mecanismos registrados; Newman valida las colecciones. Algunas fronteras máximas (p. ej.30+1jornadas o21líneas Spring) se contrastaron en código sin una nueva fixture específica; no se declaran ejecutadas. Los rangos de esfuerzo requieren contraste con el grupo y separan la práctica final adicional del tiempo ordinario. Se conserva como límite conocido la espera Spring30,1s ante caída MySQL medida en el encargo previo. PDF inspeccionados mediante muestras renderizadas, cobertura de títulos y tamaño de letra; no revisión humana exhaustiva página por página.
+
+Siguiente paso humano: seguir GUIA-REVISION-MANUAL.md en orden Ficheros→Hibernate→Spring→JDBC→Firestore→Mongo y ejecutar las prácticas con la instalación del aula. No iniciar otros desarrollos ni repasos sin nuevo encargo.
 
 ## Encargo y punto actual
 
