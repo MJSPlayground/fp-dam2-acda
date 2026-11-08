@@ -6,7 +6,7 @@ Abre esta carpeta como proyecto Maven, espera la sincronización y selecciona JD
 
 Luego ejecuta `LigaApplication.main` en `es.mjsplayground.acda.mongodb.liga`. Abre http://127.0.0.1:8080. No hay que editar HTML/CSS/JavaScript. Los datos persisten en el volumen Docker liga-data: parar Spring no los borra. No elimines volúmenes para repetir un ejercicio; crea equipos nuevos y elimina solo los de prueba desde la aplicación.
 
-Configuración: MONGODB_URI cambia la conexión; default mongodb://127.0.0.1:27018/acda_liga_final con timeout selección/conexión3s. PORT cambia puerto HTTP. Compose fija MongoDB Community8.0.34 por digest oficial y publica solo127.0.0.1:27018. El servidor HTTP también escucha loopback. Este entorno docente local carece de autenticación: no exponer fuera del equipo.
+Configuración: MONGODB_URI cambia la conexión; default mongodb://127.0.0.1:27018/acda_liga_final con timeout selección/conexión3s. PORT cambia puerto HTTP. Compose fija MongoDB Community8.0.34 por digest oficial y publica solo127.0.0.1:27018. El servidor HTTP también escucha loopback. Este entorno de desarrollo local carece de autenticación: no exponer fuera del equipo.
 
 ## Modelo documental
 
@@ -55,3 +55,13 @@ GET /api/clasificacion calcula en Java, sin Aggregation:3puntos victoria,1empate
 Cada jornada describe la participación de UN equipo frente a un rival textual. No actualiza simultáneamente al rival ni modela una competición federada bilateral: así el alumnado puede garantizar atomicidad sin transacciones multidocumento. El frontend de jornada prepara IDs y permite introducir los datos JSON de aportaciones; no hay que programar vistas.
 
 Al abrir datos antiguos del guiado, jornadas ausente se interpreta como lista vacía; al editar equipo/jugador se conservan todas las jornadas. Las variantes usan bases distintas por defecto: guiado acda_liga y final acda_liga_final, en el mismo servidor. Así guardar con el modelo guiado no puede borrar jornadas desconocidas. No anules esta separación al configurar MONGODB_URI.
+
+## Comprobaciones optativas por nivel
+
+En IntelliJ ejecuta los tests del paquete es.mjsplayground.acda.mongodb.liga y añade VM options `-Daprendizaje.nivel=base`; utiliza después aplicacion o reto según el nivel alcanzado. El valor todos activa el conjunto. Sin opción las nuevas pruebas se omiten y no impiden trabajar en un nivel anterior.
+
+NivelesAprendizajeTest prepara una base acda_qa_niveles_UUID propia. Base comprueba filtros y disponibilidad sin perder cifras. Aplicacion comprueba rechazo sin cambios, duplicado histórico y dos registros simultáneos que suman una sola vez. Reto carga jornadas como fixture para probar clasificación/racha sin necesitar el registro terminado. CalculosAprendizajeTest comprueba además todos los desempates y últimos cinco resultados con lecturas simuladas; no elimina índices ni guarda nombres duplicados.
+
+Los datos de prueba y los hilos están preparados. Los algoritmos de consulta, jornada y clasificación son trabajo del alumno; no se utiliza Aggregation Pipeline para resolverlos. Las fixtures no alteran acda_liga_final. La clase de integración valida el nombre de su base antes de limpiarla.
+
+Alternativa técnica opcional: `.\mvnw.cmd -Daprendizaje.nivel=base test`; todos los niveles con Mongo real: `.\mvnw.cmd -Daprendizaje.nivel=todos test`. El contraste de copia antigua e incrementos está también disponible en las pruebas de integración del proyecto guiado.

@@ -1,6 +1,6 @@
 ﻿# Ampliación
 
-Estas páginas profundizan en la API y la coordinación de documentos. Los fragmentos son **ejemplos conceptuales**, con sus dependencias y contexto indicados; no forman parte del recorrido mínimo ni afirman que la aplicación entregada ya tenga autenticación o actualización en tiempo real.
+La API local puede evolucionar hacia un contrato documentado, operaciones coordinadas, identidad y actualizaciones en tiempo real. Los siguientes **fragmentos conceptuales** muestran esas decisiones y el contexto que necesitan. La aplicación de reservas utiliza CRUD local; añadir autenticación o un canal de actualizaciones requiere integrar los componentes que se explican en cada apartado.
 
 ## Documentación OpenAPI y Swagger UI
 
@@ -59,8 +59,10 @@ Una **transacción** lee documentos y decide escrituras de forma coordinada. En 
 DocumentReference contador = db.collection("contadores").document("visitas");
 Long siguiente = db.runTransaction(transaccion -> {
     DocumentSnapshot actual = transaccion.get(contador).get();
-    Long valor = actual.exists() ? actual.getLong("valor") : 0L;
-    if (valor == null) throw new IllegalStateException("Contador sin valor numérico");
+    Object guardado = actual.exists() ? actual.get("valor") : 0L;
+    if (!(guardado instanceof Long valor)) {
+        throw new IllegalStateException("El contador debe almacenar un entero");
+    }
     long nuevo = Math.addExact(valor, 1L);
     transaccion.set(contador, Map.of("valor", nuevo));
     return nuevo;

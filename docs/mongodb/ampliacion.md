@@ -24,7 +24,7 @@ db.equipos.aggregate([
 ]);
 ```
 
-Se puede ejecutar desde una consola `mongosh` conectada a la base del proyecto o construir esas etapas en el panel **Aggregations** de Compass. Sin equipos de esa categoría, el resultado será vacío. La [introducción oficial a agregación](https://www.mongodb.com/docs/manual/aggregation/) explica el flujo de etapas.
+Se puede ejecutar desde una consola `mongosh` conectada a la base del proyecto o construir esas etapas en el panel **Aggregations** de Compass. Sin equipos de esa categoría, el resultado será vacío. Si el único equipo sénior tiene jugadores con dos y un gol, el grupo resultante muestra `equipos: 1` y `goles: 3`; con más equipos sénior se acumulan sus valores. Esa cifra no es una clasificación: un gol personal del guiado no supone una victoria registrada. La [introducción oficial a agregación](https://www.mongodb.com/docs/manual/aggregation/) explica el flujo de etapas.
 
 ## $match: reducir el conjunto de entrada
 

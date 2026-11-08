@@ -36,21 +36,21 @@ public class ReservaController {
 
   @PostMapping("/reservas")
   public ResponseEntity<Reserva> crear(@Valid @RequestBody ReservaRequest body) {
-    // TODO 4: implementar endpoint REST y respuesta HTTP coherente
+    // TODO 4a: delegar al servicio y construir la respuesta HTTP de esta operación.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 4: implementar endpoint REST y respuesta HTTP coherente");
   }
 
   @PutMapping("/reservas/{id}")
   public Reserva actualizar(@PathVariable String id, @Valid @RequestBody ReservaRequest body) {
-    // TODO 4: implementar endpoint REST y respuesta HTTP coherente
+    // TODO 4b: delegar al servicio y construir la respuesta HTTP de esta operación.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 4: implementar endpoint REST y respuesta HTTP coherente");
   }
 
   @DeleteMapping("/reservas/{id}")
   public ResponseEntity<Void> eliminar(@PathVariable String id) {
-    // TODO 4: implementar endpoint REST y respuesta HTTP coherente
+    // TODO 4c: delegar al servicio y construir la respuesta HTTP de esta operación.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 4: implementar endpoint REST y respuesta HTTP coherente");
   }

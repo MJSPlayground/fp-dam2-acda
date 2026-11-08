@@ -14,7 +14,7 @@ Al cambiar de starter a solución, detén el backend anterior para liberar el pu
 
 El volumen de Docker guarda los datos del servidor fuera del sistema de archivos efímero del contenedor. Detener MongoDB y volver a arrancarlo no equivale a vaciar la base. El proyecto prepara un catálogo de sedes, pero no debe volver a insertar o sobrescribir todos los equipos cada vez que se inicia Java.
 
-Para un escenario limpio usa la base de pruebas o los datos temporales que indique el README. No elimines un volumen para resolver una conexión fallida: es una operación distinta que puede perder trabajo. Cambiar la URI puede seleccionar otra base y mostrar un listado vacío sin que la anterior haya desaparecido.
+Para comprobar un paso, utiliza las pruebas optativas del guiado: crean su propia base temporal `acda_qa_fases_...` y la limpian. Para repetir desde la web, elimina únicamente los equipos de tu escenario mediante la interfaz. La práctica final utiliza `acda_liga_final`, separada de `acda_liga`. No elimines un volumen para resolver una conexión fallida: es una operación distinta que puede perder trabajo. Cambiar la URI puede seleccionar otra base y mostrar un listado vacío sin que la anterior haya desaparecido.
 
 ## Dependencias y configuración Spring
 

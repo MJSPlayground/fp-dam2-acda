@@ -69,13 +69,14 @@ public class LigaService {
   }
 
   public Equipo crear(EquipoRequest r) {
-    // TODO 3: implementar caso de uso con validaciones y guardado optimista
+    // TODO 3a: crear equipo con sede válida y plantilla vacía; guardar el agregado con su versión.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 3: implementar caso de uso con validaciones y guardado optimista");
   }
 
   public Equipo actualizar(String id, EquipoRequest r) {
-    // TODO 3: implementar caso de uso con validaciones y guardado optimista
+    // TODO 3a: editar solo datos del equipo y conservar plantilla/versión; guardar el agregado con
+    // su versión.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 3: implementar caso de uso con validaciones y guardado optimista");
   }
@@ -105,19 +106,21 @@ public class LigaService {
   }
 
   public Equipo agregarJugador(String id, JugadorRequest r) {
-    // TODO 3: implementar caso de uso con validaciones y guardado optimista
+    // TODO 3b: añadir jugador sin repetir dorsal ni superar la plantilla; guardar el agregado con
+    // su versión.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 3: implementar caso de uso con validaciones y guardado optimista");
   }
 
   public Equipo editarJugador(String id, String jugadorId, JugadorRequest r) {
-    // TODO 3: implementar caso de uso con validaciones y guardado optimista
+    // TODO 3b: editar datos personales conservando identidad y estadísticas; guardar el agregado
+    // con su versión.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 3: implementar caso de uso con validaciones y guardado optimista");
   }
 
   public Equipo eliminarJugador(String id, String jugadorId) {
-    // TODO 3: implementar caso de uso con validaciones y guardado optimista
+    // TODO 3b: retirar únicamente el jugador indicado; guardar el agregado con su versión.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 3: implementar caso de uso con validaciones y guardado optimista");
   }
@@ -128,14 +131,9 @@ public class LigaService {
   }
 
   public Equipo sumarEstadisticas(String id, String jugadorId, EstadisticasRequest r) {
-    Equipo e = obtener(id);
-    jugador(e, jugadorId);
-    if (r == null || r.goles() < 0 || r.goles() > 20 || r.asistencias() < 0 || r.asistencias() > 20)
-      throw new LigaException(400, "Goles y asistencias entre0 y20");
-    Equipo actualizado = estadisticas.sumar(id, jugadorId, r.goles(), r.asistencias());
-    if (actualizado == null)
-      throw new LigaException(
-          409, "Jugador eliminado durante la operación o límite estadístico alcanzado");
-    return actualizado;
+    // TODO 4: comprobar equipo/jugador e incrementos (0..20), delegar en el helper
+    // EstadisticasRepository.sumar YA IMPLEMENTADO y convertir resultado nulo en conflicto.
+    throw new UnsupportedOperationException(
+        "Etapa pendiente: 4: coordinar estadísticas desde el servicio");
   }
 }

@@ -68,6 +68,19 @@ Un alta de jugador no crea por ello un documento independiente en una colección
 
 La lista está acotada y los dorsales no pueden repetirse dentro de la misma plantilla. Guardar una lista completa obtenida hace tiempo podría borrar el alta concurrente de otra persona. La página de [atomicidad](atomicidad.md) explica por qué leer–modificar–guardar necesita protección cuando intervienen varios clientes.
 
+### Editar un record sin perder el agregado
+
+El modelo real es un record: sus componentes se consultan con `e.nombre()` o `e.jugadores()`, y no se sustituyen mediante setters. Para proponer una edición se construye otro `Equipo`. Un cambio de nombre debe conservar los demás datos, incluida la versión leída:
+
+```java
+Equipo propuesto = new Equipo(
+    e.id(), nuevoNombre, e.categoria(), e.sedeId(), e.jugadores(), e.version());
+```
+
+El fragmento corresponde al guiado y todavía no guarda. La escritura la realiza `EquipoRepository.save(propuesto)` dentro del caso de uso. La versión permite detectar que otra operación cambió el documento mientras preparabas ese estado; construirlo con versión nula no equivale a una edición segura.
+
+Al cambiar un jugador, modifica una copia de la lista y conserva los demás elementos. `conJugadores` ya ayuda a reconstruir el equipo; `validarJugador` ayuda con los campos. El [guiado](proyecto.md) separa equipos, plantilla y estadísticas para que puedas comprobar cada paso sin exigir los siguientes.
+
 ## La sede como referencia explícita
 
 Las sedes tienen una colección y repositorio propios. El equipo conserva `sedeId`; el servicio comprueba que corresponde a una sede existente antes de aceptar el dato.

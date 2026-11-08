@@ -156,6 +156,7 @@ public class LigaService {
   }
 
   public Equipo eliminarJugador(String id, String jugadorId) {
+    // TODO Aplicación: proteger también al jugador referenciado por una jornada histórica.
     Equipo e = obtener(id);
     jugador(e, jugadorId);
     return equipos.save(

@@ -28,7 +28,7 @@ Las [operaciones de actualización y bloqueo optimista de Spring Data](https://d
 
 Para sumar estadísticas no hace falta recuperar todo el equipo y reemplazarlo. Una operación `$inc` expresa cuánto debe aumentar el contador a partir del valor que haya en la base al ejecutarse.
 
-El repositorio preparado utiliza `MongoTemplate`, `Query`, `Criteria` y `Update`. Este fragmento reducido muestra la idea sobre las estadísticas de un jugador; omite los límites del proyecto para centrarse en la escritura:
+El repositorio preparado utiliza `MongoTemplate`, `Query`, `Criteria` y `Update`. **Esta implementación se entrega completa en el starter.** El fragmento permite interpretar la garantía de una escritura, no es una API adicional que debas programar para completar el guiado. Este fragmento reducido muestra la idea sobre las estadísticas de un jugador; omite los límites del proyecto para centrarse en la escritura:
 
 ```java
 Criteria jugador = Criteria.where("id").is(jugadorId);
@@ -81,3 +81,11 @@ Los estados `501` del starter indican TODO pendientes. La solución no utiliza e
 6. Reiniciar el backend manteniendo el volumen MongoDB: el estado confirmado debe seguir disponible.
 
 Una prueba que solo cuenta respuestas HTTP no demuestra esas propiedades. Es necesario recuperar el documento y comparar el estado final.
+
+## Reproducir el conflicto sin programar infraestructura
+
+En el guiado, la fase `estadisticas` de `FasesAprendizajeTest` prepara una copia del equipo, aplica un incremento y trata de guardar la copia antigua. El resultado esperado es `OptimisticLockingFailureException`, con los contadores actuales conservados. Después ejecuta ocho incrementos concurrentes sobre la misma fixture. Esta prueba ya contiene la sincronización y limpia únicamente su base temporal.
+
+No intentes «forzar» el conflicto escribiendo un número de versión en el JSON de edición: el DTO de esta API no lo recibe. Observa la copia `antigua` y el documento `actual` en el depurador. La diferencia entre ambos explica la protección mejor que enviar veinte peticiones sin comparar el estado final.
+
+Para probar una jornada concurrente en la práctica final utiliza el nivel `aplicacion` de `NivelesAprendizajeTest`: dos intentos con el mismo identificador confirman uno y rechazan el otro; solo debe aparecer una jornada y un incremento por participante. La preparación y los hilos están incluidos.

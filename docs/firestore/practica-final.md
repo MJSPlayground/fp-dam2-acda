@@ -62,6 +62,22 @@ El proyecto entrega infraestructura de coordinación para guardar una reserva ju
 
 Comprueba también el guiado: edición válida, listas y mapas, borrado y errores de capacidad o fecha. Una mejora no debe romper los contratos que ya utiliza el frontend. Las pruebas de servicio y API deben observar el estado posterior a un rechazo, además de su código HTTP.
 
+## Comprobaciones optativas por nivel
+
+En IntelliJ ejecuta `NivelesAprendizajeTest` desde `src/test/java/es/mjsplayground/acda/firestore/reservas`. Añade **VM options** `-Daprendizaje.nivel=base`; utiliza después `aplicacion` o `reto` cuando alcances esos requisitos. Mantén abierto el emulador. Sin opción no se ejecutan estas pruebas; `todos` corresponde al cierre de la práctica.
+
+| Nivel elegido | Preparación incluida y resultado que debes observar |
+| --- | --- |
+| `base` | Reserva activa; cancelación repetida conserva motivo, filtro exacto y edición de cancelada rechazada |
+| `aplicacion` | Dos horarios adyacentes; edición incompatible conserva datos; dos altas simultáneas confirman una sola |
+| `reto` | Persona escrita con distintas mayúsculas, cupo, cancelación y páginas cuyo cursor deja de existir |
+
+Los datos se crean en un proyecto `demo-niveles-...` exclusivo y se limpian al terminar. No necesitas crear otra colección manualmente, programar hilos ni manipular reservas de otra persona. Una prueba roja identifica el contrato que falta; no exige implementar los niveles posteriores para comprobar Base.
+
+La coordinación de la práctica ya recibe tres piezas: la reserva candidata, el ID anterior al editar y una función que comprueba la agenda leída. Revisa los puntos señalados en `crear` y `actualizar`: conservar únicamente la escritura del guiado no aplica automáticamente disponibilidad o cupo. El ayudante de transacción está resuelto; la función de reglas y las nuevas operaciones siguen siendo tu trabajo. El callback puede repetirse, por lo que no debe modificar estado externo ni enviar mensajes.
+
+Después de pasar un nivel, ejecuta también sus peticiones preparadas de Postman y el recorrido de la interfaz. El test de concurrencia comprueba una propiedad diferente de abrir dos pestañas y pulsar en momentos distintos: ya sincroniza los intentos y recupera el estado final.
+
 ## Solución completa
 
 [Descargar solución de los tres niveles](/fp-dam2-acda/descargas/codigo/reservas-final-solucion.zip){ .md-button download="reservas-final-solucion.zip" }

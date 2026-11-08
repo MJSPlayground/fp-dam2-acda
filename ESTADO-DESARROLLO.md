@@ -27,6 +27,17 @@ Nuevo encargo: corregir los seis temas existentes desde la perspectiva del alumn
 - Snapshot del hito:8ZIP afectados desde carpetas limpias;24ZIP integridad/bytes; sitio general, Spring/JDBC móvil/escritorio claro/oscuro y65páginas/1303enlaces/969fragmentos/494entradas búsqueda correctos. PDFSpring28/JDBC28/global162. Muestras de guía y diagrama renderizadas; corregida figura alta que dejaba una página casi vacía mediante límite de altura de impresión, sin cambiar web ni contenido.
 - AUDITORIA-SPRING-JDBC.md separa rangos de guiado+explicación de esfuerzo final adicional; no supone finalizar tresniveles en6h/11h. Pendiente tras push: Actions/Pages del hito y cierre Firestore/Mongo.
 
+### Publicación Spring/JDBC y cierre local Firestore/Mongo
+
+- 1de6d6b: Actions42457109958 build/deploy SUCCESS. Pages real: portada+19páginas Spring/JDBC,8ZIP con nuevos oráculos y3PDF; Spring28/JDBC28/global163 en Linux (snapshot local162). No se confunden recuentos entre entornos.
+- Firestore/Mongo:20páginas y cada requisito final revisados. Mongo entrega operación MongoTemplate preparada y desplaza TODO a coordinación/validación del servicio. Firestore divide conversión/alta-lectura/edición/filtros/servicio/HTTP; Postman carpeta00 permite primer contacto antes del TODO.
+- Defecto real corregido: DocumentSnapshot.getLong truncaba9.5 a9. Nuevo ensayo falló antes y pasa después de get+tipoLong+toIntExact; tres variantes resueltas corregidas, teoría y pistas coherentes. Sin cambios de dependencias ni frontend.
+- Ejecución del agente: soluciones Firestore16/15 y Mongo16/23 con todas fases/niveles e integraciones activas, sin fallos/omisiones;8package y8defaulttest correctos. Nuevos casos6/3/4/6; Postman Newman3/3 starter00,16/23 guiado,33/52 final; cuatro checkers UI reales y cinco ejemplos MongoAmpliación correctos. Procesos/servidores propios detenidos.
+- Snapshot final:24ZIP comparados con fuentes y24/24 extraídos/compilados/probados desde limpio; se exige ahora que cada ZIP incluya sus pruebas de aprendizaje. Webgeneral/Firestore/Mongo4combinaciones,65páginas/1345enlaces/1009fragmentos/507entradas búsqueda correctos. Guardia contextual74fuentes+HTML+PDF salida0; casos negativos preservan autoría, GitHub útil, commit transaccional e historial de negocio.
+- PDF finales locales:29Ficheros/29Hibernate/28Spring/28JDBC/31Firestore/26Mongo/8Ayuda/global169. Corregido código inline largo que provocaba auto-reducción global a8,89pt; tras permitir quiebre de línea, cuerpo predominante10pt en Firestore y global. Todas57páginas de contenido aparecen por su título en el global, además de portadas de sección. Muestras de guía/diagramas renderizadas e inspeccionadas.
+- GUIA-REVISION-MANUAL.md completa fuera de docs: seis recorridos,24ZIP,main/config/datos/resetseguro/casos/resultados/límites. Informes internos por parejas registran esfuerzo por etapa/nivel sin prometer toda final en clase. Límite explícito:30+1jornadas y alguna frontera máxima revisadas en código, sin nueva ejecución específica; no se declaranPASS.
+- Próximo paso: push último hito, comprobar Actions y Pages integral, registrar cierre y sincronización de main. No hay material evaluable reservado ni treinta proyectos de repaso.
+
 ## Encargo y punto actual
 
 Encargo integral autorizado en main. Orden obligatorio: JDBC → Firestore → MongoDB → Ficheros → Hibernate → Spring.

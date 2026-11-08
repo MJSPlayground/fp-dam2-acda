@@ -15,43 +15,43 @@ public class FirestoreReservaRepository {
   }
 
   public Reserva crear(Reserva r) {
-    // TODO 2: completar operaciones Firestore y conversión documental
+    // TODO 2b: crear un documento, esperar y devolver su ID.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 2: completar operaciones Firestore y conversión documental");
   }
 
   public Optional<Reserva> obtener(String id) {
-    // TODO 2: completar operaciones Firestore y conversión documental
+    // TODO 2b: leer y distinguir ausencia de fallo técnico.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 2: completar operaciones Firestore y conversión documental");
   }
 
   public List<Reserva> listar(String espacio, String fecha, Integer minimo) {
-    // TODO 2: completar operaciones Firestore y conversión documental
+    // TODO 2d: encadenar filtros opcionales y ordenar.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 2: completar operaciones Firestore y conversión documental");
   }
 
   public Reserva actualizar(String id, Reserva r) {
-    // TODO 2: completar operaciones Firestore y conversión documental
+    // TODO 2c: actualizar un documento existente sin cambiar su ID.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 2: completar operaciones Firestore y conversión documental");
   }
 
   public void eliminar(String id) {
-    // TODO 2: completar operaciones Firestore y conversión documental
+    // TODO 2c: esperar la eliminación del documento.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 2: completar operaciones Firestore y conversión documental");
   }
 
   public Map<String, Object> datos(Reserva r) {
-    // TODO 2: traducir entre campos Firestore y modelo, comprobar tipos y conservar causas
+    // TODO 2a: convertir Reserva a campos permitidos.
     throw new UnsupportedOperationException("Etapa pendiente: mapeo documental");
   }
 
   @SuppressWarnings("unchecked")
   public Reserva mapear(DocumentSnapshot d) {
-    // TODO 2: traducir entre campos Firestore y modelo, comprobar tipos y conservar causas
+    // TODO 2a: convertir un snapshot comprobando tipos, identidad y causas.
     throw new UnsupportedOperationException("Etapa pendiente: mapeo documental");
   }
 

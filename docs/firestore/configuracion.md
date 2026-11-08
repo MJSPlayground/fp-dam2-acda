@@ -7,11 +7,11 @@ El proyecto separa el backend de la base. Spring Boot atiende peticiones HTTP; e
 | Modo | Dónde están los datos | Identidad y permisos | Uso en el tema |
 | --- | --- | --- | --- |
 | Emulador | Proceso local de Firestore | Configuración demo sin claves privadas | Recorrido inicial y pruebas reproducibles |
-| Cloud | Proyecto remoto de Google Cloud/Firebase | Credenciales de servidor e IAM | Configuración explicada; verificación independiente |
+| Cloud | Proyecto remoto de Google Cloud/Firebase | Credenciales de servidor e IAM | Explorar servicio remoto, permisos e índices con una cuenta autorizada |
 
 El proyecto arranca en modo **emulador** con ID `demo-acda-reservas`. No hace falta crear un proyecto real para seguir el guiado. Un ID con prefijo `demo-` permite distinguir ese entorno de un proyecto remoto, pero no es una contraseña.
 
-No se debe apuntar un test que borra datos temporales a un proyecto real. Cambiar de modo exige una decisión explícita y revisar la configuración y los datos implicados.
+Para aprender, el emulador permite repetir reservas sin crear una cuenta ni gestionar una clave privada. Cloud permite estudiar un servicio remoto, su localización y sus permisos. Mantén ese entorno separado de las comprobaciones locales que crean y eliminan datos. Cambiar de modo no completa un TODO ni corrige sus errores.
 
 ## Arranque local desde IntelliJ
 
@@ -54,7 +54,7 @@ Para explorar el servicio remoto con una cuenta autorizada, entra en Firebase Co
 
 La [localización de Firestore](https://firebase.google.com/docs/firestore/locations) es una decisión de infraestructura que no se cambia como un nombre de colección. No elijas una región al azar pensando que el código corregirá después la latencia o la residencia de los datos.
 
-Antes de una prueba remota, comprueba ID de proyecto, base seleccionada, credenciales e IAM, límites de uso y política de limpieza de sus datos. El emulador no genera una cuenta real ni demuestra que esos permisos cloud funcionen. La revisión técnica debe indicar separadamente qué se ha verificado en cada entorno.
+Antes de una prueba remota, comprueba ID de proyecto, base seleccionada, credenciales e IAM, límites de uso y política de limpieza de sus datos. El emulador no genera una cuenta real ni demuestra que esos permisos cloud funcionen. Comprueba el acceso desde tu backend autorizado y observa el documento en la consola; una sesión de emulador no prepara esos permisos remotos.
 
 ## IAM y reglas de clientes no son la misma protección
 
@@ -87,6 +87,6 @@ IAM debe conceder a la identidad del servidor solo los permisos necesarios. Darl
 | `PERMISSION_DENIED` en cloud | Identidad efectiva, proyecto e IAM |
 | Parece no haber documentos | Proyecto, modo, colección y ciclo de vida de los datos locales |
 | Una consulta falla solo en cloud | Índices y diferencias documentadas del emulador |
-| El starter devuelve `501` | Etapa docente pendiente; no indica falta de credenciales |
+| El starter devuelve `501` | Operación pendiente de implementar; no indica falta de credenciales |
 
 Para interpretar stack traces y depurar sin ocultar las causas, utiliza [la guía de diagnóstico](../ayuda/diagnostico.md). Continúa con [repositorio y servicio](persistencia.md).

@@ -12,7 +12,7 @@ List<Equipo> findByCategoriaOrderByNombreAsc(String categoria);
 
 El fragmento supone que la propiedad `categoria` del modelo es una cadena. Si el proyecto utiliza un enum, la firma empleará ese tipo. Spring interpreta nombres de propiedades Java: un error tipográfico no es una nueva columna, sino una consulta inválida que puede fallar al arrancar.
 
-Un método como `findByNombreContainingIgnoreCase` expresa búsqueda textual parcial sin distinguir mayúsculas. Antes de añadirlo a una API hay que definir límites y orden: una búsqueda que devuelve miles de documentos no es un sustituto de la paginación. La [referencia de consultas derivadas](https://docs.spring.io/spring-data/mongodb/reference/mongodb/repositories/query-methods.html) enumera los operadores admitidos.
+Un método como `findByNombreContainingIgnoreCase` expresa búsqueda textual parcial sin distinguir mayúsculas. Antes de añadirlo a una API hay que definir límites y orden: una búsqueda que devuelve miles de documentos no es un sustituto de la paginación. En el método real del guiado, el resultado es `Page<Equipo>` y se añade `Pageable` a la firma. Al sustituir el método `default` del starter por una declaración, Spring Data implementa la consulta: no escribas una búsqueda completa en memoria dentro de ese cuerpo. La [referencia de consultas derivadas](https://docs.spring.io/spring-data/mongodb/reference/mongodb/repositories/query-methods.html) enumera los operadores admitidos.
 
 ## @Query y operadores básicos
 

@@ -90,6 +90,19 @@ Este fragmento simplifica la firma real para mostrar un solo filtro. Si la URL n
 
 No hay que modificar HTML ni JavaScript. El frontend ya conoce rutas y estructuras; implementar una ruta distinta por comodidad rompería ese acuerdo aunque el nuevo endpoint respondiese.
 
+## Construir la respuesta de una escritura
+
+Una creación no se expresa con `ok` por costumbre. Tras recibir del servicio una reserva `creada`, el controlador puede construir la ubicación y el cuerpo:
+
+```java
+URI destino = URI.create("/api/reservas/" + creada.id());
+return ResponseEntity.created(destino).body(creada);
+```
+
+`created` fija `201` y la cabecera `Location`; `body` incorpora la representación con su ID. `URI` procede de `java.net`. La escritura ya debe haber terminado: el controlador no devuelve un futuro del SDK como si fuera la reserva.
+
+Para el borrado, después de llamar al servicio, `ResponseEntity.noContent().build()` devuelve `204` sin JSON. Una actualización que devuelve directamente `Reserva` produce `200` y cuerpo. No copies el mismo tipo de respuesta a todas las operaciones.
+
 ## Estados de éxito y de error
 
 | Estado | Interpretación en nuestra API |
@@ -101,7 +114,7 @@ No hay que modificar HTML ni JavaScript. El frontend ya conoce rutas y estructur
 | `404 Not Found` | El ID solicitado no corresponde a una reserva |
 | `409 Conflict` | La operación contradice el estado actual, como una ocupación incompatible |
 | `500 Internal Server Error` | Fallo inesperado del servidor o la persistencia |
-| `501 Not Implemented` | Aviso docente del starter: aún falta una etapa |
+| `501 Not Implemented` | Operación pendiente en el proyecto inicial |
 
 El `501` identifica operaciones pendientes de la versión de aprendizaje; la solución completa no debe utilizarlo para ocultar errores. Una lista sin coincidencias se devuelve con `200` y `[]`, no con `404`.
 
@@ -111,7 +124,7 @@ La clase `ApiErrors` devuelve los campos `estado`, `mensaje`, `ruta` e `instante
 
 ## Probar con Postman
 
-La colección del proyecto ya contiene las peticiones: no tienes que construirlas manualmente. Tras importarla, comprueba la variable `baseUrl`, que apunta a `http://localhost:8080`, y ejecuta las carpetas en el orden indicado en [el proyecto guiado](proyecto.md).
+La colección del proyecto ya contiene las peticiones: no tienes que construirlas manualmente. Tras importarla, comprueba `baseUrl = http://localhost:8080`. La carpeta **00 · Primer contacto HTTP** contiene consultas y errores que puedes ejecutar antes de los TODO. La **01 · Lectura tras completar el repositorio** comprueba el `GET` preparado. La carpeta CRUD se usa petición a petición al completar `POST`, `PUT` y `DELETE`; ejecuta su Runner completo al terminar esos tres métodos. El [guiado](proyecto.md) relaciona cada petición con su subpaso.
 
 Una prueba de alta debe comprobar `201`, el ID devuelto y los valores persistidos mediante un `GET` posterior. Una prueba negativa debe comprobar el estado esperado **y que no haya aparecido una reserva inválida**. Borrar una reserva y volver a consultarla comprueba una propiedad distinta de limitarse a inspeccionar el código de borrado.
 
@@ -119,6 +132,6 @@ Si aparece una página HTML en vez de JSON, revisa la URL y el cuerpo: puede hab
 
 ## Etapa del proyecto: completar los controladores
 
-Una vez resueltos modelo, repositorio y servicio, completa el **TODO 4** de `ReservaController`: `POST`, `PUT` y `DELETE`. Mantén las rutas de la tabla y delega las reglas al servicio. Los `GET` de apoyo y el frontend están preparados.
+Una vez resueltos modelo, repositorio y servicio, completa los **TODO 4a–4c** de `ReservaController`, en ese orden: `POST`, `PUT` y `DELETE`. Mantén las rutas de la tabla y delega las reglas al servicio. Los `GET` de apoyo y el frontend están preparados.
 
-Prueba creación, modificación, borrado y sus errores con la colección importada. Ejecuta también las mismas operaciones desde la web: dos clientes distintos deben recibir las mismas decisiones del servicio. Continúa con [la guía del proyecto](proyecto.md) para comprobar el recorrido completo.
+La fase `rest` de `FasesAprendizajeTest` usa un servicio de prueba preparado: permite comprobar estados, `Location` y errores sin depender de Firestore. El caso técnico provoca una excepción con causa y comprueba que el JSON público no la revela. Después prueba creación, modificación, borrado y sus errores con la colección importada y el emulador real. Ejecuta también las mismas operaciones desde la web: dos clientes distintos deben recibir las mismas decisiones del servicio. Continúa con [la guía del proyecto](proyecto.md) para comprobar el recorrido completo.

@@ -2,7 +2,7 @@
 
 El [modelo documental](documentos.md) explica qué guardamos. Ahora vamos a transformar esos datos entre Java y Firestore, manteniendo la separación por capas aprendida en [JDBC](../jdbc/repositorios.md).
 
-Los ejemplos son fragmentos didácticos: suponen una variable `Firestore db` inicializada por la configuración y un método que trata las excepciones de las operaciones asíncronas. La configuración y el frontend están preparados en el proyecto; no hay que escribir conexiones nuevas en cada botón.
+Los ejemplos son fragmentos didácticos: suponen una variable `Firestore db` inicializada por la configuración. En el proyecto, `FirestoreReservaRepository` recibe el cliente por constructor y ya contiene `esperar`, que trata esperas, interrupciones y fallos técnicos. Primero aprenderemos la conversión sin red; después utilizaremos esa ayuda en el CRUD. La configuración y el frontend están preparados en el proyecto; no hay que escribir conexiones nuevas en cada botón.
 
 ## Referencia, lectura y resultado
 
@@ -12,33 +12,43 @@ El SDK devuelve una operación asíncrona. En una aplicación MVC sencilla, espe
 
 ```java
 DocumentReference referencia = db.collection("reservas").document(id);
-DocumentSnapshot documento = referencia.get().get();
+ApiFuture<DocumentSnapshot> lectura = referencia.get();
+DocumentSnapshot documento = esperar(lectura);
 if (!documento.exists()) {
-    throw new NoEncontradaException("La reserva no existe");
+    return Optional.empty();
 }
-String espacio = documento.getString("espacio");
-Long asistentes = documento.getLong("asistentes");
+return Optional.of(mapear(documento));
 ```
 
-`NoEncontradaException` es aquí un nombre ilustrativo para una excepción del dominio. El proyecto utiliza su propio tipo de error. La [lectura de documentos](https://firebase.google.com/docs/firestore/query-data/get-data) distingue la ausencia de un documento de una lectura fallida. Una respuesta vacía no significa que la red haya fallado; un fallo de acceso no debe transformarse en una reserva inventada.
+Este fragmento corresponde al cuerpo de `FirestoreReservaRepository.obtener`, que devuelve `Optional<Reserva>`. `lectura` representa la operación iniciada y `documento` su resultado. `esperar` es la ayuda preparada; `mapear` se completa antes del CRUD. El servicio convertirá `Optional.empty()` en `ReservaException(404, ...)`, sin introducir HTTP en el repositorio. La [lectura de documentos](https://firebase.google.com/docs/firestore/query-data/get-data) distingue la ausencia de un documento de una lectura fallida. Una respuesta vacía no significa que la red haya fallado; un fallo de acceso no debe transformarse en una reserva inventada.
 
-[`DocumentSnapshot`](https://cloud.google.com/java/docs/reference/google-cloud-firestore/latest/com.google.cloud.firestore.DocumentSnapshot) contiene los datos leídos y su ID. `getLong` devuelve un objeto que puede ser nulo: antes de convertirlo en `int`, hay que comprobar presencia y rango. `Math.toIntExact` rechaza un entero demasiado grande; un simple cast podría truncarlo.
+[`DocumentSnapshot`](https://cloud.google.com/java/docs/reference/google-cloud-firestore/latest/com.google.cloud.firestore.DocumentSnapshot) contiene los datos leídos y su ID. `getLong` puede convertir un valor numérico: no demuestra que el campo original fuese un entero. Para este contrato utiliza `get`, comprueba que recibes un `Long` y después convierte a `int`. `Math.toIntExact` rechaza un entero demasiado grande; un cast puede truncarlo.
 
 ## Convertir campos a una entidad
 
 La conversión debe tener un único lugar reconocible en el repositorio. Un documento con campo `inicio` de texto en vez de número no cumple el contrato de nuestra reserva. No arreglamos ese problema devolviendo cero como si fuese un horario válido.
 
 ```java
-Long inicioGuardado = documento.getLong("inicio");
-if (inicioGuardado == null) {
-    throw new IllegalStateException("Falta el campo inicio de la reserva " + documento.getId());
+Object valor = documento.get("inicio");
+if (!(valor instanceof Long inicioGuardado)) {
+    throw new IllegalArgumentException("inicio debe ser un entero Firestore");
 }
 int inicio = Math.toIntExact(inicioGuardado);
 ```
 
+Al escribir, un `int` Java puede entrar en el mapa como `Integer`; el SDK devuelve los valores enteros del documento como `Long`. Un campo decimal conserva otro tipo numérico.
+
+`instanceof Long inicioGuardado` comprueba el tipo y deja ese valor disponible como `Long` dentro del camino válido. Un campo `9.5` no debe convertirse en hora9: aunque el SDK pueda ofrecer una conversión numérica, perdería información. En la solución, el ayudante `entero` aplica esta comprobación a inicio, fin y asistentes.
+
 Después se construye la entidad con sus campos, incluida la identidad externa `documento.getId()`. Para listas y mapas hay que comprobar que los elementos tengan los tipos previstos antes de construir `List<String>` o `Map<String,String>`. Un cast genérico no demuestra que los datos almacenados sean correctos.
 
 Otra opción del SDK es mapear documentos a objetos mediante `toObject`. Requiere un modelo compatible con las reglas de su serialización. No asumas que cualquier constructor, record o propiedad Java funcionará del mismo modo: en este proyecto el mapeo explícito hace visibles nombres, tipos y valores ausentes.
+
+### Volver de Java a los campos
+
+El camino contrario es `datos(Reserva) → Map<String,Object>`. Las claves son los nombres que leerá `mapear`; los valores tienen tipos diferentes, por eso el mapa no es `Map<String,String>`. Empieza guardando `espacio` y `fecha` como textos, `inicio`, `fin` y `asistentes` como números, y continúa con lista y mapa. Incluye estado y motivo controlados por el servidor; el ID sigue siendo externo.
+
+Comprueba ambos sentidos con la fase `conversion` del [guiado](proyecto.md#como-comprobar-una-fase-sin-esperar-al-proyecto-completo). No necesitas escribir una reserva para descubrir que una clave está mal escrita o que has perdido una entrada de `detalles`.
 
 ## Crear un documento
 
@@ -111,6 +121,6 @@ La espera síncrona mantiene sencillo el recorrido MVC, pero ocupa un hilo duran
 
 ## Etapas del proyecto
 
-La primera etapa consiste en examinar el modelo y el DTO preparados. El **TODO 2** está en `FirestoreReservaRepository`: crear, obtener, listar, actualizar y eliminar, además de los ayudantes `datos` y `mapear` para convertir los campos. El **TODO 3** completa las operaciones de creación y actualización en `ReservaService`, utilizando las validaciones de apoyo y respetando sus reglas.
+El [guiado](proyecto.md) divide el trabajo en **2a** (`datos`/`mapear`), **2b** (`crear`/`obtener`), **2c** (`actualizar`/`eliminar`) y **2d** (`listar`). Después, **3a–3b** coordina validación y persistencia en `ReservaService`. No hay que completar HTTP para comprobar el repositorio: las fases `conversion`, `repositorio` y `consultas` tienen entradas preparadas.
 
 Comprueba alta con mapa y lista, lectura de la misma reserva, edición y borrado. Un ID inexistente debe distinguirse de un emulador apagado. Intenta asistentes por encima de capacidad, fecha imposible e intervalo invertido: no deben quedar documentos inválidos. Continúa con [consultas, índices y paginación](consultas.md).

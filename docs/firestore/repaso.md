@@ -1,6 +1,6 @@
 ﻿# Prácticas de repaso
 
-Este espacio reunirá cinco proyectos independientes para consolidar persistencia documental y API REST. Se publicarán sus enunciados, interfaces, proyectos iniciales y soluciones cuando estén desarrollados y comprobados.
+Para consolidar el tema, vuelve a los pasos del proyecto guiado, cambia sus datos y comprueba los rechazos sin perder el estado anterior.
 
 ## Ficha 1
 

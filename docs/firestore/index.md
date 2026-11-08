@@ -16,7 +16,7 @@ Recupera los [servicios y la inyección de Spring](../spring/componentes.md). De
 4. [Consultas e índices](consultas.md): filtros, ordenación, límites y cursores.
 5. [HTTP y REST](rest.md): peticiones, DTO, controladores, estados y Postman.
 
-El [proyecto guiado de reservas](proyecto.md) incorpora etapas a lo largo del tema. Su descarga incluye interfaz web completa y colección Postman importable con peticiones correctas e incorrectas. El modo inicial utiliza un emulador local sin claves privadas.
+El [proyecto guiado de reservas](proyecto.md) incorpora etapas a lo largo del tema. Avanza por conversión, CRUD del repositorio, filtros, servicio y HTTP; las comprobaciones optativas permiten aislar cada paso. Su descarga incluye interfaz web completa y colección Postman importable con peticiones de arranque y casos correctos e incorrectos. El modo inicial utiliza un emulador local sin claves privadas.
 
 Al terminar, una sola [práctica final](practica-final.md) amplía el sistema con cancelaciones, disponibilidad y consultas por páginas en niveles Base, Aplicación y Reto avanzado. Encontrarás también [cinco fichas de repaso en preparación](repaso.md) y [Ampliación](ampliacion.md) sobre documentación API, transacciones, identidad, tiempo real y protección de endpoints.
 

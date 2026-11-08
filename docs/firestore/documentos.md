@@ -95,4 +95,6 @@ Duplicar el nombre del espacio en la reserva puede facilitar una lectura o conse
 
 El proyecto utiliza espacios conocidos, reservas con listas y mapas, y una interfaz preparada. Antes de modificar el repositorio, localiza la entidad y los DTO: ¿qué campos recibe el cliente?, ¿cuál genera el servidor?, ¿dónde se decide el estado inicial?
 
+En el starter los encontrarás en `model/entity/Reserva.java`, `model/entity/Espacio.java` y `api/ReservaRequest.java`. `ReservaRequest` no contiene el ID generado ni el estado; `Reserva` sí. Comprueba que el mapa `detalles` puede contener actividad **y** contacto al mismo tiempo: transformar solo uno perdería información.
+
 No es necesario repartir cada campo en un documento distinto. El objetivo es recuperar una reserva comprensible y validar sus invariantes en un servicio. Continúa con [configuración y acceso seguro](configuracion.md).

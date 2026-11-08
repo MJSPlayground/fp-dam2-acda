@@ -143,10 +143,10 @@ public class FirestoreReservaRepository {
           d.getId(),
           d.getString("espacio"),
           d.getString("fecha"),
-          Math.toIntExact(d.getLong("inicio")),
-          Math.toIntExact(d.getLong("fin")),
+          entero(d, "inicio"),
+          entero(d, "fin"),
           d.getString("responsable"),
-          Math.toIntExact(d.getLong("asistentes")),
+          entero(d, "asistentes"),
           List.copyOf((List<String>) equipo),
           Map.copyOf((Map<String, String>) detalles),
           d.getString("estado"),
@@ -154,6 +154,14 @@ public class FirestoreReservaRepository {
     } catch (RuntimeException e) {
       throw new PersistenciaException("Documento de reserva incompatible: " + d.getId(), e);
     }
+  }
+
+  private int entero(DocumentSnapshot documento, String campo) {
+    Object valor = documento.get(campo);
+    if (!(valor instanceof Long numero)) {
+      throw new IllegalArgumentException("El campo " + campo + " debe ser un entero Firestore");
+    }
+    return Math.toIntExact(numero);
   }
 
   public Reserva conId(Reserva r, String id) {

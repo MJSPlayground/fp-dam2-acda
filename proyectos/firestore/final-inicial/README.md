@@ -24,9 +24,9 @@ Errores JSON: {estado,mensaje,ruta,instante}.400 entrada,404 ausencia,409 confli
 
 ## Configuración cloud e índices
 
-Cloud requiere opt-in FIRESTORE_MODO=cloud, GOOGLE_CLOUD_PROJECT real y GOOGLE_APPLICATION_CREDENTIALS apuntando a archivo externo. No subas claves ni las copies al frontend. Admin usa IAM; las reglas de clientes no protegen esta API. La aplicación local no tiene autenticación: no exponer a Internet. No se han probado credenciales cloud reales.
+Cloud requiere opt-in FIRESTORE_MODO=cloud, GOOGLE_CLOUD_PROJECT real y GOOGLE_APPLICATION_CREDENTIALS apuntando a archivo externo. No subas claves ni las copies al frontend. Admin usa IAM; las reglas de clientes no protegen esta API. La aplicación local no tiene autenticación: no exponer a Internet. Para utilizar cloud, prepara primero proyecto, cuenta autorizada e IAM; comprueba creación, lectura e índices con ese entorno. La conexión al emulador no configura los permisos remotos.
 
-Se entrega firestore.indexes.json. El emulador no exige todos los índices de producción. Ante FAILED_PRECONDITION, revisa el enlace de creación del índice en el log y Firebase Console. No se crean índices cloud automáticamente. Emulador superado no demuestra funcionamiento cloud.
+Se entrega firestore.indexes.json. El emulador no exige todos los índices de producción. Ante FAILED_PRECONDITION, revisa el enlace de creación del índice en el log y Firebase Console. No se crean índices cloud automáticamente. Una consulta local no garantiza los índices ni permisos de cloud; repite allí las operaciones con la configuración remota autorizada.
 
 ## Validación técnica opcional
 
@@ -36,7 +36,7 @@ Spring Boot3.5.7, Firebase Admin9.7.0, Java25 y SLF4J/Log4j2 están fijados en P
 
 ## Nuevos requisitos pendientes
 
-El guiado sigue resuelto: listado sin filtros nuevos y CRUD. Interfaz nueva ya preparada. TODO de servicio: cancelar, disponibilidad, filtros nuevos, paginación y reglas de agenda. TODO de repositorio: persistir cancelación y consulta paginada. No hay algoritmos nuevos ocultos. Lee el enunciado antes de programar.
+El guiado sigue resuelto: listado sin filtros nuevos y CRUD. Interfaz nueva ya preparada. TODO de servicio: cancelar, disponibilidad, filtros nuevos, paginación y reglas de agenda. TODO de repositorio: persistir cancelación y consulta paginada. Las nuevas funciones permanecen pendientes; sus contratos están en el enunciado.
 
 ## Contrato final e infraestructura preparada
 
@@ -44,6 +44,16 @@ PATCH /api/reservas/{id}/cancelacion {motivo}: motivo1–120, conserva historial
 
 GET /api/disponibilidad?espacio&fecha&inicio&fin devuelve {disponible:boolean}. Intervalos [inicio,fin): adyacentes compatibles; canceladas no ocupan. Crear y modificar comprueban conflictos. Máximo dos activas por responsable/día, ignorando mayúsculas (entrada strip).
 
-GET /api/reservas/pagina?limite&cursor: limite1–20, cursor id validado; devuelve {elementos,siguienteCursor}, ordena documentId y startAfter. La vista paginada no aplica filtros del listado. Consulta una fila adicional para decidir siguiente página.
+GET /api/reservas/pagina?limite&cursor: limite1–20, cursor id validado; devuelve {elementos,siguienteCursor}, ordena documentId y startAfter. La vista paginada no aplica filtros del listado. El resultado informa si existe continuación, sin repetir el último elemento.
 
-coordinar(candidata,id,regla) es infraestructura transaccional PREPARADA, no TODO: lee/actualiza marcador coordinacion/agenda y consulta día antes de escribir. Serializa escritores incluso cuando la agenda está vacía. El callback del servicio es puro: puede repetirse sin efectos externos. Las reglas permanecen en servicio. La API transaccional pertenece a Ampliación. Marcador global sencillo limita rendimiento: es una solución docente, no alta carga. No mezcles app guiada y final contra el mismo proyecto: el guiado no usa el coordinador.
+coordinar(candidata,id,regla) es infraestructura transaccional PREPARADA, no TODO: lee/actualiza marcador coordinacion/agenda y consulta día antes de escribir. Serializa escritores incluso cuando la agenda está vacía. El callback del servicio es puro: puede repetirse sin efectos externos. Las reglas permanecen en servicio. La API transaccional pertenece a Ampliación. Marcador global sencillo limita rendimiento: prioriza una coordinación sencilla; no está diseñado para alta carga. No mezcles app guiada y final contra el mismo proyecto: el guiado no usa el coordinador.
+
+## Comprobaciones optativas por nivel
+
+En IntelliJ ejecuta `NivelesAprendizajeTest`, en el paquete de tests es.mjsplayground.acda.firestore.reservas. Añade VM options `-Daprendizaje.nivel=base`; cambia a aplicacion o reto cuando completes ese nivel. `todos` corresponde al cierre. Sin opción las nuevas pruebas se omiten.
+
+Base prepara una reserva y comprueba cancelación repetida, motivo, filtros y edición rechazada. Aplicacion prepara horarios adyacentes y dos altas simultáneas: solo una ocupación incompatible se confirma. Reto comprueba cupo normalizado, cancelación y páginas cuyo cursor se elimina. El test prepara los datos y los hilos; no tienes que escribir esa infraestructura. Siempre utiliza un proyecto demo-niveles-UUID propio en emulador y limpia sus reservas.
+
+El starter conserva el CRUD del guiado. También hay puntos de cambio en crear/actualizar: incorporar reglas nuevas no consiste solo en escribir los métodos añadidos. Mantén preparada la función coordinar del repositorio; el algoritmo de disponibilidad/cupo pertenece al servicio. El callback puede repetirse y no debe tener efectos externos.
+
+Alternativa técnica opcional: `.\mvnw.cmd -Daprendizaje.nivel=base test`; todos los niveles con emulador activo: `.\mvnw.cmd -Daprendizaje.nivel=todos test`. Compara el documento tras cada rechazo, no solo el estado HTTP.

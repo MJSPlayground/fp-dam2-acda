@@ -6,7 +6,7 @@ Abre esta carpeta como proyecto Maven, espera la sincronización y selecciona JD
 
 Luego ejecuta `LigaApplication.main` en `es.mjsplayground.acda.mongodb.liga`. Abre http://127.0.0.1:8080. No hay que editar HTML/CSS/JavaScript. Los datos persisten en el volumen Docker liga-data: parar Spring no los borra. No elimines volúmenes para repetir un ejercicio; crea equipos nuevos y elimina solo los de prueba desde la aplicación.
 
-Configuración: MONGODB_URI cambia la conexión; default mongodb://127.0.0.1:27018/acda_liga con timeout selección/conexión3s. PORT cambia puerto HTTP. Compose fija MongoDB Community8.0.34 por digest oficial y publica solo127.0.0.1:27018. El servidor HTTP también escucha loopback. Este entorno docente local carece de autenticación: no exponer fuera del equipo.
+Configuración: MONGODB_URI cambia la conexión; default mongodb://127.0.0.1:27018/acda_liga con timeout selección/conexión3s. PORT cambia puerto HTTP. Compose fija MongoDB Community8.0.34 por digest oficial y publica solo127.0.0.1:27018. El servidor HTTP también escucha loopback. Este entorno de desarrollo local carece de autenticación: no exponer fuera del equipo.
 
 ## Modelo documental
 
@@ -42,4 +42,19 @@ Versiones: Java25, Spring Boot3.5.7, Spring Data/driver gestionados por ese BOM,
 
 ## Alcance de esta variante
 
-Etapa1 examina entidades/DTO y sedes preparados. TODO2 EquipoRepository: cambia métodos default de apoyo a consultas derivadas/@Query reales conservando las firmas. TODO3 LigaService: crear/actualizar equipo y agregar/editar/eliminar jugador con reglas y guardado optimista; validar/validarJugador y conJugadores son apoyos preparados. TODO4 EstadisticasRepository.sumar: implementa incremento atómico y actualización de versión. REST y frontend preparados. El inicial lista equipos sin filtros nuevos mediante MongoRepository heredado, y muestra501 al invocar etapas pendientes. Las pruebas del inicial verifican apoyo; la solución contiene las pruebas de requisitos completos.
+Etapa1 examina entidades/DTO y sedes preparados. TODO2 EquipoRepository: cambia métodos default de apoyo a consultas derivadas/@Query reales conservando las firmas. TODO3 LigaService: crear/actualizar equipo y agregar/editar/eliminar jugador con reglas y guardado optimista; validar/validarJugador y conJugadores son apoyos preparados. TODO4 LigaService.sumarEstadisticas: comprobar equipo/jugador e incrementos y delegar en el helper atómico preparado. EstadisticasRepository.sumar se entrega COMPLETO: no se programa MongoTemplate, Criteria ni findAndModify. REST y frontend preparados. El inicial lista equipos sin filtros nuevos mediante MongoRepository heredado, y muestra501 al invocar etapas pendientes. Las pruebas del inicial incluyen comprobaciones optativas por fases y no obligan a conservar los TODO pendientes.
+
+## Comprobaciones optativas por fases
+
+En IntelliJ abre `FasesAprendizajeTest` dentro de src/test/java/es/mjsplayground/acda/mongodb/liga, crea su configuración JUnit y añade VM options `-Daprendizaje.fase=consultas`. Mantén MongoDB abierto. Cambia el valor al completar cada paso:
+
+| Valor | Qué comprueba | Lo que todavía no exige |
+| --- | --- | --- |
+| consultas | categoría/posición/combinación y página vacía | crear equipos desde servicio |
+| equipos | crear/actualizar conservando plantilla y versión | operaciones de jugadores |
+| jugadores | altas/ediciones/bajas con dorsal único y cifras conservadas | servicio de estadísticas |
+| estadisticas | delegación segura, copia antigua y ocho incrementos concurrentes | implementar MongoTemplate o hilos |
+
+Los tests cargan sus fixtures sin utilizar los TODO futuros y limpian solo una base acda_qa_fases_UUID con nombre comprobado. No borran acda_liga. Sin propiedad quedan omitidos. `todas` corresponde al final del recorrido. Primero completa consultas en EquipoRepository (TODO2), después equipos y jugadores en LigaService (TODO3a/3b) y finalmente la coordinación de estadísticas en ese mismo servicio (TODO4). La actualización atómica avanzada está terminada en todas las variantes.
+
+Alternativa técnica opcional: `.\mvnw.cmd -Daprendizaje.fase=consultas test`; recorrido completo con Mongo real: `.\mvnw.cmd -Daprendizaje.fase=todas test`. La prueba de copia antigua y concurrencia ya proporciona sincronización, incrementos y comparación del estado final; no hay que programar una herramienta adicional ni manipular versiones por HTTP.

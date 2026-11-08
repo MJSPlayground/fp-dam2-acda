@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.*;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.Repository;
 
+/** Ayuda preparada: actualización avanzada; el alumnado no implementa MongoTemplate. */
 @Repository
 public class EstadisticasRepository {
   private final MongoTemplate mongo;

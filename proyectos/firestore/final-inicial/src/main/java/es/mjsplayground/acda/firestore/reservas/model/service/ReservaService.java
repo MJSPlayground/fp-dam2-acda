@@ -42,10 +42,12 @@ public class ReservaService {
   }
 
   public synchronized Reserva crear(ReservaRequest solicitud) {
+    // TODO Aplicación/Reto: integrar la coordinación preparada y las reglas nuevas al guardar.
     return repository.crear(validar(solicitud, "ACTIVA", ""));
   }
 
   public synchronized Reserva actualizar(String id, ReservaRequest solicitud) {
+    // TODO Base: impedir editar canceladas. Aplicación/Reto: integrar agenda y cupo al guardar.
     Reserva anterior = obtener(id);
     return repository.actualizar(
         id, validar(solicitud, anterior.estado(), anterior.motivoCancelacion()));

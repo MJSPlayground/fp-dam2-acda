@@ -24,9 +24,9 @@ Errores JSON: {estado,mensaje,ruta,instante}.400 entrada,404 ausencia,409 confli
 
 ## Configuración cloud e índices
 
-Cloud requiere opt-in FIRESTORE_MODO=cloud, GOOGLE_CLOUD_PROJECT real y GOOGLE_APPLICATION_CREDENTIALS apuntando a archivo externo. No subas claves ni las copies al frontend. Admin usa IAM; las reglas de clientes no protegen esta API. La aplicación local no tiene autenticación: no exponer a Internet. No se han probado credenciales cloud reales.
+Cloud requiere opt-in FIRESTORE_MODO=cloud, GOOGLE_CLOUD_PROJECT real y GOOGLE_APPLICATION_CREDENTIALS apuntando a archivo externo. No subas claves ni las copies al frontend. Admin usa IAM; las reglas de clientes no protegen esta API. La aplicación local no tiene autenticación: no exponer a Internet. Para utilizar cloud, prepara primero proyecto, cuenta autorizada e IAM; comprueba creación, lectura e índices con ese entorno. La conexión al emulador no configura los permisos remotos.
 
-Se entrega firestore.indexes.json. El emulador no exige todos los índices de producción. Ante FAILED_PRECONDITION, revisa el enlace de creación del índice en el log y Firebase Console. No se crean índices cloud automáticamente. Emulador superado no demuestra funcionamiento cloud.
+Se entrega firestore.indexes.json. El emulador no exige todos los índices de producción. Ante FAILED_PRECONDITION, revisa el enlace de creación del índice en el log y Firebase Console. No se crean índices cloud automáticamente. Una consulta local no garantiza los índices ni permisos de cloud; repite allí las operaciones con la configuración remota autorizada.
 
 ## Validación técnica opcional
 
@@ -42,3 +42,24 @@ Spring Boot3.5.7, Firebase Admin9.7.0, Java25 y SLF4J/Log4j2 están fijados en P
 4. TODO4 controlador POST/PUT/DELETE: responde201/200/204 con Location en alta. Interfaz y Postman ya llaman estas rutas.
 
 Las pruebas del inicial comprueban infraestructura; las de solución contrastan requisitos completos. No se simulan guardados de TODO.
+
+## Comprobaciones del recorrido por fases
+
+Ruta: `src/test/java/es/mjsplayground/acda/firestore/reservas/FasesAprendizajeTest.java`. En IntelliJ crea la configuración JUnit de la clase y añade VM options `-Daprendizaje.fase=conversion`. Reutiliza esa configuración cambiando únicamente el valor al completar cada fase:
+
+| Valor | Métodos de producción que comprueba | Dependencia |
+| --- | --- | --- |
+| conversion | datos/mapear, listas/mapas, ID y errores de tipo | Sin emulador ni otros TODO |
+| alta-lectura | crear/obtener y ausencia; limpieza independiente del TODO de borrado | Emulador; conversión |
+| repositorio | crear/obtener/actualizar/eliminar | Emulador; alta/lectura |
+| consultas | listar con filtros y resultados vacíos | Emulador; CRUD de repositorio |
+| servicio | crear/actualizar, validar antes de persistir | Dobles preparados; sin HTTP ni emulador |
+| rest | POST/PUT/DELETE, estados, Location y error técnico seguro | Servicio de prueba preparado; sin emulador |
+
+Los métodos se sitúan en model/repository/FirestoreReservaRepository.java (TODO2a–2d), model/service/ReservaService.java (TODO3a–3b) y api/ReservaController.java (TODO4a–4c). `esperar`, `conId`, validaciones auxiliares y frontend están preparados. No sustituyas clases completas para avanzar. Los resultados y pistas están en la página del proyecto.
+
+Sin propiedad, estas pruebas quedan omitidas; no exigen completar fases futuras para que el starter compile. `todas` se utiliza al terminar. Las pruebas reales generan un proyecto demo-fase-UUID exclusivo, usan siempre el emulador y limpian sus documentos; no vacían los datos de la web.
+
+Postman por pasos: carpeta00 Primer contacto HTTP antes de los TODO; carpeta01 Lectura tras completar repositorio; CRUD petición por petición después de implementar POST, PUT y DELETE. El Runner CRUD completo se ejecuta al terminar las tres escrituras, porque su limpieza utiliza DELETE.
+
+Alternativa técnica opcional: `.\mvnw.cmd -Daprendizaje.fase=conversion test`; para todas las fases, con emulador abierto, `.\mvnw.cmd -Daprendizaje.fase=todas test`. El caso técnico de la fase rest provoca una excepción con causa y verifica500 sin stack: no requiere apagar servicios ni programar otra infraestructura.

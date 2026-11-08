@@ -56,9 +56,9 @@ El [modelado de datos de MongoDB](https://www.mongodb.com/docs/manual/data-model
 
 ## Referencias: identidad sin clave foránea automática
 
-Un jugador puede guardar el ID de su equipo. De ese modo el equipo tiene identidad propia y puede consultarse por separado. Un campo `equipoId` no crea por sí solo una clave foránea: el servicio comprueba que el equipo exista y decide si puede eliminarse cuando mantiene jugadores asociados.
+En este proyecto la referencia explícita es `Equipo.sedeId`: `CENTRO` identifica un documento de la colección `sedes`. El servicio comprueba que exista antes de aceptar el equipo. Ese campo no crea por sí solo una clave foránea ni un borrado en cascada. Los jugadores, en cambio, están embebidos: no debes buscarlos en otra colección para completar este modelo.
 
-Duplicar el nombre del equipo en cada jugador facilitaría ciertas lecturas, pero obligaría a decidir si es una instantánea histórica o una copia que debe sincronizarse. No hace falta duplicar todo para evitar cualquier segunda consulta.
+Duplicar el nombre de la sede dentro del equipo facilitaría ciertas lecturas, pero obligaría a decidir si es una instantánea histórica o una copia que debe sincronizarse. No hace falta duplicar todo para evitar cualquier segunda consulta.
 
 Spring Data ofrece mecanismos de referencia con comportamiento propio. No los añadimos por costumbre: una referencia explícita por ID resulta más visible en el primer proyecto. Una operación `$lookup`, explicada en [Ampliación](ampliacion.md), puede combinar colecciones al consultar sin convertirlas en un único documento persistido.
 

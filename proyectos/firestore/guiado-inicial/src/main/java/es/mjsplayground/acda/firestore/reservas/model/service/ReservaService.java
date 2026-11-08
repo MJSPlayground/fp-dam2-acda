@@ -42,13 +42,14 @@ public class ReservaService {
   }
 
   public synchronized Reserva crear(ReservaRequest solicitud) {
-    // TODO 3: validar reglas antes de escribir mediante el repositorio
+    // TODO 3a: validar la solicitud con el apoyo preparado antes de crear; el estado lo decide el
+    // servidor.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 3: validar reglas antes de escribir mediante el repositorio");
   }
 
   public synchronized Reserva actualizar(String id, ReservaRequest solicitud) {
-    // TODO 3: validar reglas antes de escribir mediante el repositorio
+    // TODO 3b: comprobar existencia, validar y conservar estado/motivo al editar.
     throw new UnsupportedOperationException(
         "Etapa pendiente: 3: validar reglas antes de escribir mediante el repositorio");
   }

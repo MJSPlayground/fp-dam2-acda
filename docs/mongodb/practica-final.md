@@ -61,6 +61,22 @@ Comprueba el recorrido guiado después de incorporar las funciones: edición del
 
 El starter marca las funciones nuevas como pendientes y conserva las anteriores. Los tests deben observar el estado posterior a un rechazo y una versión obsoleta, además de sus respuestas. No se considera resuelto un requisito porque la interfaz muestre un mensaje de éxito.
 
+## Comprobaciones optativas por nivel
+
+En IntelliJ selecciona el paquete de tests `es.mjsplayground.acda.mongodb.liga` y crea su configuración **Run Tests**. Añade **VM options** `-Daprendizaje.nivel=base`. Cambia a `aplicacion` o `reto` para comprobar ese nivel; `todos` se utiliza al terminar. Mantén abierto MongoDB.
+
+| Nivel | Comprobaciones preparadas |
+| --- | --- |
+| `base` | Filtro por goles/disponibilidad, cambio repetido de estado y conservación de contadores |
+| `aplicacion` | Marcador incoherente, jornada repetida, jugador histórico y dos registros simultáneos de la misma jornada |
+| `reto` | Clasificación, ceros, todos los desempates y últimos cinco resultados ordenados por fecha e ID |
+
+`NivelesAprendizajeTest` prepara una base `acda_qa_niveles_...` exclusiva y la limpia al terminar. Su caso de Reto carga jornadas de ejemplo directamente como fixture: permite comprobar los cálculos sin necesitar que el registro de jornadas esté terminado. `CalculosAprendizajeTest` añade lecturas simuladas para aislar los desempates; no elimina el índice de nombres ni guarda duplicados para probar el criterio de ID.
+
+Las pruebas proporcionan datos y sincronización, **no la implementación** de filtros, jornadas o cálculos. No tienes que escribir un generador, una aplicación concurrente ni un pipeline para ejecutarlas. Sin opción quedan desactivadas y no impiden continuar con un nivel anterior.
+
+Para interpretar un rechazo, compara el equipo recuperado antes y después: jornada, plantilla y estadísticas. MongoDB confirma una única escritura de ese agregado; aquí «sin cambios parciales» no exige programar un rollback SQL ni coordinar dos equipos.
+
 ## Solución completa
 
 [Descargar solución de los tres niveles](/fp-dam2-acda/descargas/codigo/jugadores-final-solucion.zip){ .md-button download="jugadores-final-solucion.zip" }

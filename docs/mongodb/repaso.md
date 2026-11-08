@@ -1,6 +1,6 @@
 ﻿# Prácticas de repaso
 
-Este espacio reunirá cinco proyectos independientes sobre persistencia documental con MongoDB. Sus enunciados, interfaces, proyectos iniciales y soluciones se publicarán cuando estén desarrollados y comprobados.
+Para consolidar el tema, vuelve a los pasos del proyecto guiado, cambia sus datos y comprueba los rechazos sin perder el estado anterior.
 
 ## Ficha 1
 

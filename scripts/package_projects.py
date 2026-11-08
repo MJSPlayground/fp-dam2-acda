@@ -37,6 +37,13 @@ PROJECTS = {
     "almacen-guiado-solucion.zip": ROOT / "proyectos/jdbc/guiado-solucion",
 }
 REQUIRED = {"pom.xml", "README.md", "mvnw", "mvnw.cmd", ".mvn/wrapper/maven-wrapper.properties", ".mvn/wrapper/maven-wrapper.jar"}
+LEARNING_TEST_FILES = {"FasesGuiadoTest.java", "FasesFinalTest.java", "AprendizajeGuiadoTest.java", "AprendizajeFinalTest.java", "FasesAprendizajeTest.java", "NivelesAprendizajeTest.java"}
+
+
+def has_learning_tests(names):
+    return any(Path(name).name in LEARNING_TEST_FILES for name in names)
+
+
 EXCLUDED_DIRS = {"target", ".idea", ".m2-cache", ".venv", ".git", "trabajo-codelab", "qa-captures", "__pycache__", "node_modules", ".firebase", ".cache"}
 EXCLUDED_SUFFIXES = {".zip", ".log", ".tmp", ".bak", ".swp", ".pyc", ".iml", ".class", ".db", ".sqlite"}
 

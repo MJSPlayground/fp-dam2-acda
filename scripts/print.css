@@ -147,6 +147,7 @@ code:not(pre code) {
   font-family: "Courier New", monospace;
   font-size: .92em;
   padding: .1em .2em;
+  overflow-wrap: anywhere;
 }
 .highlight pre { background: #eef4f8; }
 .highlighttable { border: none; }

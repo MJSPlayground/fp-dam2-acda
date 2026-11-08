@@ -10,7 +10,7 @@ import zipfile
 from pathlib import Path
 from urllib.parse import parse_qsl, urlparse
 
-from package_projects import DESTINATION, EXCLUDED_DIRS, PROJECTS, REQUIRED
+from package_projects import DESTINATION, EXCLUDED_DIRS, PROJECTS, REQUIRED, has_learning_tests
 
 
 def check_postman_urls(items):
@@ -55,6 +55,7 @@ def check(name: str) -> None:
             names = set(archive.namelist())
             assert archive.testzip() is None, name
             assert REQUIRED <= names, REQUIRED - names
+            assert has_learning_tests(names), f"Faltan pruebas de aprendizaje en {name}"
             assert any(n.startswith("src/main/java/") and n.endswith(".java") for n in names)
             assert all(not (set(Path(item).parts) & EXCLUDED_DIRS) for item in names)
             assert all(not item.endswith((".zip", ".log", ".tmp", ".class")) for item in names)

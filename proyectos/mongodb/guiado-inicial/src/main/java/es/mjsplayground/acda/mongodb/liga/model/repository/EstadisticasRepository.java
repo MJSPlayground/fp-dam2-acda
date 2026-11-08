@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.*;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.Repository;
 
+/** Ayuda preparada: actualización avanzada; el alumnado no implementa MongoTemplate. */
 @Repository
 public class EstadisticasRepository {
   private final MongoTemplate mongo;
@@ -14,8 +15,22 @@ public class EstadisticasRepository {
   }
 
   public Equipo sumar(String equipoId, String jugadorId, int goles, int asistencias) {
-    // TODO 4: incremento atómico con predicados y cambio de versión
-    throw new UnsupportedOperationException(
-        "Etapa pendiente: 4: incremento atómico con predicados y cambio de versión");
+    Criteria jugador =
+        Criteria.where("id")
+            .is(jugadorId)
+            .and("estadisticas.partidos")
+            .lt(10000)
+            .and("estadisticas.goles")
+            .lte(100000 - goles)
+            .and("estadisticas.asistencias")
+            .lte(100000 - asistencias);
+    Query q = Query.query(Criteria.where("_id").is(equipoId).and("jugadores").elemMatch(jugador));
+    Update u =
+        new Update()
+            .inc("jugadores.$.estadisticas.partidos", 1)
+            .inc("jugadores.$.estadisticas.goles", goles)
+            .inc("jugadores.$.estadisticas.asistencias", asistencias)
+            .inc("version", 1);
+    return mongo.findAndModify(q, u, FindAndModifyOptions.options().returnNew(true), Equipo.class);
   }
 }

@@ -47,6 +47,103 @@
   ],
   "item": [
     {
+      "name": "00 · Primer contacto HTTP (antes de los TODO)",
+      "description": "Estas peticiones no requieren persistencia implementada. Ejecuta esta carpeta al arrancar por primera vez.",
+      "item": [
+        {
+          "name": "Ver espacios preparados",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/espacios"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Catálogo preparado\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().some(e=>e.id===\"SALA-A\"&&e.capacidad===12)).to.eql(true);});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Leer un error de parámetros",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/reservas?minAsistentes=0"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Entrada inválida\",()=>{pm.response.to.have.status(400);const e=pm.response.json();pm.expect(e.estado).to.eql(400);pm.expect(e.ruta).to.eql(\"/api/reservas\");pm.expect(e.instante).to.be.a(\"string\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Leer un error de JSON recibido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/reservas",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Cuerpo incompleto\",()=>{pm.response.to.have.status(400);pm.expect(pm.response.json().estado).to.eql(400);});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "01 · Lectura tras completar el repositorio",
+      "description": "Ejecutar al terminar TODO2a–2d. POST/PUT/DELETE todavía pueden responder501.",
+      "item": [
+        {
+          "name": "Listar reservas con el GET preparado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/reservas"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Listado persistido\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json()).to.be.an(\"array\");});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "1 · CRUD y errores (guiado)",
       "item": [
         {

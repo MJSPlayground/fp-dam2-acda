@@ -14,7 +14,7 @@ Necesitas la [arquitectura Spring](../spring/index.md) y las [peticiones y respu
 4. [Consultas y paginación](consultas.md): métodos derivados, `@Query`, orden e índices.
 5. [Atomicidad y errores](atomicidad.md): versiones, incrementos y límites de consistencia.
 
-El [proyecto guiado de equipos y jugadores](proyecto.md) evoluciona sobre una aplicación con frontend preparado. El alumnado trabaja en el backend y no modifica sus vistas.
+El [proyecto guiado de equipos y jugadores](proyecto.md) evoluciona sobre una aplicación con frontend preparado. Trabajarás por separado consultas, equipos, jugadores y coordinación de estadísticas. La actualización atómica avanzada se entrega como ayuda preparada; el trabajo se centra en Spring Data, servicios y reglas, sin modificar las vistas.
 
 Al finalizar, una sola [práctica de gestión de competición](practica-final.md) incorpora consultas, disponibilidad, jornadas y clasificación con niveles Base, Aplicación y Reto avanzado. Encontrarás también [cinco fichas de repaso en preparación](repaso.md) y [Ampliación](ampliacion.md) sobre pipelines e interpretación de planes.
 

@@ -112,10 +112,16 @@ jobs:
         run: npx --yes firebase-tools@15.35.0 emulators:exec --only firestore --project demo-acda-reservas --config proyectos/firestore/guiado-solucion/firebase.json "sh scripts/test_firestore_emulator.sh"
       - name: Instalar dependencias
         run: python -m pip install -r requirements.txt
+      - name: Comprobar lenguaje orientado al estudiante
+        run: |
+          python scripts/test_student_voice.py
+          python scripts/check_student_voice.py
       - name: Instalar Chromium
         run: python -m playwright install --only-shell chromium
       - name: Construir web y PDF
         run: python scripts/export_pdfs.py
+      - name: Comprobar texto público en HTML y PDF
+        run: python scripts/check_student_voice.py --site --pdf
       - name: Empaquetar y verificar proyectos descargables
         run: |
           python scripts/package_projects.py

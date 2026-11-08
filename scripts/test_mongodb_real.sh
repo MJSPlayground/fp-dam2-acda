@@ -4,6 +4,6 @@ set -eu
 for project in guiado-solucion final-solucion; do
   (
     cd "proyectos/mongodb/$project"
-    sh mvnw -Dqa.mongo=true test --batch-mode
+    sh mvnw -Dqa.mongo=true -Daprendizaje.fase=todas -Daprendizaje.nivel=todos test --batch-mode
   )
 done

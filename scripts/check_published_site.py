@@ -10,7 +10,7 @@ from zipfile import ZipFile
 
 from playwright.sync_api import sync_playwright
 from pypdf import PdfReader
-from package_projects import PROJECTS, REQUIRED, included
+from package_projects import PROJECTS, REQUIRED, included, has_learning_tests
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -70,6 +70,7 @@ def main():
                 with ZipFile(BytesIO(response.body())) as archive:
                     names = set(archive.namelist())
                     assert archive.testzip() is None and REQUIRED <= names, url
+                    assert has_learning_tests(names), f"ZIP sin las comprobaciones de aprendizaje: {url}"
                     assert all(included(Path(name)) for name in names), url
                 print(f"OK ZIP publicado: {url.rsplit('/', 1)[-1]}", flush=True)
             for topic in sorted(selected | {"documentacion-completa"}):

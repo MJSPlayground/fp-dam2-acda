@@ -90,7 +90,9 @@ La práctica final entrega preparada la infraestructura que coordina una escritu
 
 ## Comprobaciones en el proyecto
 
-El **TODO 2** de `FirestoreReservaRepository.listar` utiliza los filtros de `espacio`, `fecha` y `minAsistentes`. Comprueba el listado sin filtros y con cada condición por separado; después combínalas. El mínimo de asistentes admitido está entre 1 y 30; cero o un valor superior a 30 se rechazan con `400`. Una consulta válida sin coincidencias devuelve una lista vacía con `200`.
+El **TODO 2d** de `FirestoreReservaRepository.listar` utiliza los filtros de `espacio`, `fecha` y `minAsistentes`. Comprueba el listado sin filtros y con cada condición por separado; después combínalas. El mínimo de asistentes admitido está entre 1 y 30; cero o un valor superior a 30 se rechazan con `400`. Una consulta válida sin coincidencias devuelve una lista vacía con `200`.
+
+Ejecuta la fase `consultas` de `FasesAprendizajeTest`: sus documentos de salas y cantidades distintas permiten detectar un filtro omitido. Después utiliza el `GET` preparado de Postman. Si todo sale vacío, inspecciona el proyecto y los campos de la consulta; no elimines filtros para conseguir una respuesta.
 
 La práctica final añadirá consultas de estado y responsable y un endpoint de páginas independiente. La interfaz y la colección Postman ya contienen sus controles y peticiones; implementarlas no requiere construir un nuevo frontend.
 
