@@ -1,6 +1,8 @@
 # Proyecto guiado: catálogo de biblioteca
 
-La biblioteca necesita mantener editoriales, autores, libros y sus detalles de publicación. El proyecto integra las tres cardinalidades en una sola aplicación JavaFX, con controles y formularios preparados. El alumnado completa mapeos, repositorios y servicio.
+La biblioteca necesita mantener editoriales, autores, libros y sus detalles de publicación. Al terminar podrás crear y editar fichas, buscar por título y editorial y eliminar libros conservando sus autores compartidos. Completarás mapeos, repositorios y casos de uso en una sola aplicación JavaFX; sus controles y formularios están preparados.
+
+Necesitas manejar clases, colecciones, excepciones y lambdas sencillas de Java, y distinguir repositorio y servicio como en [Ficheros](../ficheros/arquitectura.md). Sigue aquí el recorrido **entidades y relaciones → sesión y repositorios → consultas → servicio → comprobación conjunta**, apoyándote en las páginas de teoría enlazadas.
 
 ## Preparar y ejecutar
 
@@ -14,7 +16,7 @@ Descomprime y abre en IntelliJ la carpeta con `pom.xml`. Espera la sincronizaci�
 
 El servidor local escucha en 3308 y el guiado utiliza `biblioteca_guiado`. La [configuración del tema](configuracion.md) explica conexión, Workbench y esquema. Para cambiar de starter a solución cierra la aplicación anterior; no es necesario borrar el servidor o su volumen.
 
-La UI puede arrancar mientras existen TODO. Sus avisos no simulan persistencia. Completa las etapas en orden antes de registrar libros: una asociación marcada como transitoria todavía no representa la relación que exige el catálogo.
+**Primera comprobación, sin escribir código:** abre las pestañas **Libros**, **Editoriales** y **Autores**, pulsa **Actualizar** y localiza el aviso de etapa pendiente. La ventana debe responder; ese aviso indica que aún falta consultar los catálogos, no que MySQL esté averiado. Un error de conexión requiere revisar Docker, el puerto y la causa del registro. No prepares todavía la demostración ni registres libros: las asociaciones marcadas como transitorias aún no representan las relaciones del catálogo.
 
 ## Paquetes y apoyos preparados
 
@@ -32,11 +34,22 @@ app.Launcher → Interfaz JavaFX
 
 El helper `transaccion` y las convenciones de excepción y logging están resueltos. Los repositorios reciben una sesión: no cierran la que pertenece al caso de uso ni confirman cada operación por separado.
 
-## Etapa 1. Completar asociaciones
+## Etapa 1. Entidades y asociaciones
 
-Lee [arquitectura](arquitectura.md), [entidades](entidades.md) y [relaciones](relaciones.md). El **TODO 1** marca asociaciones que temporalmente tienen `@Transient` para permitir el arranque.
+Lee [arquitectura](arquitectura.md), [entidades](entidades.md) y [relaciones](relaciones.md). Empieza observando `model/entity/Detalle.java`, ya mapeado en el starter. Este fragmento **ya existe**, no tienes que añadirlo:
 
-Sustituye esas marcas por:
+```java
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
+
+@Column(nullable = false, length = 30)
+private String idioma;
+```
+
+`@Id` identifica la entidad; `IDENTITY` deja que MySQL genere su identificador. `@Column` describe una columna obligatoria y su longitud. Localiza también `@Entity`, el constructor sin argumentos y `paginas`. Las anotaciones describen persistencia; no sustituyen la validación del idioma y las páginas en el servicio.
+
+El **TODO 1** marca asociaciones que temporalmente tienen `@Transient` para permitir el arranque. Los campos simples ya están resueltos. Sustituirás esas marcas, sin cambiar constructores ni accesores, para representar estas relaciones:
 
 - `Libro.editorial`: N:1 propietario, editorial obligatoria.
 - `Editorial.libros`: 1:N inverso mediante `mappedBy`.
@@ -46,7 +59,7 @@ Sustituye esas marcas por:
 
 No añadas borrado en cascada a autores o editoriales compartidos. En Workbench observa las claves y la tabla de unión cuando el proveedor prepare el esquema; que existan campos en Java no demuestra que sus asociaciones estén mapeadas.
 
-El primer lado propietario se declara sobre el atributo real de `Libro.java`:
+La primera asociación sirve de referencia resuelta: **añade este mapeo** al atributo ya existente `Libro.editorial`, sustituyendo su `@Transient`. Es solo ese atributo, no un archivo completo:
 
 ```java
 @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -54,28 +67,57 @@ El primer lado propietario se declara sobre el atributo real de `Libro.java`:
 private Editorial editorial;
 ```
 
-La entrada conceptual es una editorial existente; la salida persistida es su clave en `libro.editorial_id`. Ahora completa el lado inverso en `Editorial.libros`: ¿qué nombre de atributo debe indicar `mappedBy`? Consulta [1:N](relaciones.md) antes de seguir con M:N y 1:1. No sustituyas el atributo por otro ID Java independiente.
+Cada libro referencia una editorial existente y su clave queda en `libro.editorial_id`. `optional = false` expresa la relación obligatoria; `LAZY` solicita carga diferida. **Ahora te toca** completar `Editorial.libros`: ¿qué nombre de atributo debe indicar `mappedBy`? Consulta [1:N](relaciones.md) antes de seguir con M:N y 1:1. No sustituyas el atributo por otro ID Java independiente.
 
 Hazlo en tres pasos en `src/main/java/es/mjsplayground/acda/hibernate/biblioteca/model/entity`: primero `Libro.editorial` y `Editorial.libros`; después `Libro.autores` y `Autor.libros`; por último `Libro.detalle`. En cada pareja identifica el atributo que escribe la clave o la tabla de unión antes de añadir anotaciones. `mappedBy` contiene el **nombre del atributo Java propietario**, no el de una columna SQL. Compara tus anotaciones con [las relaciones](relaciones.md), sin añadir cascadas por ensayo y error.
 
-Las fases `uno-muchos`, `muchos-muchos` y `uno-uno` comprueban cada paso sin necesitar MySQL; `mapeos` reúne las cinco asociaciones. Después, la fase `catalogos` prepara datos reales en un esquema temporal; si falla por una asociación mal construida, corrígela antes de pasar al repositorio.
+??? tip "Pista — Propiedad y ciclo de vida"
 
-## Etapa 2. CRUD y consultas de repositorio
+    En M:N, compara los dos `Set`: solo uno declara `@JoinTable`; el otro apunta al atributo propietario con `mappedBy`. En 1:1, pregunta si el detalle puede compartirse y qué debe ocurrir al retirarlo. La [teoría de relaciones](relaciones.md) muestra la sintaxis; decide qué opciones corresponden a cada asociación antes de aplicarlas.
 
-Lee [sesiones y transacciones](persistencia.md) y [HQL básico](consultas.md). Completa el **TODO 2** de `LibroRepository`: listar, buscar, insertar y eliminar, además de las consultas de editoriales y autores de `CatalogoRepository`.
+**Comprueba:** identifica en el código las cinco asociaciones y explica dónde se guarda cada vínculo. Las fases `uno-muchos`, `muchos-muchos` y `uno-uno` comprueban cada paso sin necesitar MySQL; `mapeos` reúne las cinco asociaciones. Todavía no certifican el esquema ni su ciclo de vida real. La interfaz seguirá anunciando consultas pendientes; no esperes todavía un catálogo funcional.
 
-Utiliza la sesión recibida y consultas tipadas con parámetros. El listado admite texto de título y editorial opcional, y ordena por título e ID. La consulta habla de propiedades Java; no uses `editorial_id` como si fuera una propiedad HQL.
+## Etapa 2. Sesiones, repositorios y consultas
 
-Las operaciones preparadas del servicio permiten mantener editoriales y autores. Comprueba altas y consultas de estos catálogos antes de registrar libros. Un nombre repetido debe rechazarse con un mensaje comprensible; un fallo de conexión no debe mostrarse como una lista vacía.
-
-Dentro de `LibroRepository.buscar`, la API recibe la sesión del servicio y el ID solicitado:
+Lee [sesiones y transacciones](persistencia.md) y [HQL básico](consultas.md). Antes de programar, observa `CatalogoRepository.editorial`, **ya resuelto en el starter**:
 
 ```java
-Libro encontrado = s.find(Libro.class, id);
-// Decide qué debe devolver buscar cuando no existe esa identidad.
+public Editorial editorial(Session s, long id) {
+    return s.find(Editorial.class, id);
+}
 ```
 
-`find` devuelve la entidad gestionada o `null`; no necesita construir un libro vacío. Para el listado, comienza contrastando una consulta tipada sin filtros:
+Recibe una sesión abierta por el servicio y busca una identidad. Devuelve una entidad gestionada o `null` si no existe; no inventa una editorial vacía. Localiza también `insertar` y `eliminar` de esa clase: `persist` incorpora un objeto nuevo y `remove` marca uno gestionado para borrado. Ninguno abre o confirma una transacción.
+
+### 2A. Recuperar y mantener entidades
+
+**Ahora te toca:** en `model/repository/LibroRepository.java`, completa `buscar(Session,long)`, `insertar(Session,Libro)` y `eliminar(Session,Libro)` adaptando esos métodos de referencia. Conserva el `flush` preparado. Una búsqueda inexistente debe devolver `null`; el servicio preparado decide cuándo eso constituye un error de negocio.
+
+**Comprueba:** puedes ejecutar la fase optativa `repositorio`, que prepara sus propios libros sin utilizar `guardarLibro`, `datosDemo` ni `listar` pendientes. Inserta y elimina un tercer libro y conserva los dos anteriores y sus autores. Sin JUnit, observa con el depurador el patrón preparado de mantenimiento de autor/editorial; comprobarás tus operaciones de libros desde la interfaz al completar la etapa 3. Todavía no funcionará **Guardar libro**.
+
+### 2B. Integrar una consulta y adaptar otra
+
+En HQL se consultan entidades y atributos Java. Este método es una **referencia completa para añadir** en lugar del TODO de `CatalogoRepository.editoriales`; las consultas más complejas se construirán después:
+
+```java
+public List<Editorial> editoriales(Session s) {
+    return s.createSelectionQuery(
+        "from Editorial e order by e.nombre,e.id", Editorial.class)
+        .getResultList();
+}
+```
+
+`Editorial.class` fija el tipo del resultado. `getResultList()` devuelve una lista, vacía si no hay datos; ordenar también por ID hace estable el orden entre nombres iguales. **Ahora te toca:** adapta el patrón a `CatalogoRepository.autores` con su entidad y el mismo criterio de orden.
+
+**Comprueba:** en la interfaz, crea una editorial **Horizonte** y dos autores **Alex Ríos** y **Luz Vega** desde sus pestañas; pulsa **Actualizar** y verifica esos catálogos. El listado de libros puede seguir anunciando su TODO: se completa a continuación. Si hay datos previos, utiliza nombres nuevos y consérvalos. La fase optativa `catalogos` contrasta dos editoriales y dos autores con datos aislados.
+
+### 2C. Filtrar libros con HQL
+
+**Ahora te toca:** completa `LibroRepository.listar(Session,String,Long)`. Debe aceptar texto de título y editorial opcional y devolver libros ordenados por título e ID. No cambies el contrato ni abras otra sesión.
+
+Utiliza consultas tipadas con parámetros. La consulta habla de propiedades Java; no uses `editorial_id` como si fuera una propiedad HQL.
+
+Este fragmento **ilustrativo dentro de `listar`** muestra una consulta sin filtros. No es la implementación final del método:
 
 ```java
 List<Libro> encontrados = s.createSelectionQuery(
@@ -83,15 +125,19 @@ List<Libro> encontrados = s.createSelectionQuery(
 // Añade los filtros parametrizados explicados en consultas.md.
 ```
 
-No concatentes el texto introducido por la persona en ese HQL. El primer fragmento busca una identidad y el segundo devuelve una lista: esa diferencia permite probar CRUD antes de combinar filtros.
+No concatenes el texto introducido por la persona en ese HQL. `find` busca una identidad; esta consulta devuelve una lista. Ninguna operación abre por sí misma una nueva sesión.
 
-Divide el TODO en tres hitos dentro de `model/repository`: **catálogos**, completando `CatalogoRepository.editoriales/autores` (fase `catalogos`); **CRUD de libro**, completando `LibroRepository.buscar/insertar/eliminar` (fase `repositorio`); y **listado HQL**, completando `LibroRepository.listar` (fase `consultas`). `s.find(Libro.class, id)` busca una identidad; `s.persist(libro)` incorpora un objeto nuevo a esa sesión. Ninguno reemplaza la transacción del servicio. En una edición, recuperar y modificar una entidad gestionada permite que Hibernate detecte sus cambios.
+??? tip "Pista — Parámetros de una consulta"
 
-Con los datos del test, listar sin filtro devuelve dos libros; `Java` con Horizonte devuelve uno; `Java` con Norte devuelve cero. Prueba primero un filtro y después combina ambos. Si sale cero siempre, inspecciona parámetros y propiedades antes de cambiar el servicio.
+    Observa `CatalogoRepository.editorialUsada`, preparado: declara `:id`, enlaza su valor con `setParameter` y obtiene un resultado. Para el título necesitas `LIKE`; el filtro de editorial solo se añade cuando hay una identidad. No confundas un parámetro con concatenar su valor al texto HQL.
+
+**Comprueba:** la fase `consultas` prepara sus propios datos: sin filtro devuelve dos libros; `Java` con Horizonte devuelve uno; `Java` con Norte devuelve cero. La interfaz ya debe mostrar un listado vacío sin aviso de TODO si tu base no tiene libros. Tras la etapa 3 podrás repetir manualmente los filtros con fichas reales. Si sale cero siempre, inspecciona parámetros y propiedades antes de cambiar el servicio.
 
 ## Etapa 3. Crear y editar libros
 
-Completa el **TODO 3** de `BibliotecaService.guardarLibro` y `datosDemo`, usando validaciones y transacción de apoyo. El caso de uso recupera editorial y autores en esa sesión antes de relacionarlos con el libro.
+Antes de escribir el **TODO 3**, observa `BibliotecaService.guardarAutor`, preparado: valida el nombre, delega una tarea al helper `transaccion`, recupera o construye la entidad y devuelve su ID. Pon un breakpoint en `transaccion`: el helper abre/cierra la sesión, confirma si la tarea termina y revierte si falla. La entidad nueva es transitoria antes de `persist`; una recuperada en esa sesión está gestionada. Al cerrarse la sesión queda separada y la UI recibe valores preparados, no una sesión abierta.
+
+**Ahora te toca:** completa `model/service/BibliotecaService.guardarLibro(Long,Long,LibroSolicitud)` por dos avances: primero alta; después edición de la misma identidad. `validar`, `editorial`, `autores`, `requerido`, `comprobarVersion` y `transaccion` ya están preparados. Decide cómo coordinarlos y dónde termina la operación atómica; no reconstruyas su infraestructura ni cambies `@Version`.
 
 Las reglas son:
 
@@ -108,7 +154,9 @@ En una base vacía, la demostración crea Horizonte, Norte, Alex Ríos y Luz Veg
 
 Prueba **Nuevo → Guardar**, **Editar → Cancelar** y edición confirmada. Cambiar el precio no debe borrar autores ni detalle. La UI devuelve la versión que abrió y el servicio rechaza una edición si el libro ya cambió.
 
-En `model/service/BibliotecaService.java`, aborda `guardarLibro` en este orden: valida `LibroSolicitud` con el apoyo preparado; entra en `transaccion`; recupera editorial y autores existentes; distingue alta (`id == null`) de edición; asigna los valores y prepara el detalle; llama a `flush` y devuelve la identidad. Antes de editar, utiliza `comprobarVersion`, ya preparado: no tienes que construir un mecanismo de concurrencia. En `datosDemo`, utiliza la misma sesión para los datos relacionados y respeta la condición de catálogos vacíos. Comprueba la fase `servicio` antes de añadir más operaciones.
+**Comprueba el alta:** crea un libro de ISBN `9780000000003`, título `Ensayo`, precio `12,50`, con la editorial y autores creados en 2B, inicialmente sin detalle. Debe aparecer una sola ficha y recuperarse tras **Actualizar**. Prueba después un precio cero: no debe aparecer otro libro. Todavía puedes tener pendiente la edición y la demostración.
+
+**Comprueba la edición:** cambia el título a `Ensayo revisado` y el precio a `13,50`; conserva ISBN, editorial y autores. Cancela otra edición: el listado mantiene el último dato guardado. La fase `servicio` comprueba edición y versión preparada, sin necesitar `datosDemo`.
 
 En la rama de edición, estas llamadas pertenecen al **interior de la misma tarea transaccional**:
 
@@ -124,6 +172,8 @@ actual.setTitulo(r.titulo().strip());
 ??? tip "Pista: primero recuperar las identidades relacionadas"
 
     Elegir una editorial o autor existente no equivale a crear otro objeto con su nombre. Recupera esas entidades en la sesión del caso de uso y asigna las relaciones desde su lado propietario. El detalle nuevo tiene otro ciclo de vida y puede persistirse con la cascada del libro.
+
+**Integra con mayor autonomía:** completa ahora `BibliotecaService.datosDemo`. Crea el conjunto descrito arriba en una única operación y recházalo si cualquiera de los catálogos ya contiene datos. No utilices varias transacciones independientes ni llames a un método que confirme cada registro por separado. En tu base de trabajo, pulsar **Preparar demostración** debe rechazar la acción sin borrar las fichas existentes. Para probar la creación completa necesitas un esquema local vacío distinto del anterior: créalo desde Workbench y configura `MYSQL_URL`, `MYSQL_USER` y `MYSQL_PASSWORD` en **Environment variables** de Run con una cuenta que tenga permisos sobre ese esquema. La aplicación crea las tablas, pero no el esquema MySQL. No vacíes tu volumen para repetir el ensayo.
 
 ## Etapa 4. Comprobar las tres relaciones
 
@@ -164,6 +214,19 @@ Comando opcional: `./mvnw -Dtest=FasesGuiadoTest -Dfase=rollback -Dqa.mysql=true
 <div class="mjs-task"><input type="checkbox" id="biblioteca-etapa-5"><label for="biblioteca-etapa-5">He contrastado consultas, errores, versión y reversión de cambios.</label></div>
 
 ## Solución completa
+
+Antes de descargarla, comprueba el conjunto:
+
+| Acción | Resultado esperado |
+| --- | --- |
+| Crear, editar y buscar un libro | Una identidad; sus relaciones y valores se recuperan en una consulta nueva. |
+| ISBN repetido, precio inválido o detalle incompleto | Error comprensible; ninguna escritura parcial. |
+| Retirar detalle o vínculo de autor | Desaparece solo el dependiente o vínculo correspondiente. |
+| Borrar libro con detalle | Libro y detalle desaparecen; autores y editorial permanecen. |
+| Reiniciar Launcher y pulsar Actualizar | MySQL conserva las fichas guardadas, sin volver a sembrarlas. |
+| Repetir demostración en una base con datos | Rechazo; el catálogo anterior permanece. |
+
+**Explica con tus palabras:** ¿por qué `mappedBy` usa un atributo Java? ¿Por qué no se borra en cascada un autor compartido? ¿Quién abre y confirma la transacción? ¿Por qué una entidad gestionada puede editarse sin llamar a `merge`? ¿Qué problema evita preparar `LibroDatos` antes de cerrar la sesión?
 
 [Descargar solución del guiado](/fp-dam2-acda/descargas/codigo/biblioteca-guiado-solucion.zip){ .md-button download="biblioteca-guiado-solucion.zip" }
 
