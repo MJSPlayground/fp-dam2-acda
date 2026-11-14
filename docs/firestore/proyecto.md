@@ -2,6 +2,8 @@
 
 El centro necesita una agenda para sus salas. El proyecto comienza con una interfaz web terminada y una API de apoyo; examinarás el modelo preparado y completarás, por separado, las conversiones, el acceso a documentos, los casos de uso y las operaciones REST. Trabajarás siempre sobre la misma aplicación.
 
+Al terminar podrás crear, consultar, filtrar, editar y borrar reservas desde la web y desde Postman, conservando listas y mapas y rechazando datos inválidos. Necesitas manejar objetos, colecciones, excepciones e inyección por constructor del [tema de Spring](../spring/proyecto.md). El modelo documental, el SDK y HTTP se estudian durante el recorrido: no necesitas conocerlos de antemano.
+
 ## Preparar el proyecto
 
 [Descargar proyecto inicial](/fp-dam2-acda/descargas/codigo/reservas-guiado-inicial.zip){ .md-button .md-button--primary download="reservas-guiado-inicial.zip" }
@@ -19,6 +21,8 @@ Al cambiar entre proyecto inicial y solución, detén la aplicación anterior pa
 No hacen falta cuentas de servicio ni un proyecto cloud para el modo local. Se utiliza el proyecto demo `demo-acda-reservas`. No actives otro modo para intentar corregir un TODO o una falta de arranque: consulta [configuración y diagnóstico](configuracion.md).
 
 El catálogo preparado contiene `SALA-A` con capacidad de 12 personas y `SALA-B` con capacidad de 30. Los datos de reservas se crean durante las comprobaciones; un catálogo de salas visible no demuestra que la persistencia de reservas ya esté resuelta. El emulador local mantiene datos mientras sigue en marcha; no se presupone que reiniciarlo los conserve sin un mecanismo de exportación.
+
+**Primera comprobación, sin programar:** abre el formulario de nueva reserva y comprueba que ofrece SALA-A y SALA-B. Cancela: no debe aparecer ninguna reserva nueva. A continuación utiliza las tres peticiones de primer contacto que se indican abajo.
 
 Al principio algunas peticiones responden `501` con un mensaje de etapa pendiente. Es una señal del starter, no un guardado simulado ni una avería de red. La solución debe sustituir esos estados por comportamiento real.
 
@@ -65,9 +69,22 @@ FirestoreConfig → cliente Firestore → emulador
 
 La colección `reservas` guarda una reserva por documento. `equipo` es una lista de textos y `detalles` un mapa de textos. No se necesita una colección independiente para cada elemento pequeño y acotado que pertenece a la reserva.
 
+Un mismo dato atraviesa representaciones distintas: el cuerpo JSON se convierte en `ReservaRequest`; el servicio produce una `Reserva`; el repositorio la convierte en campos de documento. `ResponseEntity` pertenece a HTTP, no al documento guardado. Trabajarás primero sin red en la conversión, después con el SDK y finalmente conectarás servicio y controlador.
+
 ## Etapa 1. Modelo y validaciones de entrada
 
 Lee [documentos y relaciones](documentos.md). Localiza `Reserva`, `Espacio` y `ReservaRequest`: el modelo y el DTO se entregan preparados para que la interfaz pueda arrancar. Esta primera etapa es de comprensión, sin un TODO de modelo. Distingue campos recibidos de los que controla el servidor.
+
+Observa este **método completo que ya existe** en `api/ReservaController.java`:
+
+```java
+@GetMapping("/espacios")
+public List<Espacio> espacios() {
+    return servicio.espacios();
+}
+```
+
+El prefijo `/api` está declarado en la clase. Por eso `GET /api/espacios` llama al servicio y Spring transforma su lista en un array JSON con estado `200`. No se usa el repositorio: las salas son un catálogo preparado. Localiza después `ReservaService.espacios` y relaciona cada componente de `Espacio` con un campo de la respuesta Postman. Este método será tu referencia de delegación al completar las escrituras REST.
 
 Las condiciones del proyecto son:
 
@@ -108,6 +125,18 @@ int inicio = Math.toIntExact(numero);
 
 `get` permite comprobar el tipo original: `getLong` podría convertir un decimal y perder su fracción. `instanceof` rechaza ese caso; `toIntExact` comprueba el rango. El tratamiento del método conserva la causa de un documento incompatible. `mapear` debe conservar los datos y rechazar números fuera del rango `int`, elementos de lista que no sean texto o valores de mapa incompatibles. Conserva la causa del fallo en `PersistenciaException`. Ejecuta la fase `conversion`: compara una reserva completa y comprueba también los documentos incompatibles. No necesitas completar aún altas, servicios o HTTP.
 
+**Ahora te toca:** adapta la conversión mostrada para `fin` y `asistentes`, recupera los textos obligatorios y completa la construcción de `Reserva`. Consulta su record para no intercambiar parámetros. Para `datos`, incluye los diez campos persistidos del modelo y deja el ID en la referencia del documento. No valides aquí si una sala tiene capacidad: convertir `13` a entero es correcto, aunque el servicio pueda rechazar esa reserva.
+
+**Comprobación sin JUnit:** inicia la aplicación con **Debug**, pon un breakpoint en el `return` de `ReservaService.espacios` y ejecuta «Ver espacios preparados» desde Postman. Al detenerse, abre **Evaluate Expression** y evalúa esta expresión de prueba; no debes añadirla al servicio:
+
+```java
+repository.datos(new Reserva(null, "SALA-A", "2027-02-15", 10, 12,
+    "Coordinación", 8, List.of("Proyector"),
+    Map.of("actividad", "Taller"), "ACTIVA", ""))
+```
+
+El resultado debe contener `equipo` como lista y `detalles` como mapa, sin un campo `id`. La evaluación solo convierte el objeto; no escribe documentos ni requiere completar REST. Reanuda la ejecución para que termine la petición. La fase `conversion` añade documentos incompatibles que no tienes que fabricar en la base.
+
 ??? tip "Si el mapa o la lista pierden datos"
 
     Compara primero nombres de campos y tipos. `List<?>` permite inspeccionar cada elemento antes de construir `List<String>`; un cast de toda la lista no comprueba sus elementos. El ID se obtiene con `getId()`, no buscando un campo `id` inventado.
@@ -116,7 +145,9 @@ int inicio = Math.toIntExact(numero);
 
 Completa `crear` y `obtener`. En el alta distingue referencia, escritura, espera e identidad generada; al leer distingue un documento ausente de una operación fallida. La secuencia del SDK está explicada en [referencia y resultado](persistencia.md#referencia-lectura-y-resultado).
 
-En el interior de `obtener`, `id` viene del parámetro y `reservas` es la colección inyectada. La llamada devuelve primero una operación y después su resultado:
+Antes de escribir, observa el constructor ya preparado: `db.collection("reservas")` obtiene una referencia y no descarga toda la colección. Del mismo modo, `reservas.document(id)` señala un documento; `get()` inicia la lectura. El método preparado `esperar` obtiene el resultado y conserva la causa si hay un fallo técnico.
+
+En el interior de `obtener`, `id` viene del parámetro y `reservas` es la colección inyectada. La llamada devuelve primero una operación y después su resultado (`ApiFuture` es `com.google.api.core.ApiFuture`; IntelliJ puede añadir el import):
 
 ```java
 ApiFuture<DocumentSnapshot> lectura = reservas.document(id).get();
@@ -126,11 +157,21 @@ DocumentSnapshot documento = esperar(lectura);
 
 Ejecuta `alta-lectura` y coloca un breakpoint tras `esperar`: ya puedes inspeccionar el resultado aunque no hayas implementado edición, borrado, servicio o HTTP. La limpieza del test utiliza el SDK preparado y no depende del TODO de `eliminar`. Continúa cuando recupere la misma reserva y distinga un ID ausente. El controlador de alta todavía responderá `501`: aún no es la herramienta para comprobar este método.
 
+**Alternativa manual:** vuelve al breakpoint de `espacios` de 2a. En la expresión de prueba cambia únicamente `repository.datos(...)` por `repository.crear(...)`: ahora sí escribirás una reserva de prueba en el emulador. Anota su ID y evalúa `repository.obtener("ID_ANOTADO")`; debe devolverla dentro de un `Optional`. Un ID como `no-existe-en-mi-prueba` debe producir `Optional.empty`, sin ocultar errores técnicos. Estas llamadas prueban el repositorio, no la validación del servicio.
+
+??? tip "Pista — Una ausencia no es una excepción de red"
+
+    Revisa `DocumentSnapshot.exists()` y el retorno `Optional<Reserva>`. Para el alta, compara `document()` sin argumentos con `document(id)` y consulta `DocumentReference.create`. `conId` ya construye una copia con identidad; no necesitas modificar el record.
+
 ### 2c. Editar y eliminar
 
 Completa `actualizar` y `eliminar`. La edición mantiene el ID; el borrado espera el resultado del SDK. La decisión «este ID no existe» pertenece al servicio, que ya dispone de `obtener`.
 
+**Ahora te toca:** utiliza en `actualizar` la conversión ya terminada y la operación `DocumentReference.update`; deduce el borrado a partir de la misma referencia con `delete`. Conserva `esperar` en ambas operaciones: devolver antes de conocer el resultado podría anunciar un éxito que no ocurrió.
+
 Ejecuta `repositorio`: guarda una reserva, compara todos sus campos después de leerla, cambia responsable/asistentes y verifica la ausencia tras borrar. Este test llama directamente al repositorio; no depende de los TODO de servicio ni de REST. Si falla al guardar, inspecciona primero `datos`; si guarda pero recupera mal, inspecciona `mapear`.
+
+Para repetirlo sin JUnit, desde el mismo breakpoint evalúa `repository.actualizar` con el ID anotado y una reserva de prueba cuyo responsable sea distinto. Recupera el ID: debe conservarse con el nombre nuevo. Evalúa después `repository.eliminar("ID_ANOTADO")` y vuelve a obtenerlo: ya no existe. Elimina únicamente el documento creado para esta comprobación.
 
 ### 2d. Añadir filtros de uno en uno
 
@@ -147,11 +188,21 @@ QuerySnapshot resultado = esperar(consulta.get());
 
 El ejemplo solo implementa la condición de sala. El parámetro ausente no debe filtrar por el texto literal `null`. El mínimo admite 1–30. Ejecuta `consultas` y después la petición Postman de la carpeta **01**. Debe aparecer un array, no un éxito vacío utilizado para ocultar una excepción.
 
+**Ahora te toca:** adapta la igualdad para `fecha` y añade el rango de asistentes. Revisa en [consultas](consultas.md) por qué un rango requiere ordenar por ese campo; termina con el ID de documento para que el resultado sea estable. Las consultas devuelven snapshots: reutiliza `mapear`, sin repetir la conversión dentro de `listar`.
+
 Continúa cuando el CRUD del repositorio y sus consultas funcionen. Todavía no tiene sentido ejecutar el Runner CRUD de la API: faltan las capas siguientes.
 
 ## Etapa 3. Reglas del caso de uso
 
 Localiza `model/service/ReservaService.java`. En **3a**, completa `crear`: utiliza `validar` antes de llamar a `repository.crear`. En **3b**, completa `actualizar`: comprueba existencia y conserva estado y motivo. El ayudante `validar` ya contiene las comprobaciones de campos; léelo y recórrelo con el depurador, no lo dupliques en el controlador. Las validaciones del DTO ayudan a detectar formato; el servicio debe volver a comprobar las invariantes para llamadas que no procedan de HTTP.
+
+Como referencia, observa **`ReservaService.obtener`, ya implementado**: valida el formato del ID, llama al repositorio y convierte un `Optional` vacío en `ReservaException(404, ...)`. El repositorio informa de ausencia; el servicio decide qué significa para el caso de uso. En `validar`, observa también cómo `responsable.strip()` normaliza la entrada antes de construir el modelo.
+
+**Ahora te toca:** completa primero el alta con estado `ACTIVA` y motivo vacío, y después adapta la colaboración para editar una reserva existente. La edición recibe los nuevos campos del DTO y conserva el estado y motivo leídos; el cliente no los decide. No necesitas añadir validadores, modelos ni clases de configuración.
+
+??? tip "Pista — Qué datos pertenecen a cada entrada"
+
+    Compara los parámetros de `validar` con `ReservaRequest` y `Reserva`. Para editar necesitarás información de la solicitud y de la reserva anterior. Localiza qué método preparado distingue un ID ausente antes de construir la propuesta.
 
 En SALA-A, una reserva de ocho asistentes puede aceptarse; una de trece debe rechazarse. Prueba una fecha imposible, un intervalo invertido y un responsable vacío. Ninguno de esos intentos debe producir una reserva válida por accidente.
 
@@ -163,6 +214,12 @@ El guiado no resuelve todavía la ocupación entre reservas ni las cancelaciones
 
 Lee [HTTP y respuestas REST](rest.md) y abre `api/ReservaController.java`. Completa **4a**, el `POST`, y ejecuta solo la petición de creación de Postman. Usa el ID devuelto en el `GET` preparado. Después completa **4b**, el `PUT`, compara el resultado con otro `GET` y, finalmente, **4c**, el `DELETE`. Ahora puedes ejecutar `rest` y el Runner CRUD completo. El controlador recibe DTO, invoca al servicio y devuelve el estado correcto; no contiene reglas sobre capacidad ni llamadas al SDK. Si el alta persiste pero el cliente no recibe `201` o `Location`, revisa esta capa, no reescribas el repositorio.
 
+| Completa en `ReservaController` | Ejecuta en Postman | Resultado antes de avanzar |
+| --- | --- | --- |
+| `crear`, TODO 4a | «Crear reserva» y «Leer reserva» | `201`, `Location` y después `200` con el mismo ID y contenido. PUT y DELETE siguen pendientes. |
+| `actualizar`, TODO 4b | «Modificar reserva», «Leer reserva» y «Capacidad excedida 400» | Cambia el dato válido; la entrada inválida no reemplaza el anterior. |
+| `eliminar`, TODO 4c | «Eliminar reserva» y «Leer eliminada 404» | `204` sin cuerpo y después `404`. Ya puedes ejecutar la carpeta CRUD completa. |
+
 Cuando ya tengas `Reserva creada` devuelta por el servicio, esta expresión construye estado, ubicación y representación:
 
 ```java
@@ -171,6 +228,8 @@ ResponseEntity.created(URI.create("/api/reservas/" + creada.id()))
 ```
 
 El método debe devolver esa respuesta; no vuelvas a escribir en Firestore desde el controlador. Para entender cada parte utiliza [la construcción de respuestas](rest.md#construir-la-respuesta-de-una-escritura).
+
+**Ahora te toca:** termina el POST conectando el DTO con el servicio. Después deduce el PUT a partir del GET preparado: devuelve la representación que entrega el servicio. Para DELETE consulta `ResponseEntity.noContent`; una eliminación correcta no devuelve una reserva vacía con estado `200`.
 
 Una creación correcta responde `201`, devuelve la reserva con ID y señala su dirección con `Location`. Una edición válida responde `200`. El borrado responde `204` sin cuerpo. Un ID inexistente devuelve `404`; una entrada inválida, `400`.
 
@@ -189,6 +248,8 @@ Crea una reserva de SALA-A para `2027-02-15`, de 10 a 12, con ocho asistentes, u
 Repite los flujos desde la interfaz preparada. Reiniciar solo Spring, manteniendo el emulador activo, no debe borrar los documentos guardados. Detener el emulador es otro cambio de entorno y debe interpretarse según su ciclo de vida.
 
 Utiliza [la guía de diagnóstico, logging y pruebas](../ayuda/diagnostico.md) para seguir una petición desde el controlador al repositorio. El test de fase `rest` incluye un fallo técnico preparado y comprueba `500` sin exponer su causa en JSON; no tienes que romper el emulador ni programar otra infraestructura para reproducirlo. Las pruebas deben distinguir error de negocio, entrada mal formada, ausencia y fallo técnico. Un test de compilación no comprueba la persistencia real.
+
+**Explica con tus palabras:** ¿por qué `get()` y `esperar(...)` son dos momentos distintos? ¿Por qué el ID se obtiene del snapshot y no de `datos`? ¿Qué diferencia hay entre una reserva ausente y un fallo de Firestore? ¿Qué capa impide trece asistentes en SALA-A y cuál convierte el rechazo en HTTP?
 
 ## Solución completa
 
