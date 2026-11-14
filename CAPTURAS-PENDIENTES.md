@@ -70,6 +70,16 @@ Este archivo recoge **capturas auténticas, GIF y otros recursos visuales** que 
 
 Las solicitudes del antiguo codelab de directorios se conservan en [el archivo histórico](referencias/ficheros-historico/CAPTURAS-HISTORICAS.md). Se sustituirán por solicitudes concretas del nuevo inventario cuando proceda.
 
+### [Opcional · Pendiente] Comprobar APIs desde Evaluate Expression
+
+- **Páginas y posición:** `docs/ficheros/proyecto.md`, comprobación 2A; `docs/jdbc/proyecto.md`, final de etapa 4.
+- **Finalidad:** mostrar cómo inspeccionar un resultado parcial sin completar TODO posteriores ni ejecutar obligatoriamente JUnit.
+- **Secuencia:** Ficheros: detener Debug en `InventarioService.filtrar`, cambiar el filtro y evaluar la lectura del CSV copiado; mostrar los tres productos sin alterar el catálogo. JDBC: detenerse dentro del `try` de `AlmacenService.listar`, usar una base de prueba nueva, observar las dos escrituras con autocommit desactivado y su reversión mediante rollback antes de reanudar.
+- **Herramienta:** IntelliJ IDEA; registrar versión real del aula. Solo datos de prueba y servicios locales.
+- **Destinos propuestos:** `docs/assets/capturas/ficheros/evaluar-lectura-csv.webp` y `docs/assets/capturas/jdbc/evaluar-rollback.webp`.
+- **Alt/pie:** «Evaluación de una lectura CSV desde un breakpoint del inventario»; «Existencias e historial antes y después del rollback en la misma conexión».
+- **Estado:** pendiente; sin imágenes ni enlaces públicos añadidos. Los procedimientos textuales están disponibles.
+
 ## Reglas de actualización
 
 Cada vez que se desarrolle un bloque o tema, **revisar si hacen falta visuales adicionales** y registrar solo solicitudes concretas (prioridad, ubicación, objetivo, secuencia/estado a captar, herramienta/versión, ruta/nombre, alt, pie, estado/responsable). Codex puede generar diagramas conceptuales si las fuentes bastan, pero no capturas falsas del IDE. Si un recurso llega, validar su correspondencia con la versión actual de la herramienta y marcarlo realizado; no dejar imágenes enlazadas que no existan.

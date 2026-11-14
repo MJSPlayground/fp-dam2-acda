@@ -268,3 +268,19 @@ Hibernate comienza después de ese control. Se producirán cuatro proyectos Java
 - PDF generados y abiertos, con muestras renderizadas e inspeccionadas; no revisión visual exhaustiva humana de todas las páginas.
 - Caída de MySQL en Spring: timeout observado30,1s antes del500; recuperación y persistencia comprobadas. Propuesta futura: ajustar el timeout con una prueba de caída equivalente si se necesita respuesta más rápida.
 - Recomendación: completar capturas del aula y contraste cloud cuando existan los entornos; después realizar la revisión pedagógica del conjunto antes de distribuir la web. Mantener los treinta repasos pendientes hasta nuevo encargo.
+
+## Mejora de guiados y cierre de incidencias — 2026-11-15
+
+Encargo retomado desde el árbol interrumpido, conservando sus modificaciones. Los seis guiados aplican observación de referencias reales, comprensión, adaptación con ayuda, implementación autónoma, comprobación e integración. Se conservan proyectos, APIs, tecnologías, diseño y navegación. Las páginas de las seis finales autónomas permanecen intactas; sus README solo se depuran por defectos concretos. No se producen imágenes públicas ni los treinta repasos.
+
+- `8a395f2`: README de las descargas, contradicción de la semilla JDBC, separación de destinatarios, control de lenguaje en fuentes/README/ZIP y columnas de fases PDF legibles.
+- `428cf24`, `4e2b28e`, `6abee53`, `e8cdbaf`, `2fc1c99`, `8d8c3e5`: guiados Ficheros, Hibernate, Spring, JDBC, Firestore y MongoDB, respectivamente.
+- [Informe por tema, ejemplos resueltos y trabajo autónomo](INFORME-MEJORA-GUIADOS.md), con comandos, recuentos reales, revisión independiente y límites. Registro opcional de nuevas capturas de depuración en CAPTURAS-PENDIENTES.md.
+- Local: 24 ZIP compilados y probados desde carpetas limpias; fases de soluciones Ficheros/JDBC, MySQL Hibernate/Spring, MongoDB real y emulador Firestore correctos. Seis recorridos JavaFX y tres aplicaciones web reales comprobados. Los modos ordinarios que omiten pruebas optativas no se presentan como prueba de esos requisitos.
+- Web local: 65 páginas, 1418 enlaces, 1070 fragmentos y 515 entradas de búsqueda; seis temas comprobados en móvil/escritorio y claro/oscuro. Control de lenguaje: cinco pruebas y 98 fuentes, HTML/PDF/README de los 24 ZIP.
+- Actions [43652906566](https://github.com/MJSPlayground/fp-dam2-acda/actions/runs/43652906566), sobre `8d8c3e5`: **build SUCCESS y deploy SUCCESS**. La ejecución previa del primer hito fue sustituida por concurrencia al subir los guiados; no se atribuye éxito a esa ejecución cancelada.
+- Pages real: `scripts/check_published_site.py`, salida 0, portada y 64 páginas de navegación, 24 ZIP íntegros y ocho PDF. Texto completo de los seis artículos idéntico al HTML local y pistas inicialmente cerradas.
+- PDF públicos: Ficheros31, Hibernate31, Spring30, JDBC31, Firestore33, MongoDB28, Ayuda8 y global182 páginas. Se descargaron, renderizaron e inspeccionaron todos los guiados y muestras del resto. La variación frente a Firestore34/global183 locales procede de la redistribución en CI; también se revisó visualmente su salida real sin defectos materiales. No se declara inspección de cada página restante del módulo.
+- Procesos y contenedores propios de ensayo cerrados; servicios ajenos conservados. Cierre de documentación interna con `[skip ci]`, sin modificar el sitio validado.
+
+**Preparado para revisión humana.** Pendientes: ejecución manual dentro de IntelliJ/Workbench/Compass/Postman, capturas de aula, contraste pedagógico y de ritmo con alumnado. Firestore cloud real no se ha utilizado y sigue pendiente de credenciales y autorización específica. No quedan incidencias técnicas bloqueantes conocidas dentro del alcance verificado.
