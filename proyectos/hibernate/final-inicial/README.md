@@ -8,7 +8,7 @@ Luego ejecuta `app.Launcher.main` del paquete `es.mjsplayground.acda.hibernate.b
 
 La base predeterminada de esta variante es biblioteca_final. Las variantes guiada/final usan bases distintas en el mismo servidor para evitar interferencias al evolucionar el proyecto. Hibernate usa `update` en la aplicación: no borra ni vuelve a sembrar al reiniciar. Nunca cambies a create/create-drop sobre tus datos. El script docker/init.sql solo se ejecuta cuando el volumen está vacío.
 
-Variables opcionales: MYSQL_URL (URL JDBC completa), MYSQL_USER y MYSQL_PASSWORD. Predeterminados locales: acda/acda_local, host127.0.0.1:3308. Compose usa root/qa_root_local únicamente como administración de este entorno docente. Son credenciales de desarrollo explícitas, no secretos reales. El puerto se publica solo en loopback; no reutilices esas credenciales en un servicio expuesto ni introduzcas claves reales en Git.
+Variables opcionales: MYSQL_URL (URL JDBC completa), MYSQL_USER y MYSQL_PASSWORD. Predeterminados locales: acda/acda_local, host127.0.0.1:3308. Compose usa root/qa_root_local únicamente como administración de este entorno local de prácticas. Son credenciales de desarrollo explícitas, no secretos reales. El puerto se publica solo en loopback; no reutilices esas credenciales en un servicio expuesto ni introduzcas claves reales en Git.
 
 Preparar demostración es una acción explícita confirmada, admitida solo si no hay editoriales, autores ni libros. Nunca se ejecuta automáticamente. Si hay datos, los conserva y muestra un mensaje. La demostración crea dos editoriales y dos autores compartidos por dos libros; uno tiene detalle y otro no, para practicar ambos estados.
 
@@ -34,17 +34,17 @@ Los cambios sobre entidades gestionadas se detectan al flush/commit. No se llama
 
 Una excepción provoca rollback y se conserva su causa técnica. BibliotecaException distingue mensajes de negocio y fallos de persistencia, con SLF4J/Log4j2 para el diagnóstico. La UI no llama al repositorio directamente. El pool incorporado de Hibernate es suficiente para esta práctica local; no se presenta como configuración de producción.
 
-## QA opcional
+## Comprobaciones opcionales
 
-Desde esta carpeta: `.\mvnw.cmd clean test` sin MySQL para pruebas de reglas; con el servidor local activo: `.\mvnw.cmd -Dqa.mysql=true test`. Las pruebas crean un esquema NUEVO qa_hibernate_UUID mediante la cuenta administrativa y lo eliminan al terminar, comprobando el prefijo; nunca vacían biblioteca_guiado/biblioteca_final. Variables QA_MYSQL_ADMIN_URL/QA_MYSQL_ADMIN_USER/QA_MYSQL_ADMIN_PASSWORD permiten otra instancia. Los valores locales de QA por defecto son root/qa_root_local en3308.
+Desde esta carpeta: `.\mvnw.cmd clean test` sin MySQL para pruebas de reglas; con el servidor local activo: `.\mvnw.cmd -Dqa.mysql=true test`. Las pruebas crean un esquema NUEVO qa_hibernate_UUID mediante la cuenta administrativa y lo eliminan al terminar, comprobando el prefijo; nunca vacían biblioteca_guiado/biblioteca_final. Variables QA_MYSQL_ADMIN_URL/QA_MYSQL_ADMIN_USER/QA_MYSQL_ADMIN_PASSWORD permiten otra instancia. Los valores locales de las pruebas por defecto son root/qa_root_local en3308.
 
 Interfaz real, con sesión gráfica disponible: `.\mvnw.cmd -Dqa.mysql=true -Dqa.ui=true test`. Sin esas propiedades, las pruebas gráficas o de MySQL se omiten explícitamente: no equivale a haberlas ejecutado. Las demos de Ampliación están en el paquete demo de la solución guiada y tienen pruebas independientes; no forman otro proyecto obligatorio.
 
-Versiones comprobadas en POM: Java25, Hibernate ORM7.4.15.Final, Jakarta Persistence3.2 transitivo, MySQL Connector/J9.5.0, JavaFX25.0.2, SLF4J/Log4j2. Compose fija MySQL8.4.13 por digest. Fuentes: https://hibernate.org/orm/releases/7.4/ ; https://docs.hibernate.org/orm/7.4/introduction/html_single/ ; https://dev.mysql.com/doc/connector-j/en/ ; https://jakarta.ee/specifications/persistence/3.2/ .
+Versiones del proyecto (POM): Java25, Hibernate ORM7.4.15.Final, Jakarta Persistence3.2 transitivo, MySQL Connector/J9.5.0, JavaFX25.0.2, SLF4J/Log4j2. Compose fija MySQL8.4.13 por digest. Fuentes: https://hibernate.org/orm/releases/7.4/ ; https://docs.hibernate.org/orm/7.4/introduction/html_single/ ; https://dev.mysql.com/doc/connector-j/en/ ; https://jakarta.ee/specifications/persistence/3.2/ .
 
 ## Alcance de esta variante
 
-La solución guiada permanece íntegra. La interfaz nueva y contratos están preparados; filtros/duplicar/trasladar/fusionar y consultas nuevas del repositorio permanecen en TODO generales, sin algoritmos ocultos ni pruebas que los resuelvan. Las entidades existentes se reutilizan, sin introducir préstamos, usuarios ni otros modelos.
+Incluye las operaciones del guiado resueltas y la interfaz para las funciones nuevas. Completa los TODO de filtros, duplicación, traslado y fusión según los requisitos de la práctica final. Los contratos que utiliza la interfaz y las entidades del catálogo ya están preparados.
 
 ## Ampliación del catálogo: práctica final
 
@@ -52,14 +52,14 @@ Base: duplicar una ficha con ISBN y título nuevos conserva editorial, precio y 
 
 Aplicación: trasladar entre1 y100 libros distintos a otra editorial, aplicando un descuento de0–30 % con hasta dos decimales; precio resultante redondeado HALF_UP a dos decimales y nunca inferior a0,01. Se rechazan selecciones repetidas y cualquier libro que ya esté en destino para evitar aplicar dos veces un descuento por error. La operación se confirma completa o se revierte completa.
 
-Reto: fusionar editorial origen en destino, renombrar destino y eliminar origen en una única transacción. Deben ser diferentes y todas las fichas de origen deben tener detalle completo. Se trasladan todos los libros; no se cambian precios, autores ni detalles. El nombre final tiene1–80 caracteres y es único. Es posible reutilizar el nombre de origen porque se elimina antes de renombrar destino. Si falla cualquier escritura o eliminación, nada queda aplicado.
+Reto: fusionar editorial origen en destino, renombrar destino y eliminar origen en una única transacción. Deben ser diferentes y todas las fichas de origen deben tener detalle completo. Se trasladan todos los libros; no se cambian precios, autores ni detalles. El nombre final tiene1–80 caracteres y es único. El nombre final puede ser el que tenía la editorial de origen. Si falla cualquier escritura o eliminación, nada queda aplicado.
 
-La fusión bloquea las editoriales en orden de ID para coordinar la operación y conserva @Version de los libros. No borra autores compartidos. El orden interno de flush permite probar un fallo intermedio real de restricción única; no se oculta con una confirmación de éxito. Los detalles de bloqueos y rendimiento se amplían posteriormente; la infraestructura existente de transacción sigue siendo la misma.
+La fusión debe conservar los autores compartidos y rechazar conflictos sin aplicar cambios parciales. El coordinador transaccional y la versión de los libros del guiado siguen disponibles; no necesitas reemplazar esa infraestructura.
 
 ## Pruebas optativas de aprendizaje por fases
 
-El proyecto entrega `FasesFinalTest` en `src/test/java`. Abre la clase en IntelliJ, crea una configuración JUnit y selecciona en **VM options** `-Dfase=base`. Valores disponibles: base, aplicacion, reto. El valor `completo` activa todas las fases de esta clase. Añade también `-Dqa.mysql=true` para las fases con MySQL (todas salvo `mapeos`). El apoyo crea y elimina solo un esquema UUID propio; requiere una cuenta de desarrollo con CREATE/DROP DATABASE, nunca credenciales de producción. La conexión administrativa por defecto es `jdbc:mysql://127.0.0.1:3308/mysql?sslMode=DISABLED&allowPublicKeyRetrieval=true&serverTimezone=UTC`, root/qa_root_local. Puedes sobreescribirla mediante `QA_MYSQL_ADMIN_URL`, `QA_MYSQL_ADMIN_USER` y `QA_MYSQL_ADMIN_PASSWORD` en Environment variables de Run.
+El proyecto entrega `FasesFinalTest` en `src/test/java`. Abre la clase en IntelliJ, crea una configuración JUnit y selecciona en **VM options** `-Dfase=base`. Valores disponibles: base, aplicacion, reto. El valor `completo` activa todas las fases de esta clase. Añade también `-Dqa.mysql=true`: todas las fases de esta clase necesitan MySQL. El apoyo crea y elimina solo un esquema UUID propio; requiere una cuenta de desarrollo con CREATE/DROP DATABASE, nunca credenciales de producción. La conexión administrativa por defecto es `jdbc:mysql://127.0.0.1:3308/mysql?sslMode=DISABLED&allowPublicKeyRetrieval=true&serverTimezone=UTC`, root/qa_root_local. Puedes sobreescribirla mediante `QA_MYSQL_ADMIN_URL`, `QA_MYSQL_ADMIN_USER` y `QA_MYSQL_ADMIN_PASSWORD` en Environment variables de Run.
 
-Alternativa con Wrapper: `.\mvnw.cmd '-Dtest=FasesFinalTest' '-Dfase=completo'  '-Dqa.mysql=true' test`. En Unix utiliza `./mvnw`. Sin `fase`, estos casos se omiten; esa omisión no verifica los TODO. En el starter se espera que fallen las fases cuyos métodos siguen pendientes. Los mismos oráculos están en la solución para contrastar los resultados, sin incluir sus algoritmos en el starter.
+Alternativa con Wrapper: `.\mvnw.cmd '-Dtest=FasesFinalTest' '-Dfase=completo'  '-Dqa.mysql=true' test`. En Unix utiliza `./mvnw`. Sin `fase`, estos casos se omiten; esa omisión no verifica los TODO. En el starter se espera que fallen las fases cuyos métodos siguen pendientes. Las mismas comprobaciones están en la solución para contrastar los resultados de cada fase.
 
-Los casos del Reto proporcionan las condiciones de fallo, conservación y recuperación/rollback: no hace falta cortar el servidor, cambiar permisos ni crear infraestructura de ensayo. Consulta la práctica final para distinguir estos lotes pequeños de los datos de demostración de la interfaz.
+Los casos del Reto proporcionan datos aislados y un fallo preparado para comprobar la reversión de la fusión y la conservación del catálogo. No hace falta cortar el servidor, cambiar permisos ni crear infraestructura de ensayo.

@@ -12,7 +12,7 @@ Variables opcionales: MYSQL_URL, MYSQL_USER, MYSQL_PASSWORD y PORT. Las credenci
 
 ## Dominio y servicios
 
-Se reutiliza un subconjunto de Hibernate: Editorial y Libro, sin arrastrar autores/detalles ni la práctica anterior. Libro: ISBN único de13 dígitos (identificador, sin cálculo de control), título1–120, precio BigDecimal0,01–10000 con hasta2 decimales, existencias0–catalogo.max-stock, editorial obligatoria y @Version. Nombre de editorial1–80 y único. Se recortan extremos; los saltos internos del título/nombre se conservan. No se elimina editorial con libros.
+El catálogo contiene editoriales y libros; no incluye autores ni detalles adicionales. Libro: ISBN único de13 dígitos (identificador, sin cálculo de control), título1–120, precio BigDecimal0,01–10000 con hasta2 decimales, existencias0–catalogo.max-stock, editorial obligatoria y @Version. Nombre de editorial1–80 y único. Se recortan extremos; los saltos internos del título/nombre se conservan. No se elimina editorial con libros.
 
 Spring construye los componentes y les proporciona sus dependencias por constructor. CatalogoService coordina LibroRepository, EditorialService y ReglasCatalogo. EditorialService usa su repositorio y verifica referencias. Los repositorios extienden JpaRepository; Spring Data implementa las consultas derivadas por título/editorial. La UI recibe LibroDatos construido dentro del servicio: open-in-view está desactivado y no accede a relaciones LAZY tras cerrar la transacción.
 
@@ -38,17 +38,17 @@ En el perfil seguro, las páginas requieren autenticación y las escrituras el r
 
 ## Ampliación ejecutable: pruebas, JAR y Docker
 
-Desde esta carpeta, `.\mvnw.cmd clean test` ejecuta únicamente ComponentesTest (registro del Clock, propiedades e implementación de Notificador según perfil). Este starter no incluye la suite de integración MySQL: añadir `-Dqa.mysql=true` no crea pruebas que no existen. La solución correspondiente contiene las pruebas completas de CRUD, MVC, eventos, seguridad, transacciones y conflictos para contrastar los requisitos después de implementar los TODO. No se declara comprobada una función pendiente por superar las pruebas de componentes.
+Desde esta carpeta, `.\mvnw.cmd clean test` ejecuta ComponentesTest (registro del Clock, propiedades e implementación de Notificador según perfil). Las pruebas de aprendizaje se omiten hasta elegir una fase, como se explica abajo. La propiedad `-Dqa.mysql=true` activa la suite adicional de integración de la solución; en este starter se utilizan las fases de aprendizaje. Superar las pruebas de componentes no comprueba los TODO que aún debes programar.
 
 En las soluciones, las pruebas reales usan esquemas nuevos qa_spring_UUID y los eliminan con comprobación de nombre; no limpian spring_guiado/spring_final. Las variables QA_MYSQL_ADMIN_URL/QA_MYSQL_ADMIN_USER/QA_MYSQL_ADMIN_PASSWORD configuran la cuenta administrativa de esa validación. Ejecutar este starter desde IntelliJ o JAR sí requiere el MySQL local descrito arriba.
 
-`.\mvnw.cmd package` genera target/catalogo-guiado-inicial-1.0.0.jar; alternativa de ejecución: `java -jar target/catalogo-guiado-inicial-1.0.0.jar`. Puedes añadir `--spring.profiles.active=seguro`. El JAR contiene aplicación, plantillas y servidor, pero sigue necesitando MySQL. No afirmes que ejecutar tests aislados demuestra navegación real: la entrega se complementa con revisión en navegador.
+`.\mvnw.cmd package` genera target/catalogo-guiado-inicial-1.0.0.jar; alternativa de ejecución: `java -jar target/catalogo-guiado-inicial-1.0.0.jar`. Puedes añadir `--spring.profiles.active=seguro`. El JAR contiene aplicación, plantillas y servidor, pero sigue necesitando MySQL. Comprueba también las operaciones desde el navegador: los tests aislados no ejecutan toda la interacción visual.
 
 Para Docker local: genera el JAR anterior y ejecuta `docker compose --profile app up --build -d` desde esta carpeta. Dockerfile usa Eclipse Temurin25 JRE y usuario sin privilegios. La conexión DENTRO del contenedor es mysql:3306/spring_guiado, no localhost:3309. La aplicación queda en http://127.0.0.1:8088. `app` es un perfil de Compose, independiente del perfil Spring `seguro`. En PowerShell puedes definir `$env:SPRING_PROFILES_ACTIVE="seguro"` antes de levantar el perfil app. No hay comandos de push ni publicación de imágenes o de la aplicación.
 
 El Compose tiene el mismo nombre acda-spring en las variantes: usa una a la vez para el servicio app; las bases permanecen separadas. Parar servicios conserva el volumen. No uses opciones que borren volúmenes para repetir un ejercicio. La configuración prepara un entorno de estudio local; no presume despliegue público ni mantenimiento de una instalación real.
 
-Spring Boot3.5.16 gestiona sus versiones compatibles de Hibernate, Spring Data y Spring Security; no se fuerza Hibernate7 del tema anterior. Java25 probado. Esta es la última versión OSS de la rama3.5, fijada para el encargo docente; las referencias técnicas son de esa rama. Documentación: https://docs.spring.io/spring-boot/3.5/system-requirements.html ; https://docs.spring.io/spring-data/jpa/reference/ ; https://docs.spring.io/spring-security/reference/6.5/servlet/authentication/passwords/form.html ; https://docs.spring.io/spring-security/reference/6.5/servlet/exploits/csrf.html .
+Spring Boot3.5.16 gestiona sus versiones compatibles de Hibernate, Spring Data y Spring Security; no se fuerza Hibernate7 del tema anterior. El proyecto utiliza Java 25; las referencias técnicas corresponden a la rama 3.5 de Spring Boot. Documentación: https://docs.spring.io/spring-boot/3.5/system-requirements.html ; https://docs.spring.io/spring-data/jpa/reference/ ; https://docs.spring.io/spring-security/reference/6.5/servlet/authentication/passwords/form.html ; https://docs.spring.io/spring-security/reference/6.5/servlet/exploits/csrf.html .
 
 ## Alcance de esta variante
 

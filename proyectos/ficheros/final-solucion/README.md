@@ -24,13 +24,12 @@ CSV: UTF-8, coma, reglas RFC4180, encabezados exactos `codigo,nombre,unidades,pr
 
 BIN: Instantanea(Producto[]) mediante Serializable y ObjectOutputStream/ObjectInputStream. Es el formato binario principal. FiltroSerializacion es infraestructura preparada: lista blanca de clases exactas y límites de profundidad, referencias, bytes y longitud de array. Solo debes abrir binarios generados y controlados por la aplicación. El filtro no convierte archivos externos en confiables; la serialización Java no es formato recomendado de intercambio. serialVersionUID ayuda a identificar versiones, sin garantizar compatibilidad ilimitada de cambios.
 
-Una carga guiada es estricta: si hay un formato incorrecto, producto inválido o código duplicado, se rechaza el archivo completo y se conserva la memoria anterior. La escritura usa EscrituraProtegida preparada, adaptada del ComercialJsonDao histórico: primero escribe aparte y solo reemplaza tras éxito. La explicación de temporales/movimiento atómico pertenece a Ampliación; no es un TODO adicional ni una garantía contra cualquier corte físico.
+Una carga guiada es estricta: si hay un formato incorrecto, producto inválido o código duplicado, se rechaza el archivo completo y se conserva la memoria anterior. La escritura usa EscrituraProtegida, ya preparada: primero escribe aparte y solo reemplaza tras éxito. La explicación de temporales/movimiento atómico pertenece a Ampliación; no es un TODO adicional ni una garantía contra cualquier corte físico.
 
-## Recursos y validación
+## Comprobar y ejecutar
 
-Las clases históricas se conservan intactas. Se han reutilizado el enfoque RFC4180/UTF-8 de ProductoFormatos, la escritura protegida de ComercialJsonDao, la precaución de SerializacionDemo, el estilo gestor.css y branding oficial; no se copia el gestor comercial entero ni su acceso directo UI→DAO.
 
-Desde esta carpeta, QA opcional: `.\mvnw.cmd clean test`; interfaz real con sesión gráfica: `.\mvnw.cmd -Dqa.ui=true test`; ejecución alternativa `.\mvnw.cmd javafx:run`. Las pruebas usan carpetas temporales, no datos del usuario. Sin qa.ui se omiten explícitamente los recorridos gráficos; no confundir esa omisión con haber comprobado la UI. La vía normal del alumnado es Run/Debug en IntelliJ.
+Desde esta carpeta, comprobaciones opcionales: `.\mvnw.cmd clean test`; interfaz real con sesión gráfica: `.\mvnw.cmd -Dqa.ui=true test`; ejecución alternativa `.\mvnw.cmd javafx:run`. Las pruebas usan carpetas temporales, no datos del usuario. Sin qa.ui se omiten explícitamente los recorridos gráficos; no confundir esa omisión con haber comprobado la UI. La vía normal del alumnado es Run/Debug en IntelliJ.
 
 POM: Java 25, JavaFX 25.0.2, Commons CSV 1.14.1, Jackson 2.20.0, SLF4J 2.0.17/Log4j2 2.25.3. Documentación oficial: https://commons.apache.org/proper/commons-csv/apidocs/ ; https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/io/ObjectInputFilter.html ; https://fasterxml.github.io/jackson-databind/javadoc/2.20/ .
 
@@ -46,7 +45,7 @@ Aplicación: Previsualizar lote admite CSV/JSON. Un error de estructura que impi
 
 Un código nuevo válido se incorpora; si existe, el nombre tras recortar extremos debe coincidir exactamente, se suman existencias hasta 1000000 y se toma el precio entrante válido. Si falla una condición, esa fila genera incidencia y conserva el producto actual. El catálogo resultante no supera 5000 productos.
 
-Reto: la previsualización devuelve PlanConciliacion inmutable con versionBase, resultado e incidencias, sin mutar. Aplicar verifica que la versión del catálogo no cambió; primero guarda la copia BIN anterior en `recuperacion/preconciliacion-UUID.bin`, dentro de la carpeta seleccionada. La ruta debe ser nueva: nunca reemplaza una recuperación previa. Si falla esa escritura, limpia solo la reserva creada por la operación, conserva causa y catálogo, y no aplica. Después del éxito cambia la memoria. Esta versión local protege el plan de cambios en la misma aplicación, no coordina varios procesos sobre un archivo.
+Reto: una propuesta de previsualización debe poder rechazarse si el catálogo cambió después de generarla. El contrato preparado PlanConciliacion contiene versionBase, resultado e incidencias. Aplicar requiere una copia BIN del catálogo anterior en una ruta nueva de `recuperacion/`, dentro de la carpeta seleccionada; nunca reemplaza otra copia. Si no puede crearse, no se aplica ningún cambio y se conserva la causa del fallo. La recuperación debe restaurar el conjunto anterior completo. La protección de propuestas corresponde a cambios en esta aplicación local; no coordina varios procesos.
 
 Recuperar valida un BIN entero antes de sustituir el catálogo. Usa el BIN seleccionado o, si no hay un BIN seleccionado, la última copia creada. La carpeta recuperación no aparece en listado simple: escribe esa ubicación y pulsa Usar carpeta para explorar copias antiguas, o pulsa Recuperar sin seleccionar un BIN para usar la última copia creada. Exportar incidencias genera `incidencias.csv` con encabezados fila,codigo,motivo, correctamente entrecomillado. La numeración de fila comienza en 1 para los datos, excluyendo encabezados CSV.
 

@@ -44,7 +44,7 @@ PATCH /api/reservas/{id}/cancelacion {motivo}: motivo1–120, conserva historial
 
 GET /api/disponibilidad?espacio&fecha&inicio&fin devuelve {disponible:boolean}. Intervalos [inicio,fin): adyacentes compatibles; canceladas no ocupan. Crear y modificar comprueban conflictos. Máximo dos activas por responsable/día, ignorando mayúsculas (entrada strip).
 
-GET /api/reservas/pagina?limite&cursor: limite1–20, cursor id validado; devuelve {elementos,siguienteCursor}, ordena documentId y startAfter. La vista paginada no aplica filtros del listado. El resultado informa si existe continuación, sin repetir el último elemento.
+GET /api/reservas/pagina?limite&cursor: limite1–20, cursor id validado; devuelve {elementos,siguienteCursor}, mantiene orden por identificador de documento. La vista paginada no aplica filtros del listado. El resultado informa si existe continuación, sin repetir el último elemento.
 
 coordinar(candidata,id,regla) es infraestructura transaccional PREPARADA, no TODO: lee/actualiza marcador coordinacion/agenda y consulta día antes de escribir. Serializa escritores incluso cuando la agenda está vacía. El callback del servicio es puro: puede repetirse sin efectos externos. Las reglas permanecen en servicio. La API transaccional pertenece a Ampliación. Marcador global sencillo limita rendimiento: prioriza una coordinación sencilla; no está diseñado para alta carga. No mezcles app guiada y final contra el mismo proyecto: el guiado no usa el coordinador.
 

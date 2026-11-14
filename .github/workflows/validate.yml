@@ -127,6 +127,7 @@ jobs:
           python scripts/package_projects.py
           python scripts/package_projects.py --check
           python scripts/test_project_packages.py
+          python scripts/check_student_voice.py --packages
       - name: Probar navegación y menú de descargas
         run: python scripts/check_site_ui.py
       - name: Probar páginas y cuatro descargas de JDBC

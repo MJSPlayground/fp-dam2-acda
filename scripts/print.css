@@ -126,6 +126,9 @@ table {
 th,td { border: 1px solid var(--mjs-line); padding: 2mm 3mm; text-align: left; vertical-align: top; }
 th { background: #e7f2f8; font-weight: 700; }
 tr { break-inside: avoid; }
+.print-phase-table th:first-child,
+.print-phase-table td:first-child { min-width: 28mm; white-space: nowrap; }
+.print-phase-table td:first-child code { white-space: nowrap; overflow-wrap: normal; word-break: normal; }
 pre,.highlight {
   font-family: "Courier New", monospace;
   font-size: 8.5pt;

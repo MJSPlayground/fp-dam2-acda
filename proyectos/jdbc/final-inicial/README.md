@@ -16,7 +16,7 @@ Las cantidades monetarias se guardan en céntimos enteros. Búsquedas de nombre 
 
 Los TODO de `OperacionesService` y `JdbcRecepcionRepository` están pendientes. Las nuevas acciones muestran un aviso y no modifican datos. Las pruebas básicas comprueban el arranque y el guiado conservado. Las nuevas pruebas funcionales optativas están preparadas por nivel; no es necesario sustituirlas al completar los requisitos.
 
-Validación técnica secundaria: `.\mvnw.cmd clean test`. Con sesión gráfica, `.\mvnw.cmd -Dqa.ui=true -Dtest=OperacionesUiTest test` abre y prueba la interfaz de operaciones y genera `target/qa/operaciones.png`. Las pruebas de servicio usan bases temporales; la prueba UI requiere pantalla y se omite por defecto en CI. No se ha comprobado el arranque dentro de IntelliJ en esta sesión.
+Comprobaciones opcionales: `.\mvnw.cmd clean test`. Con sesión gráfica, `.\mvnw.cmd -Dqa.ui=true -Dtest=OperacionesUiTest test` abre y prueba la interfaz de operaciones y genera `target/qa/operaciones.png`. Las pruebas de servicio usan bases temporales; la prueba UI requiere pantalla y se omite por defecto. Actívala con la propiedad indicada para comprobar ese recorrido.
 
 Versiones fijadas en POM: JavaFX 25.0.2, SQLite JDBC 3.53.4.0, SLF4J 2.0.17, Log4j2 2.25.3. Se conserva Maven Wrapper del guiado.
 

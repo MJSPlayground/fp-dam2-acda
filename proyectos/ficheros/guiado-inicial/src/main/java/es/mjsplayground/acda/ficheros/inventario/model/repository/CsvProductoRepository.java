@@ -6,7 +6,7 @@ import java.nio.file.*;
 import java.util.*;
 import org.apache.commons.csv.*;
 
-/** Adaptación focal de ProductoFormatos histórico: RFC4180 y UTF-8, sin split de texto. */
+/** Convierte productos a CSV RFC4180 con texto UTF-8. */
 public class CsvProductoRepository implements InventarioRepository {
   public static final CSVFormat LECTURA =
       CSVFormat.RFC4180

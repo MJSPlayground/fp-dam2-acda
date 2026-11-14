@@ -129,6 +129,13 @@ def article_markup(source):
     for details in article.select("details"):
         details["open"] = "open"
 
+    # Las fases son valores literales de configuración: no partir sus nombres
+    # entre líneas al redistribuir las columnas para A4.
+    for table in article.select("table"):
+        first_heading = table.select_one("thead th")
+        if first_heading and first_heading.get_text(strip=True) == "Fase":
+            table["class"] = [*table.get("class", []), "print-phase-table"]
+
     # El origen de cada recurso debe seguir siendo la página original:
     # p.ej. ../../assets/demo/figure.svg se convierte en /assets/demo/figure.svg.
     original_url = "http://127.0.0.1:PORT/" + path.relative_to(SITE).as_posix()
